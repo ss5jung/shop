@@ -3,6 +3,7 @@
 	<name>shop</name>
 	<comment></comment>
 	<projects>
+		<project>mariadb-java-client-2.7.6</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
