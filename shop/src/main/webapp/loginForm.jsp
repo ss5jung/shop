@@ -56,7 +56,7 @@
 					<!-- LOGO -->
 					<div class="col-md-3">
 						<div class="header-logo">
-							<a href="#" class="logo"> <img src="./img/logo.png" alt="">
+							<a href="#" class="logo"> <img src="./img/mamazon.png" style="width: 170px; margin-top: 16px"  alt="">
 							</a>
 						</div>
 					</div>

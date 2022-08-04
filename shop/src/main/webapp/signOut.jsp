@@ -167,6 +167,7 @@ if (session.getAttribute("id") == null) {
 		<!-- /MAIN HEADER -->
 	</header>
 	<!-- /HEADER -->
+	
 	<!-- NAVIGATION -->
 	<nav id="navigation">
 		<!-- container -->
@@ -198,13 +199,13 @@ if (session.getAttribute("id") == null) {
 			<!-- row -->
 			<div class="row">
 				<div class="col-md-12">
-					<h3 class="breadcrumb-header"><%=session.getAttribute("user")%>
-						정보
-					</h3>
+					<h3 class="breadcrumb-header">멤버탈퇴</h3>
+					<!-- 					
 					<ul class="breadcrumb-tree">
 						<li><a href="#">Home</a></li>
 						<li class="active">Blank</li>
 					</ul>
+					-->
 				</div>
 			</div>
 			<!-- /row -->
@@ -213,35 +214,31 @@ if (session.getAttribute("id") == null) {
 	</div>
 	<!-- /BREADCRUMB -->
 
+	<!-- SIGNOUT  -->
 	<!-- SECTION -->
 	<div class="section">
 		<!-- container -->
 		<div class="container">
 			<!-- row -->
 			<div class="row">
-				<table class="table table-bordered">
-					<tr>
-						<td>USER</td>
-						<td><%=session.getAttribute("user")%></td>
-					</tr>
-					<tr>
-						<td>ID</td>
-						<td><%=session.getAttribute("id")%></td>
-					</tr>
-					<tr>
-						<td>NAME</td>
-						<td><%=session.getAttribute("name")%></td>
-					</tr>
-				</table>
-				<a href="<%=request.getContextPath()%>/signOut.jsp"><button type="button" class="btn btn-primary" style="float: left;">회원 탈퇴</button></a> 
-				<a href="<%=request.getContextPath()%>/logout.jsp"><button type="button" class="btn btn-danger" style="float: right;">로그아웃</button></a>
+				<!-- signout form -->
+				<form method="post" action="<%=request.getContextPath()%>/signOut<%=session.getAttribute("user") %>Action.jsp" id="signOutForm">
+					<fieldset>
+						<label for="signOutId">ID:</label>
+						<input type="text" id="signOutId" name="signOutId" value="<%=session.getAttribute("id")%>" readonly="readonly">
+						<label for="signOutPw">Password:</label>
+						<input type="password" id="signOutPw" name="signOutPw">
+						<button type="button" id="signOutBtn" class="btn btn-danger" style="float: right;">탈퇴</button>
+					</fieldset>
+				</form>
+				<!-- signout form -->
 			</div>
 			<!-- /row -->
 		</div>
 		<!-- /container -->
 	</div>
 	<!-- SECTION -->
-
+	<!-- SIGNOUT  -->
 
 	<!-- FOOTER -->
 	<footer id="footer">
@@ -348,4 +345,14 @@ if (session.getAttribute("id") == null) {
 	<script src="js/main.js"></script>
 
 </body>
+<script>
+	/* 탈퇴 비밀번호 빈칸검사 */
+	$('#signOutBtn').click(function() {
+		if ($('#signOutPw').val() == '') {
+			alert('비밀번호를 입력하세요');
+		} else {
+			$('#signOutForm').submit();
+		}
+	});
+</script>
 </html>
