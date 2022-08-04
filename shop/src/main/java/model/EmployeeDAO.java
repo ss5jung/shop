@@ -30,7 +30,7 @@ public class EmployeeDAO {
 	}
 
 	// 로그인
-	public Employee selectEmployeeByIdAndPw(Employee employee) throws ClassNotFoundException, SQLException {
+	public Employee selectEmployeeByIdAndPw(Connection conn, Employee employee) throws ClassNotFoundException, SQLException {
 		// getConnection을 사용하기 위한 DBUtil 객체 생성
 		DBUtil dbUtil = new DBUtil();
 		// 새로 받아오는 객체
@@ -38,7 +38,6 @@ public class EmployeeDAO {
 		// 로그인한 Employee의 정보를 받아오기 위한 sql
 		String sql = "SELECT employee_id employeeId, employee_name employeeName FROM employee where employee_id=? and employee_pass=PASSWORD(?)";
 		// DB연동
-		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 

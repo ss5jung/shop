@@ -16,14 +16,16 @@ String customerPass = request.getParameter("customerPass");
 Customer paramCustomer = new Customer();
 paramCustomer.setCustomerId(customerId);
 paramCustomer.setCustomerPass(customerPass);
+
 //customer 정보 처리할 CustomerService 객체 생성
 CustomerService customerService = new CustomerService();
 //DB에서 가져올 회원정보를 담은 Customer 객체 생성
 Customer loginCustomer = customerService.getCustomer(paramCustomer);
 //디버깅
 System.out.println("loginCustomer --> " + loginCustomer);
+
 if (loginCustomer != null) { //로그인되면
-	System.out.println("로그인 성공!");
+	System.out.println("customer 로그인 성공!");
 	//session 값 설정
 	session.setAttribute("user", "Customer");
 	session.setAttribute("id", loginCustomer.getCustomerId());
@@ -31,7 +33,7 @@ if (loginCustomer != null) { //로그인되면
 	//페이지 넘겨주기
 	response.sendRedirect(request.getContextPath() + "/index.jsp");
 } else {
-	System.out.println("로그인 실패");
+	System.out.println("customer 로그인 실패");
 	response.sendRedirect(request.getContextPath() + "/loginForm.jsp?errorMsg=check your id or password");
 }
 %>

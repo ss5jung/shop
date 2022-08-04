@@ -29,7 +29,7 @@ public class CustomerDAO {
 	}
 	
 	// 로그인
-	public Customer selectCustomerByIdAndPw(Customer customer) throws ClassNotFoundException, SQLException {
+	public Customer selectCustomerByIdAndPw(Connection conn, Customer customer) throws ClassNotFoundException, SQLException {
 		// getConnection을 사용하기 위한 DBUtil 객체 생성
 		DBUtil dbUtil = new DBUtil();
 		// 새로 받아오는 객체
@@ -37,7 +37,6 @@ public class CustomerDAO {
 		// 로그인한 customer의 정보를 받아오기 위한 sql
 		String sql = "SELECT customer_id customerId, customer_pass customerPass, customer_name customerName FROM customer where customer_id=? and customer_pass=PASSWORD(?)";
 		// DB연동
-		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 

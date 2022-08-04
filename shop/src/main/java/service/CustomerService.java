@@ -25,19 +25,19 @@ public class CustomerService {
 			// 디버깅
 			if (removeCustomer == 1) { // 정상적으로 삭제가 되면
 				System.out.println("removeCustomer - 회원정보 삭제가 정상적으로 이루워졌습니다.");
+				// outid 테이블에 탈퇴한 아이디 insert 하기
+				OutIdDAO OutIdDao = new OutIdDAO();
+				int insertOutId = OutIdDao.insertOutId(conn, paramCustomer.getCustomerId()); // int 값 리턴
+				// 디버깅
+				if (insertOutId == 1) { // outid 테이블에 insert가 성공하면
+					System.out.println("insertOutId - 탈퇴한 회원ID가 정상적으로 outid 테이블에 insert되었습니다.");
+				} else { // outid 테이블에 insert에 실패하면
+					System.out.println("insertOutId -  탈퇴한 회원ID 백업실패");
+					// 오류발생시 캐치절로 이동
+					throw new Exception();
+				}
 			} else { // 삭제에 실패할 경우
 				System.out.println("removeCustomer - 회원정보 삭제가 실패하였습니다.");
-				// 오류발생시 캐치절로 이동
-				throw new Exception();
-			}
-			// outid 테이블에 탈퇴한 아이디 insert 하기
-			OutIdDAO OutIdDao = new OutIdDAO();
-			int insertOutId = OutIdDao.insertOutId(conn, paramCustomer.getCustomerId()); // int 값 리턴
-			// 디버깅
-			if (insertOutId == 1) { // outid 테이블에 insert가 성공하면
-				System.out.println("insertOutId - 탈퇴한 회원ID가 정상적으로 outid 테이블에 insert되었습니다.");
-			} else { // outid 테이블에 insert에 실패하면
-				System.out.println("insertOutId -  탈퇴한 회원ID 백업실패");
 				// 오류발생시 캐치절로 이동
 				throw new Exception();
 			}
@@ -74,13 +74,13 @@ public class CustomerService {
 
 			// DB에서 customer 정보 select
 			CustomerDAO customerDAO = new CustomerDAO();
-			selectCustomerByIdAndPw = customerDAO.selectCustomerByIdAndPw(paramCustomer); // customer 리턴
+			selectCustomerByIdAndPw = customerDAO.selectCustomerByIdAndPw(conn, paramCustomer); // customer 리턴
 			// 디버깅
 			if (selectCustomerByIdAndPw != null) { // 로그인회원의 정보가 null값인 경우
 				System.out.println("selectCustomerByIdAndPw - 로그인이 정상적으로 이루워졌습니다.");
 			} else {
 				System.out.println("selectCustomerByIdAndPw - 로그인 실패");
-				//catch 오류
+				// catch 오류
 				throw new Exception();
 			}
 
