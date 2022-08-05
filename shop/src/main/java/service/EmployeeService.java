@@ -2,6 +2,7 @@ package service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import repository.DBUtil;
 import repository.EmployeeDAO;
@@ -9,6 +10,73 @@ import repository.OutIdDAO;
 import vo.Employee;
 
 public class EmployeeService {
+	//사원리스트
+	public ArrayList<Employee> getEmployeeList(int rowPerPage, int currentPage) {
+		//DAO에서 전송받은 직원들의 정보를 담을 list객체
+		ArrayList<Employee> list = null;
+		//beginRow 변수 
+		int beginRow = (currentPage - 1)*rowPerPage;
+		
+		Connection conn = null;
+		try {
+			conn = new DBUtil().getConnection();
+			System.out.println("getEmployeeList - DB연동 성공");
+
+			// DAO에서 Employee 정보들을 담은 list 전달받음
+			list = new EmployeeDAO().selectEmployeeList(conn, rowPerPage, beginRow);
+			System.out.println(list + "<-- list EmployeeService. getEmployeeList");
+			
+			if (list == null) { // 실행되지 않았다면
+				throw new Exception(); // 오류로 이동
+			}
+		} catch (Exception e) {
+			e.printStackTrace(); // console에 예외메세지 출력
+			try {
+				conn.rollback(); // 실행시 예외가 발생하면 현재 conn 실행쿼리 롤백
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return list;
+	}
+	// 회원가입
+	// signUpEmployeeAction.jsp 호출시
+	public int addEmployee(Employee paramEmployee) {
+		int row = 0;
+		Connection conn = null;
+		try {
+			conn = new DBUtil().getConnection();
+			System.out.println("addEmployee - DB연동 성공");
+
+			// DB에서 Employee 정보 insert
+			row = new EmployeeDAO().insertEmployee(conn, paramEmployee);
+			System.out.println(row + "<-- row EmployeeService. addEmployee");
+			if (row == 0) { // 실행되지 않았다면
+				throw new Exception(); // 오류로 이동
+			}
+		} catch (Exception e) {
+			e.printStackTrace(); // console에 예외메세지 출력
+			try {
+				conn.rollback(); // 실행시 예외가 발생하면 현재 conn 실행쿼리 롤백
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return row;
+	}
+
 	// 직원탈퇴
 	// signOutEmployeeAction.jsp 호출시
 	public Boolean removeEmployee(Employee paramEmployee) {

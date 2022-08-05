@@ -30,5 +30,4 @@ if(row == 1){
 	System.out.println("고객님의 회원가입이 실패했습니다.");
 	response.sendRedirect(request.getContextPath()+"/addCustomer.jsp");
 }
-
 %>

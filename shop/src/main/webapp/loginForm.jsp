@@ -208,16 +208,17 @@
 							<table class="table table-bordered">
 								<tr>
 									<td>ID</td>
-									<td><input type="text" id="customerId" name="customerId"></td>
+									<td><input type="text" class="form-control" id="customerId" name="customerId"></td>
 								</tr>
 								<tr>
 									<td>Password</td>
-									<td><input type="password" id=customerPass name="customerPass"></td>
+									<td><input type="password" class="form-control" id=customerPass name="customerPass"></td>
 								</tr>
 							</table>
 							<button type="button" id="customerBtn" class="btn btn-primary" style="float: right;">고객 로그인</button>
 						</fieldset>
 					</form>
+					<a href="<%=request.getContextPath()%>/addCustomer.jsp"><span style="color: #0F1111;">Not a customer? Sign up</span></a>
 				</div>
 				<div class="col-lg-6">
 					<form action="<%=request.getContextPath()%>/employeeLoginAction.jsp" method="post" id="employeeLogin">
@@ -228,16 +229,17 @@
 							<table class="table table-bordered">
 								<tr>
 									<td>ID</td>
-									<td><input type="text" id="employeeId" name="employeeId"></td>
+									<td><input type="text" class="form-control" id="employeeId" name="employeeId"></td>
 								</tr>
 								<tr>
 									<td>Password</td>
-									<td><input type="password" id="employeePass" name="employeePass"></td>
+									<td><input type="password" class="form-control" id="employeePass" name="employeePass"></td>
 								</tr>
 							</table>
 							<button type="button" id="employeeBtn" class="btn btn-primary" style="float: right;">관리자 로그인</button>
 						</fieldset>
 					</form>
+					<a href="<%=request.getContextPath()%>/addEmployee.jsp"><span style="color: #0F1111;">Sign up for EMPLOYEE</span></a>
 				</div>
 			</div>
 			<!-- /row -->

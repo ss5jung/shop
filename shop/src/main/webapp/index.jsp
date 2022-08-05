@@ -34,21 +34,29 @@ if (session.getAttribute("id") == null) {
 	<div class="container">
 		<!-- row -->
 		<div class="row">
-			<table class="table table-bordered">
+			<table class="table table-striped">
 				<tr>
-					<td>USER</td>
+					<th>USER</th>
 					<td><%=session.getAttribute("user")%></td>
 				</tr>
 				<tr>
-					<td>ID</td>
+					<th>ID</th>
 					<td><%=session.getAttribute("id")%></td>
 				</tr>
 				<tr>
-					<td>NAME</td>
+					<th>NAME</th>
 					<td><%=session.getAttribute("name")%></td>
 				</tr>
 			</table>
-			<a href="<%=request.getContextPath()%>/signOut.jsp"><button type="button" class="btn btn-primary" style="float: left;">회원 탈퇴</button></a> <a href="<%=request.getContextPath()%>/logout.jsp"><button type="button" class="btn btn-danger" style="float: right;">로그아웃</button></a>
+			<a href="<%=request.getContextPath()%>/signOut.jsp"><button type="button" class="btn btn-danger" style="float: left;">회원 탈퇴</button></a> 
+			<a href="<%=request.getContextPath()%>/logout.jsp"><button type="button" class="btn btn-success" style="float: right;">로그아웃</button></a>
+			<%
+			if (session.getAttribute("user").equals("Employee")) { //직원일 경우에만 관리자모드 버튼 구현
+			%>
+			<a href="<%=request.getContextPath()%>/adminIndex.jsp"> <button type="button" class="btn btn-link" style="float: right;"> <strong>관리자모드</strong> </button></a>
+			<%
+			}
+			%>
 		</div>
 		<!-- /row -->
 	</div>

@@ -25,7 +25,7 @@ public class CustomerDAO {
 		// 디버깅
 		System.out.println(stmt + "<-- stmt - insertCustomer(){}");
 		row = stmt.executeUpdate();
-		if(stmt != null) {
+		if (stmt != null) {
 			stmt.close();
 		}
 		// 디버깅
@@ -48,7 +48,7 @@ public class CustomerDAO {
 		// 디버깅
 		System.out.println(stmt + "<-- stmt - deleteCustomer(){}");
 		row = stmt.executeUpdate();
-		if(stmt != null) {
+		if (stmt != null) {
 			stmt.close();
 		}
 		// 디버깅

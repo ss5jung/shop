@@ -10,7 +10,7 @@ import vo.Customer;
 
 public class CustomerService {
 	// 회원가입
-	// signUpAction.jsp 호출시
+	// signUpCustomerAction.jsp 호출시
 	public int addCustomer(Customer paramCustomer) {
 		int row = 0;
 		Connection conn = null;

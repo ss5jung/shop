@@ -31,15 +31,15 @@ String idCkMsg = request.getParameter("idCkMsg");
 		<div class="row">
 			<!-- 흐름 : 아이디 입력 -> 중복검사 -> 통과하면   -> addCustomer -> 회원가입 폼 입력후 -> addCustomerAction -->
 			<!-- 고객 아이디 중복검사 -->
-			<form action="<%=request.getContextPath()%>/idCheckAction.jsp" method="post" id="idCkForm">
+			<form action="<%=request.getContextPath()%>/idCheckAction.jsp?user=Customer" method="post" id="idCkCustomerForm">
 				<fieldset>
-				<legend>ID 중복검사</legend>
+				<legend><b>Customer ID 중복검사</b></legend>
 				<table class="table table-bordered">
 					<tr>
-						<td>ID</td>
+						<th>ID</th>
 						<td>
-							<input type="text" id="customerId" name="customerId">
-							<button type="button" id="idCkBtn">ID중복검사</button> <!-- idCkMsg가 true이면 밑에 입력 false이면 다시 값 입력후 아이디 중복검사해 --> 
+							<input type="text" id="checkId" name="checkId">
+							<button type="button" id="idCkCustomerBtn">ID중복검사</button> <!-- idCkMsg가 true이면 밑에 입력 false이면 다시 값 입력후 아이디 중복검사해 --> 
 							<%
 							 if (idCkMsg != null) {
 							 %> 
@@ -51,39 +51,39 @@ String idCkMsg = request.getParameter("idCkMsg");
 				</table>
 				</fieldset>
 			</form>
-			<hr>
+
 			<!-- 중복 검사를 통과하면 회원가입 폼 뜬다. -->
 			<%
 			if (idCkBoolean != null && idCkBoolean.equals("true")) { // 중복검사에 통과한다면 
 				customerId = request.getParameter("checkedId"); //통과한 아이디값 가져오기
 				System.out.println(customerId + "<--customerId : 중복검사 통과한 아이디");
 			%>
-			<form action="<%=request.getContextPath()%>/signUpAction.jsp" method="post" id="signUpForm">
+			<form action="<%=request.getContextPath()%>/signUpCustomerAction.jsp" method="post" id="signUpCustomerForm">
 				<fieldset>
-				<legend>회원가입</legend>
+				<legend><b>고객 회원가입</b></legend>
 				<table>
 					<tr>
-						<td>ID</td>
+						<th>ID</th>
 						<td><input type="text" id="customerId" name="customerId" value="<%=customerId%>" readonly="readonly"></td>
 					</tr>
 					<tr>
-						<td>Password</td>
+						<th>Password</th>
 						<td><input type="password" id="customerPass" name="customerPass"></td>
 					</tr>
 					<tr>
-						<td>Name</td>
+						<th>Name</th>
 						<td><input type="text" id="customerName" name="customerName"></td>
 					</tr>
 					<tr>
-						<td>Address</td>
+						<th>Address</th>
 						<td><input type="text" id="customerAddress" name="customerAddress"></td>
 					</tr>
 					<tr>
-						<td>Telephone</td>
+						<th>Telephone</th>
 						<td><input type="text" id="customerTelephone" name="customerTelephone"></td>
 					</tr>
 				</table>
-				<button type="button" class="btn btn-success" style="float: right;" id="signUpBtn">회원가입</button>
+				<button type="button" class="btn btn-success" style="float: right;" id="signUpCustomerBtn">회원가입</button>
 				</fieldset>
 			</form>
 			<%
@@ -102,15 +102,15 @@ String idCkMsg = request.getParameter("idCkMsg");
 </body>
 <script>
 	/* 아이디 중복 검사 빈칸 검사 */
-	$('#idCkBtn').click(function() {
-		if ($('#customerId').val() == '') {
+	$('#idCkCustomerBtn').click(function() {
+		if ($('#checkId').val() == '' || $('#checkId').val() == null) {
 			alert('중복검사 받으실 아이디를 입력하세요');
 		} else {
-			$('#idCkForm').submit();
+			$('#idCkCustomerForm').submit();
 		}
 	});
 	/* 회원가입 빈칸 검사*/
-	$('#signUpBtn').click(function() {
+	$('#signUpCustomerBtn').click(function() {
 		if ($('#customerPass').val() == '') {
 			alert('고객님의 비밀번호를 입력하세요');
 		} else if ($('#customerName').val() == '') {
@@ -120,7 +120,7 @@ String idCkMsg = request.getParameter("idCkMsg");
 		} else if ($('#customerTelephone').val() == '') {
 			alert('고객님의 전화번호를 입력하세요');
 		} else {
-			$('#signUpForm').submit();
+			$('#signUpCustomerForm').submit();
 		}
 	});
 </script>
