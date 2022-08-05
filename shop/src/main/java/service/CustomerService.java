@@ -3,12 +3,44 @@ package service;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import model.CustomerDAO;
-import model.DBUtil;
-import model.OutIdDAO;
+import repository.CustomerDAO;
+import repository.DBUtil;
+import repository.OutIdDAO;
 import vo.Customer;
 
 public class CustomerService {
+	// 회원가입
+	// signUpAction.jsp 호출시
+	public int addCustomer(Customer paramCustomer) {
+		int row = 0;
+		Connection conn = null;
+		try {
+			conn = new DBUtil().getConnection();
+			System.out.println("addCustomer - DB연동 성공");
+
+			// DB에서 customer 정보 insert
+			row = new CustomerDAO().insertCustomer(conn, paramCustomer);
+			System.out.println(row + "<-- row CustomerService. addCustomer");
+			if(row == 0) {	//실행되지 않았다면
+				throw new Exception();	//오류로 이동
+			}
+		} catch (Exception e) {
+			e.printStackTrace(); // console에 예외메세지 출력
+			try {
+				conn.rollback(); // 실행시 예외가 발생하면 현재 conn 실행쿼리 롤백
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return row;
+	}
+
 	// 회원탈퇴
 	// signOutCustomerAction.jsp 호출시
 	public Boolean removeCustomer(Customer paramCustomer) {

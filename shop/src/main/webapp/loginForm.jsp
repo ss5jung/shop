@@ -56,7 +56,7 @@
 					<!-- LOGO -->
 					<div class="col-md-3">
 						<div class="header-logo">
-							<a href="#" class="logo"> <img src="./img/mamazon.png" style="width: 170px; margin-top: 16px"  alt="">
+							<a href="#" class="logo"> <img src="./img/mamazon.png" style="width: 170px; margin-top: 16px" alt="">
 							</a>
 						</div>
 					</div>
@@ -199,57 +199,52 @@
 		<div class="container">
 			<!-- row -->
 			<div class="row">
-				<form action="<%=request.getContextPath()%>/customerLoginAction.jsp" method="post" id="customerLogin">
-					<fieldset>
-						<legend>쇼핑몰 고객 로그인</legend>
-						<table class="table table-bordered">
-							<tr>
-								<td>ID</td>
-								<td><input type="text" id="customerId" name="customerId"></td>
-							</tr>
-							<tr>
-								<td>Password</td>
-								<td><input type="password" id=customerPass name="customerPass"></td>
-							</tr>
-						</table>
-						<button type="button" id="customerBtn" class="btn btn-primary">고객 로그인</button>
-					</fieldset>
-				</form>
+				<div class="col-lg-6">
+					<form action="<%=request.getContextPath()%>/customerLoginAction.jsp" method="post" id="customerLogin">
+						<fieldset>
+							<legend>
+								<b>Customer Login</b>
+							</legend>
+							<table class="table table-bordered">
+								<tr>
+									<td>ID</td>
+									<td><input type="text" id="customerId" name="customerId"></td>
+								</tr>
+								<tr>
+									<td>Password</td>
+									<td><input type="password" id=customerPass name="customerPass"></td>
+								</tr>
+							</table>
+							<button type="button" id="customerBtn" class="btn btn-primary" style="float: right;">고객 로그인</button>
+						</fieldset>
+					</form>
+				</div>
+				<div class="col-lg-6">
+					<form action="<%=request.getContextPath()%>/employeeLoginAction.jsp" method="post" id="employeeLogin">
+						<fieldset>
+							<legend>
+								<b>Employee Login</b>
+							</legend>
+							<table class="table table-bordered">
+								<tr>
+									<td>ID</td>
+									<td><input type="text" id="employeeId" name="employeeId"></td>
+								</tr>
+								<tr>
+									<td>Password</td>
+									<td><input type="password" id="employeePass" name="employeePass"></td>
+								</tr>
+							</table>
+							<button type="button" id="employeeBtn" class="btn btn-primary" style="float: right;">관리자 로그인</button>
+						</fieldset>
+					</form>
+				</div>
 			</div>
 			<!-- /row -->
 		</div>
 		<!-- /container -->
 	</div>
 	<!-- SECTION -->
-
-	<!-- SECTION -->
-	<div class="section">
-		<!-- container -->
-		<div class="container">
-			<!-- row -->
-			<div class="row">
-				<form action="<%=request.getContextPath()%>/employeeLoginAction.jsp" method="post" id="employeeLogin">
-					<fieldset>
-						<legend>쇼핑몰 관리자 로그인</legend>
-						<table class="table table-bordered">
-							<tr>
-								<td>ID</td>
-								<td><input type="text" id="employeeId" name="employeeId"></td>
-							</tr>
-							<tr>
-								<td>Password</td>
-								<td><input type="password" id="employeePass" name="employeePass"></td>
-							</tr>
-						</table>
-						<button type="button" id="employeeBtn" class="btn btn-primary">관리자 로그인</button>
-					</fieldset>
-				</form>
-			</div>
-			<!-- /row -->
-		</div>
-		<!-- /container -->
-	</div>
-	<!-- /SECTION -->
 
 	<!-- FOOTER -->
 	<footer id="footer">

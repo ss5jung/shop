@@ -1,5 +1,5 @@
 <%@page import="service.CustomerService"%>
-<%@page import="model.CustomerDAO"%>
+<%@page import="repository.CustomerDAO"%>
 <%@page import="vo.Customer"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%

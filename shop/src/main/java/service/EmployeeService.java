@@ -3,9 +3,9 @@ package service;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import model.DBUtil;
-import model.EmployeeDAO;
-import model.OutIdDAO;
+import repository.DBUtil;
+import repository.EmployeeDAO;
+import repository.OutIdDAO;
 import vo.Employee;
 
 public class EmployeeService {
