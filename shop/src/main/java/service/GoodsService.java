@@ -20,6 +20,9 @@ public class GoodsService {
 	
 	//상품 추가
 	public int addGoods(Goods goods, GoodsImg goodsImg) throws SQLException {
+		//파라미터 디버깅
+		System.out.println(goods);
+		System.out.println(goodsImg);
 		//리턴할 변수 선언
 		int row = 0;
 		//DB 연동

@@ -38,6 +38,8 @@ public class GoodsImg {
 	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
 	}
+	
+	
 	@Override
 	public String toString() {
 		return "GoodsImg [goodsNo=" + goodsNo + ", filename=" + filename + ", originFilename=" + originFilename
