@@ -6,17 +6,73 @@ import java.util.ArrayList;
 
 import repository.DBUtil;
 import repository.EmployeeDAO;
+import repository.GoodsDAO;
 import repository.OutIdDAO;
 import vo.Employee;
 
 public class EmployeeService {
-	//사원리스트
+	//last 페이지 구하기
+	public int getEmployeeLastPage(int rowPerPage) throws SQLException {
+		int lastPage = 0;
+		Connection conn = null;
+		try {
+			// DB연동
+			conn = new DBUtil().getConnection();
+			System.out.println("DB 연동 - getEmployeeLastPage");
+			// lastPage
+			lastPage = new GoodsDAO().selectGoodsLastPage(conn, rowPerPage);
+			System.out.println(lastPage + "lastPage - Goods");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// DB 자원 해제
+			if (conn != null) {
+				conn.close();
+				System.out.println("conn 연결 해제");
+			}
+		}
+		return lastPage;
+	}
+
+	// 회원 접근권한 변경
+	// modifyEmployeeActive.jsp가 호출시
+	public int modifyEmployeeActive(String active, String adminId) throws ClassNotFoundException, SQLException {
+		// 리턴할 변수 선언 및 초기화
+		int row = 0;
+		Connection conn = null;
+		try {
+			//conn DB 연동하기
+			conn = new DBUtil().getConnection();
+			//디버깅
+			System.out.println(conn + "<-- conn modifyEmployeeActive 정상 연결");
+			//DAO로 전송
+			row = new EmployeeDAO().modifyEmployeeActive(conn, active,adminId);
+			//디버깅
+			System.out.println(row + "<-- row ");
+			if (row == 1) { //DAO 정상적으로 실행시
+				System.out.println("modifyEmployeeActive DAO가 정상적으로 작동하였습니다.");
+			} else {  //DAO 실행 실패시
+				System.out.println("modifyEmployeeActive DAO 실행 실패");
+				throw new Exception();
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			//DB 자원 해제
+			if(conn != null) {
+				conn.close();
+			}
+		}
+		return row;
+	}
+
+	// 사원리스트
 	public ArrayList<Employee> getEmployeeList(int rowPerPage, int currentPage) {
-		//DAO에서 전송받은 직원들의 정보를 담을 list객체
+		// DAO에서 전송받은 직원들의 정보를 담을 list객체
 		ArrayList<Employee> list = null;
-		//beginRow 변수 
-		int beginRow = (currentPage - 1)*rowPerPage;
-		
+		// beginRow 변수
+		int beginRow = (currentPage - 1) * rowPerPage;
+
 		Connection conn = null;
 		try {
 			conn = new DBUtil().getConnection();
@@ -25,7 +81,7 @@ public class EmployeeService {
 			// DAO에서 Employee 정보들을 담은 list 전달받음
 			list = new EmployeeDAO().selectEmployeeList(conn, rowPerPage, beginRow);
 			System.out.println(list + "<-- list EmployeeService. getEmployeeList");
-			
+
 			if (list == null) { // 실행되지 않았다면
 				throw new Exception(); // 오류로 이동
 			}
@@ -45,6 +101,7 @@ public class EmployeeService {
 		}
 		return list;
 	}
+
 	// 회원가입
 	// signUpEmployeeAction.jsp 호출시
 	public int addEmployee(Employee paramEmployee) {

@@ -53,7 +53,7 @@ if (session.getAttribute("id") == null) {
 			<%
 			if (session.getAttribute("user").equals("Employee")) { //직원일 경우에만 관리자모드 버튼 구현
 			%>
-			<a href="<%=request.getContextPath()%>/adminIndex.jsp"> <button type="button" class="btn btn-link" style="float: right;"> <strong>관리자모드</strong> </button></a>
+			<a href="<%=request.getContextPath()%>/admin/adminIndex.jsp"> <button type="button" class="btn btn-link" style="float: right;"> <strong>관리자모드</strong> </button></a>
 			<%
 			}
 			%>

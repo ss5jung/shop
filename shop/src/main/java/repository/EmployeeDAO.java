@@ -9,31 +9,90 @@ import java.util.ArrayList;
 import vo.Employee;
 
 public class EmployeeDAO {
+
+	// 라스트 페이지
+	public int selectGoodsLastPage(Connection conn, int rowPerPage) throws SQLException {
+		// 전송된 값 디버깅
+		System.out.println(rowPerPage + "<-- rowPerPage");
+		// 리턴할 변수 선언 및 초기화
+		int lastPage = 0;
+
+		String sql = "SELECT count(*) count FROM employee";
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		int totalCount = 0;
+
+		try {
+			stmt = conn.prepareStatement(sql);
+			rs = stmt.executeQuery();
+			// 디버깅
+			if (rs.next()) {
+				totalCount = rs.getInt("count");
+				System.out.println(totalCount + "<--totalCount 전체직원 인원");
+			}
+		} finally {
+			rs.close();
+			stmt.close();
+		}
+		// lastPage 연산 - 올림해서 lastPage구하기
+		lastPage = (int) Math.ceil((double) totalCount / rowPerPage);
+		return lastPage;
+	}
+
+	// 회원 접근권한 변경
+	public int modifyEmployeeActive(Connection conn, String active, String adminId) throws SQLException {
+		// 리턴할 변수 선언 및 초기화
+		int row = 0;
+		PreparedStatement stmt = null;
+		String sql = "UPDATE employee SET active= ? WHERE employee_id = ?";
+		try {
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, active);
+			stmt.setString(2, adminId);
+			System.out.println(stmt + "<-- stmt -modifyEmployeeActive ");
+
+			row = stmt.executeUpdate();
+			// 디버깅
+			System.out.println(row + "<-- row - modifyEmployeeActive ");
+		} finally {
+			// DB자원 해제
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return row;
+	}
+
 	// 사원 리스트
 	public ArrayList<Employee> selectEmployeeList(Connection conn, int rowPerPage, int beginRow) throws SQLException {
-		//DB에서 select한 직원들의 정보를 담을 list객체
-		ArrayList<Employee> list =  new ArrayList<Employee>();
+		// 파라미터 디버깅
+		System.out.println(rowPerPage + "<--rowPerPage");
+		System.out.println(beginRow + "<--beginRow");
+		// DB에서 select한 직원들의 정보를 담을 list객체
+		ArrayList<Employee> list = new ArrayList<Employee>();
 		// 로그인한 Employee의 정보를 받아오기 위한 sql
-		String sql = "SELECT employee_id employeeId, employee_name employeeName, update_date updateDate, create_date createDate, active FROM employee ORDER BY update_date DESC";
+		String sql = "SELECT employee_id employeeId, employee_name employeeName, update_date updateDate, create_date createDate, active FROM employee ORDER BY update_date DESC LIMIT ?,?";
 		// DB연동
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 
 		try {
 			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, beginRow);
+			stmt.setInt(2, rowPerPage);
 			System.out.println(stmt + "<-- stmt -EmployeeDAO.selectEmployeeList ");
 			rs = stmt.executeQuery();
 
 			while (rs.next()) {
 				System.out.println(rs + "<-- rs 실행됨 -selectEmployeeList ");
-				//정상적으로 연결된다면 employee 객체 생성 
+				// 정상적으로 연결된다면 employee 객체 생성
 				Employee e = new Employee();
 				e.setEmployeeId(rs.getString("employeeId"));
 				e.setEmployeeName(rs.getString("employeeName"));
 				e.setCreateDate(rs.getString("createDate"));
 				e.setUpdateDate(rs.getString("updateDate"));
 				e.setActive(rs.getString("active"));
-				System.out.println(e +"<-- e Employee 정보");
+				// System.out.println(e + "<-- e Employee 정보");
 				list.add(e);
 			}
 		} finally {
@@ -47,6 +106,7 @@ public class EmployeeDAO {
 		}
 		return list;
 	}
+
 	// 회원가입
 	public int insertEmployee(Connection conn, Employee paramEmployee) throws SQLException {
 		// 리턴할 변수 선언

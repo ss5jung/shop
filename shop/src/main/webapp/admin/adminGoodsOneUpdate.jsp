@@ -1,3 +1,7 @@
+<%@page import="java.util.HashMap"%>
+<%@page import="java.util.Map"%>
+<%@page import="service.GoodsService"%>
+<%@page import="vo.Goods"%>
 <%@page import="service.EmployeeService"%>
 <%@page import="vo.Employee"%>
 <%@page import="java.util.ArrayList"%>
@@ -11,6 +15,11 @@ if (session.getAttribute("id") == null || session.getAttribute("user").equals("C
 	response.sendRedirect(request.getContextPath() + "/loginForm.jsp");
 	return;
 }
+//전송받은 값
+int goodsNo = Integer.parseInt(request.getParameter("goodsNo"));
+System.out.println("----" + goodsNo + " 상세 수정하기----");
+//goodsNo와 관련된 정보 및 이미지 가져오기
+Map<String, Object> goodsOne = new GoodsService().getGoodsAndImgOne(goodsNo);
 %>
 <!DOCTYPE html>
 <html lang="euc-kr">
@@ -28,8 +37,7 @@ if (session.getAttribute("id") == null || session.getAttribute("user").equals("C
 <body class="sb-nav-fixed">
 	<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
 		<!-- Navbar Brand-->
-		<a class="navbar-brand ps-3" href="<%=request.getContextPath()%>/adminIndex.jsp">
-			<img alt="mamazon" src="<%=request.getContextPath()%>/img/mamazon.png" style="margin-top: 15px">
+		<a class="navbar-brand ps-3" href="<%=request.getContextPath()%>/adminIndex.jsp"> <img alt="mamazon" src="<%=request.getContextPath()%>/img/mamazon.png" style="margin-top: 15px">
 		</a>
 		<!-- Sidebar Toggle-->
 		<button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!">
@@ -47,9 +55,8 @@ if (session.getAttribute("id") == null || session.getAttribute("user").equals("C
 		</form>
 		<!-- Navbar-->
 		<ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
-			<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-					<i class="fas fa-user fa-fw"></i>
-				</a>
+			<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> <i class="fas fa-user fa-fw"></i>
+			</a>
 				<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
 					<li><a class="dropdown-item" href="#!">Settings</a></li>
 					<li><a class="dropdown-item" href="#!">Activity Log</a></li>
@@ -66,35 +73,34 @@ if (session.getAttribute("id") == null || session.getAttribute("user").equals("C
 				<div class="sb-sidenav-menu">
 					<div class="nav">
 						<div class="sb-sidenav-menu-heading">Admin Mode</div>
-						<a class="nav-link" href="#">
-							<div class="sb-nav-link-icon">
-								<i class="fas fa-bell"></i>
-							</div>
-							공지사항관리
-						</a>
-						<a class="nav-link active" href="<%=request.getContextPath()%>/employeeList.jsp">
+						<a class="nav-link" href="<%=request.getContextPath()%>/admin/adminEmployeeList.jsp">
 							<div class="sb-nav-link-icon ">
 								<i class="fas fa-user-tie"></i>
-							</div>
-							사원관리
+							</div> 사원관리
 						</a>
-						<a class="nav-link" href="index.html">
-							<div class="sb-nav-link-icon">
-								<i class="fas fa-users"></i>
-							</div>
-							고객관리
-						</a>
-						<a class="nav-link" href="index.html">
+						<!-- 상품목록/등록/수정(품절)/석재(장바구니,주문이 없는 경우) -->
+						<a class="nav-link active" href="<%=request.getContextPath()%>/admin/adminGoodsList.jsp">
 							<div class="sb-nav-link-icon">
 								<i class="fas fa-list-alt"></i>
-							</div>
-							상품관리
+							</div> 상품관리 - 상세
 						</a>
-						<a class="nav-link" href="index.html">
+						<!-- 주문목록/수정 -->
+						<a class="nav-link" href="<%=request.getContextPath()%>/admin/adminOrderList.jsp">
 							<div class="sb-nav-link-icon">
 								<i class="fas fa-tachometer-alt"></i>
-							</div>
-							주문관리
+							</div> 주문관리
+						</a>
+						<!-- 고객목록/강제탈퇴/비밀번호수정(전달구현X) -->
+						<a class="nav-link" href="<%=request.getContextPath()%>/admin/adminCustomerList.jsp">
+							<div class="sb-nav-link-icon">
+								<i class="fas fa-users"></i>
+							</div> 고객관리
+						</a>
+						<!-- 공지 CRUD -->
+						<a class="nav-link" href="<%=request.getContextPath()%>/admin/adminNoticeList.jsp">
+							<div class="sb-nav-link-icon">
+								<i class="fas fa-bell"></i>
+							</div> 공지관리
 						</a>
 					</div>
 					<!-- /nav -->
@@ -104,65 +110,45 @@ if (session.getAttribute("id") == null || session.getAttribute("user").equals("C
 		<!-- /Left Nav -->
 
 		<!-- Main page -->
-		<!-- 사원리스트에 필요한 변수 선언 -->
-		<%
-		//한 페이지 당 보여줄 글의 수 - 상수화시킨다
-		final int rowPerPage = 10;
-		//currentPage는 1로 초기화한다.
-		int currentPage = 1;
-		if (request.getParameter("currentPage") != null) { //전달되는 값이 있다면
-			currentPage = Integer.parseInt(request.getParameter("currentPage")); //전달되는 값으로 현재페이지를 설정
-			//디버깅
-			System.out.println(currentPage + "<-- currentPage - employeeList.jsp");
-		}
-		//직원들의 정보를 담을 ArrayList객체 생성
-		ArrayList<Employee> list = new EmployeeService().getEmployeeList(rowPerPage, currentPage);
-		%>
 		<div id="layoutSidenav_content">
 			<main>
 				<div class="container-fluid px-4">
-					<h1 class="mt-4">사원관리</h1>
+					<h1 class="mt-4">제품 정보 수정</h1>
 					<hr>
 					<div class="card mb-4">
 						<div class="card-header">
-							<i class="fas fa-table me-1"></i> Employee Data
+							<i class="fas fa-table me-1"></i> GoodsOne
 						</div>
 						<div class="card-body">
-							<table class="table table-bordered">
-								<thead>
-									<tr>
-										<th>ID</th>
-										<th>Name</th>
-										<th>Update date</th>
-										<th>Create date</th>
-										<th>Active</th>
-									</tr>
-								</thead>
-								<tbody>
-									<%
-									for (Employee e : list) {
-									%>
-									<tr>
-										<td><%=e.getEmployeeId()%></td>
-										<td><%=e.getEmployeeName()%></td>
-										<td><%=e.getUpdateDate()%></td>
-										<td><%=e.getCreateDate()%></td>
-										<td>
-											<form action="<%=request.getContextPath()%>/modifyEmployeeActive.jsp">
-												<select name="active" id="active">
-													<option value="none" selected disabled hidden><%=e.getActive()%></option>
-													<option value="Y">Y</option>
-													<option value="N">N</option>
-												</select>
-												<button type="submit" class="btn btn-primary btn-sm">권한변경</button>
-											</form>
-										</td>
-									</tr>
-									<%
-									}
-									%>
-								</tbody>
-							</table>
+							<!-- 수정할 데이터  -->
+							<form action="<%=request.getContextPath()%>/admin/adminGoodsOneUpdate.jsp" method="post" id="adminGoodsOneUpdate">
+								<fieldset>
+									<table class="table table-bordered">
+										<tr>
+											<th>goodsNo</th>
+											<td><input type="text" class="form-control" name="goodsNo" id="goodsNo" readonly="readonly" value="<%=goodsOne.get("goodsNo")%>"></td>
+										</tr>
+										<tr>
+											<th>goodsName</th>
+											<td><input type="text" class="form-control" name="goodsName" id="goodsName"></td>
+										</tr>
+										<tr>
+											<th>goodsPrice</th>
+											<td><input type="text" class="form-control" name="goodsPrice" id="goodsPrice"></td>
+										</tr>
+										<tr>
+											<th>soldOut</th>
+											<td>품절<input type="radio" id="soldOut" name="Y"> 재고있음<input type="radio" id="soldOut" name="N">
+											</td>
+										</tr>
+										<tr>
+											<th>이미지 파일:</th>
+											<td><input type="file" name="file" id=""></td>
+										</tr>
+									</table>
+									<button type="button" class="btn btn-primary" id="btn">수정</button>
+								</fieldset>
+							</form>
 						</div>
 					</div>
 				</div>
@@ -174,9 +160,7 @@ if (session.getAttribute("id") == null || session.getAttribute("user").equals("C
 					<div class="d-flex align-items-center justify-content-between small">
 						<div class="text-muted">Copyright &copy; PARKSJ Website 2022</div>
 						<div>
-							<a href="#">Privacy Policy</a>
-							&middot;
-							<a href="#">Terms &amp; Conditions</a>
+							<a href="#">Privacy Policy</a> &middot; <a href="#">Terms &amp; Conditions</a>
 						</div>
 					</div>
 				</div>
@@ -193,4 +177,17 @@ if (session.getAttribute("id") == null || session.getAttribute("user").equals("C
 	<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
 	<script src="<%=request.getContextPath()%>/adminIndexBoot/js/datatables-simple-demo.js"></script>
 </body>
+<script>
+	$('#btn').click(function(){
+		if ( $('#imgPw').val().length < 3){
+			alert('비밀번호를 입력하세요');
+		} else if( $('#imgTitle').val().length < 3){
+			alert('제목은 3자 이상');
+		} else if ( $('#imgFile').val().length < 1){
+			alert('파일을 선택하세요');
+		} else {
+			$('#adminGoodsOneUpdate').submit();
+		}
+	});
+</script>
 </html>

@@ -63,36 +63,35 @@ if (session.getAttribute("id") == null || session.getAttribute("user").equals("C
 				<div class="sb-sidenav-menu">
 					<div class="nav">
 						<div class="sb-sidenav-menu-heading">Admin Mode</div>
-						<a class="nav-link" href="#">
-							<div class="sb-nav-link-icon">
-								<i class="fas fa-bell"></i>
-							</div>
-							공지사항관리
-						</a>
-						<a class="nav-link" href="<%=request.getContextPath()%>/employeeList.jsp">
-							<div class="sb-nav-link-icon">
+						<a class="nav-link" href="<%=request.getContextPath()%>/admin/adminEmployeeList.jsp">
+							<div class="sb-nav-link-icon ">
 								<i class="fas fa-user-tie"></i>
-							</div>
-							사원관리
-						</a>
-						<a class="nav-link" href="index.html">
-							<div class="sb-nav-link-icon">
-								<i class="fas fa-users"></i>
-							</div>
-							고객관리
-						</a>
-						<a class="nav-link" href="index.html">
+							</div> 사원관리
+						</a> 
+						<!-- 상품목록/등록/수정(품절)/석재(장바구니,주문이 없는 경우) -->
+						<a class="nav-link" href="<%=request.getContextPath()%>/admin/adminGoodsList.jsp">
 							<div class="sb-nav-link-icon">
 								<i class="fas fa-list-alt"></i>
-							</div>
-							상품관리
-						</a>
-						<a class="nav-link" href="index.html">
+							</div> 상품관리
+						</a> 
+						<!-- 주문목록/수정 -->
+						<a class="nav-link" href="<%=request.getContextPath()%>/admin/adminOrderList.jsp">
 							<div class="sb-nav-link-icon">
 								<i class="fas fa-tachometer-alt"></i>
-							</div>
-							주문관리
+							</div> 주문관리
 						</a>
+						<!-- 고객목록/강제탈퇴/비밀번호수정(전달구현X) -->
+						<a class="nav-link" href="<%=request.getContextPath()%>/admin/adminCustomerList.jsp">
+							<div class="sb-nav-link-icon">
+								<i class="fas fa-users"></i>
+							</div> 고객관리
+						</a> 
+						<!-- 공지 CRUD -->
+						<a class="nav-link" href="<%=request.getContextPath()%>/admin/adminNoticeList.jsp">
+							<div class="sb-nav-link-icon">
+								<i class="fas fa-bell"></i>
+							</div> 공지관리
+						</a> 
 					</div>
 					<!-- /nav -->
 				</div>
@@ -109,6 +108,7 @@ if (session.getAttribute("id") == null || session.getAttribute("user").equals("C
 					<%=session.getAttribute("id")%>
 					직원이름:
 					<%=session.getAttribute("name")%>
+					관리자 인덱스화면입니다.
 				</div>
 			</main>
 
