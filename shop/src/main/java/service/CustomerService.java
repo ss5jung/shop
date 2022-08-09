@@ -11,12 +11,13 @@ import vo.Customer;
 
 public class CustomerService {
 	// 고객 목록
-	public List getCustomerList(int rowPerPage, int currentPage) {
+	public List<Customer> getCustomerList(int rowPerPage, int currentPage) {
 		//파라미터 디버깅
 		System.out.println(rowPerPage + "<-- rowPerPage - getCustomerList ");
 		System.out.println(currentPage + "<-- currentPage- getCustomerList");
-		return null;
-		
+		//리턴할 객체 생성하기
+		List<Customer> list = null;
+		return list;
 	}
 	
 	// 회원가입

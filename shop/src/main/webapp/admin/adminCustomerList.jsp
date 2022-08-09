@@ -22,7 +22,7 @@ if (request.getParameter("currentPage") != null) {
 }
 //리스트에 보여줄 데이터 가져오기
 List<Customer> list = null;
-list = new CustomerService().
+list = new CustomerService().getCustomerList(rowPerPage, currentPage);
 
 //lastPage 구하기
 int lastPage = new OrdersService().getOrdersLastPage(rowPerPage);
@@ -140,17 +140,18 @@ System.out.println(lastPage + "<-- lastPage - adminOrderList");
 								</thead>
 								<tbody>
 									<%
-									for (Map<String, Object> m : list) {
+									for (Customer c : list) {
 									%>
 									<tr>
 										<td>
 										<a href="<%=request.getContextPath()%>/admin/adminOrderOne.jsp?orderNo=<%=m.get("orderNo") %>"><%=m.get("orderNo") %></a>
 										</td>
-										<td><%=m.get("customerId") %></td>
-										<td><%=m.get("orderTotal") %></td>
-										<td><%=m.get("orderState") %></td>
-										<td><%=m.get("updateDate") %></td>
-										<td><%=m.get("createDate") %></td>
+										<td><%=c.getCustomerId() %></td>
+										<td><%=c.getCustomerName() %></td>
+										<td><%=c.getCustomerAddress() %></td>
+										<td><%=c.getCustomerTelephone() %></td>
+										<td><%=c.getUpdateDate() %></td>
+										<td><%=c.getCreateDate() %></td>
 									</tr>
 									<%
 									}
