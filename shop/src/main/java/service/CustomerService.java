@@ -2,6 +2,7 @@ package service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 import repository.CustomerDAO;
 import repository.DBUtil;
@@ -9,6 +10,15 @@ import repository.OutIdDAO;
 import vo.Customer;
 
 public class CustomerService {
+	// 고객 목록
+	public List getCustomerList(int rowPerPage, int currentPage) {
+		//파라미터 디버깅
+		System.out.println(rowPerPage + "<-- rowPerPage - getCustomerList ");
+		System.out.println(currentPage + "<-- currentPage- getCustomerList");
+		return null;
+		
+	}
+	
 	// 회원가입
 	// signUpCustomerAction.jsp 호출시
 	public int addCustomer(Customer paramCustomer) {

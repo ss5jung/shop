@@ -1,3 +1,5 @@
+<%@page import="java.util.HashMap"%>
+<%@page import="java.util.Map"%>
 <%@page import="service.GoodsService"%>
 <%@page import="vo.Goods"%>
 <%@page import="service.EmployeeService"%>
@@ -7,27 +9,15 @@
 <%
 //인코딩
 request.setCharacterEncoding("utf-8");
-
 //접근제한
 //로그인하지 않은 상태이거나 고객일 경우에 접근차단하기
-if (session.getAttribute("id") == null || session.getAttribute("user").equals("Customer")) {
+if (session.getAttribute("id") == null || "Customer".equals((String) session.getAttribute("user"))) {
 	response.sendRedirect(request.getContextPath() + "/loginForm.jsp");
 	return;
 }
-/* 페이징 */
-//한 페이지 당 보여줄 글의 수 - 상수화시킨다
-final int rowPerPage = 10;
-//currentPage는 1로 초기화한다.
-int currentPage = 1;
-if (request.getParameter("currentPage") != null ) { //전달되는 값이 있다면
-	currentPage = Integer.parseInt(request.getParameter("currentPage")); //전달되는 값으로 현재페이지를 설정
-	//디버깅
-	System.out.println(currentPage + "<-- currentPage - adminGoodsList.jsp");
-}
-
-//lastPage 구하기
-int lastPage = new GoodsService().getGoodsLastPage(rowPerPage);
-System.out.println(lastPage + "<-- lastPage - Goods");
+//전송받은 값
+int orderNo = Integer.parseInt(request.getParameter("orderNo"));
+System.out.println(orderNo + "<-- orderNo - adminOrderOneUpdate.jsp");
 %>
 <!DOCTYPE html>
 <html lang="euc-kr">
@@ -40,6 +30,7 @@ System.out.println(lastPage + "<-- lastPage - Goods");
 <title>Admin</title>
 <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
 <link href="<%=request.getContextPath()%>/adminIndexBoot/css/styles.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
 <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
 </head>
 <body class="sb-nav-fixed">
@@ -87,13 +78,13 @@ System.out.println(lastPage + "<-- lastPage - Goods");
 							</div> 사원관리
 						</a>
 						<!-- 상품목록/등록/수정(품절)/석재(장바구니,주문이 없는 경우) -->
-						<a class="nav-link active" href="<%=request.getContextPath()%>/admin/adminGoodsList.jsp">
+						<a class="nav-link " href="<%=request.getContextPath()%>/admin/adminGoodsList.jsp">
 							<div class="sb-nav-link-icon">
 								<i class="fas fa-list-alt"></i>
 							</div> 상품관리
 						</a>
 						<!-- 주문목록/수정 -->
-						<a class="nav-link" href="<%=request.getContextPath()%>/admin/adminOrderList.jsp">
+						<a class="nav-link active" href="<%=request.getContextPath()%>/admin/adminOrderList.jsp">
 							<div class="sb-nav-link-icon">
 								<i class="fas fa-tachometer-alt"></i>
 							</div> 주문관리
@@ -118,92 +109,54 @@ System.out.println(lastPage + "<-- lastPage - Goods");
 		<!-- /Left Nav -->
 
 		<!-- Main page -->
-		<!-- 상품 리스트 필요한 변수 선언 -->
-		<%
-		//상품들의 정보를 담을 ArrayList객체 생성
-		ArrayList<Goods> list = (ArrayList<Goods>) (new GoodsService().getGoodsListByPage(rowPerPage, currentPage));
-		%>
 		<div id="layoutSidenav_content">
 			<main>
 				<div class="container-fluid px-4">
-					<h1 class="mt-4">상품관리</h1>
+					<h1 class="mt-4">주문내역 수정</h1>
 					<hr>
 					<div class="card mb-4">
 						<div class="card-header">
-							<i class="fas fa-table me-1"></i> Goods Data
+							<i class="fas fa-table me-1"></i> 상품 추가
 						</div>
 						<div class="card-body">
-							<table id="datatablesSimple">
-								<thead>
-									<tr>
-										<th>상품명</th>
-										<th>상품가격</th>
-										<th>Update date</th>
-										<th>Create date</th>
-										<th>품절여부</th>
-									</tr>
-								</thead>
-								<tbody>
-									<%
-									for (Goods g : list) {
-									%>
-									<tr>
-										<td><a href="<%=request.getContextPath()%>/admin/adminGoodsOne.jsp?goodsNo=<%=g.getGoodsNo()%>"><%=g.getGoodsName()%></a></td>
-										<td><%=g.getGoodsPrice()%></td>
-										<td><%=g.getUpdateDate()%></td>
-										<td><%=g.getCreateDate()%></td>
-										<td><%=g.getSoldOut()%></td>
-									</tr>
-									<%
-									}
-									%>
-								</tbody>
-							</table>
-							<!-- 페이징과 버튼 -->
-							<!-- row  -->
-							<div class="row">
-								<div class="col-lg-2"></div>
-								<!-- 페이징 -->
-								<div class="col-lg-8">
-									<ul class="pagination justify-content-center">
-										<%
-										if (currentPage > 1) {
-										%>
-										<li class="page-item"><a class="page-link" href="<%=request.getContextPath()%>/admin/adminGoodsList.jsp?currentPage=<%=currentPage - 1%>">이전</a></li>
-										<%
-										} else {
-										%>
-										<li class="page-item disabled"><a class="page-link" href="<%=request.getContextPath()%>/admin/adminGoodsList.jsp?currentPage=<%=currentPage - 1%>">이전</a></li>
-										<%
-										}
-										%>
-										<%
-										if (currentPage < lastPage) {
-										%>
-										<li class="page-item"><a class="page-link" href="<%=request.getContextPath()%>/admin/adminGoodsList.jsp?currentPage=<%=currentPage + 1%>">다음</a></li>
-										<%
-										} else {
-										%>
-										<li class="page-item disabled"><a class="page-link" href="<%=request.getContextPath()%>/admin/adminGoodsList.jsp?currentPage=<%=currentPage + 1%>">다음</a></li>
-										<%
-										}
-										%>
-										<!-- 
-								<li class="page-item"><a class="page-link" href="#">이전</a></li>
-								<li class="page-item"><a class="page-link" href="#">1</a></li>
-								<li class="page-item"><a class="page-link" href="#">2</a></li>
-								<li class="page-item"><a class="page-link" href="#">3</a></li>
-								<li class="page-item"><a class="page-link" href="#">다음</a></li> 
-								-->
-									</ul>
-								</div>
-								<!-- /페이징 -->
-								<!-- 상품추가 -->
-								<div class="col-lg-2" style="text-align: right;">
-									<a href="<%=request.getContextPath()%>/admin/addGoodsForm.jsp"><button class="btn btn-primary">상품추가</button></a>
-								</div>
-							</div>
-							<!-- row  -->
+							<form action="<%=request.getContextPath()%>/admin/adminOrderOneUpdateAction.jsp" method="post" id="updateOrderForm">
+								<fieldset>
+									<table class="table table-bordered">
+										<tr>
+											<th>orderNo</th>
+											<td><input type="text" class="form-control" id="orderNo" name="orderNo" value="<%=orderNo%>" readonly="readonly"></td>
+										</tr>
+										<tr>
+											<th>orderAddr</th>
+											<td><input type="text" class="form-control" id="orderAddr" name="orderAddr"></td>
+										</tr>
+										<tr>
+											<th>orderState</th>
+											<td><select id="orderState" name="orderState">
+													<option value="default">:::주문상황:::</option>
+													<option value="결제대기">결제대기</option>
+													<option value="주문완료">주문완료</option>
+													<option value="배송준비중">배송준비중</option>
+													<option value="배송중">배송중</option>
+													<option value="배송완료">배송완료</option>
+											</select></td>
+										</tr>
+										<tr>
+											<th>goodsNo</th>
+											<td><input type="text" class="form-control" id="goodsNo" name="goodsNo"></td>
+										</tr>
+										<tr>
+											<th>orderQuantity</th>
+											<td><input type="text" class="form-control" id="orderQuantity" name="orderQuantity"></td>
+										</tr>
+										<tr>
+											<th>orderPrice</th>
+											<td><input type="text" class="form-control" id="orderPrice" name="orderPrice"></td>
+										</tr>
+									</table>
+									<button type="button" id="updateOrderBtn" class="btn btn-primary" style="float: right;">주문 수정</button>
+								</fieldset>
+							</form>
 						</div>
 					</div>
 				</div>
@@ -232,4 +185,19 @@ System.out.println(lastPage + "<-- lastPage - Goods");
 	<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
 	<script src="<%=request.getContextPath()%>/adminIndexBoot/js/datatables-simple-demo.js"></script>
 </body>
+<script>
+	$('#updateOrderBtn').click(function() {
+		if ($('#orderAddr').val().length < 1) {
+			alert('배송지를 입력하세요');
+		} else if ($('#goodsNo').val().length < 1) {
+			alert('상품번호를 입력하세요');
+		} else if ($('#orderQuantity').val().length < 1) {
+			alert('주문 수량을 입력하세요');
+		} else if ($('#orderPrice').val().length < 1) {
+			alert('상품의 개별 가격을 입력하세요');
+		} else {
+			$('#updateOrderForm').submit();
+		}
+	});
+</script>
 </html>

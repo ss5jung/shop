@@ -130,7 +130,7 @@ System.out.println("lastPage > " + lastPage);
 							<i class="fas fa-table me-1"></i> Employee Data
 						</div>
 						<div class="card-body">
-							<table class="table table-bordered">
+							<table id="datatablesSimple">
 								<thead>
 									<tr>
 										<th>ID</th>

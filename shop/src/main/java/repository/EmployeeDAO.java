@@ -96,13 +96,13 @@ public class EmployeeDAO {
 				list.add(e);
 			}
 		} finally {
+			//DB 자원해제
 			if (rs != null) {
 				rs.close();
 			}
 			if (stmt != null) {
 				stmt.close();
 			}
-			System.out.println("selectEmployeeList.jsp - DB연동 해제");
 		}
 		return list;
 	}
