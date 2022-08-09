@@ -15,21 +15,44 @@ import vo.Goods;
 public class GoodsDAO {
 	// 상품 추가 - key 값 리턴
 	public int insertGoods(Connection conn, Goods goods) throws SQLException {
+		// 파라미터 디버깅
+		System.out.println(goods);
+		// 리턴할 변수(Key값)
 		int keyId = 0;
-		PreparedStatement stmt = conn.prepareStatement("INSERT ...", Statement.RETURN_GENERATED_KEYS);
-		// 1) insert
-		// 2) select last_ai_key from...
-		stmt.executeUpdate(); // insert 성공한 row 수
-		ResultSet rs = stmt.getGeneratedKeys(); // select last_key
-		if (rs.next()) {
-			keyId = rs.getInt(1);
-		}
-
-		if (stmt != null) {
-			stmt.close();
-		}
-		if (rs != null) {
-			stmt.close();
+		int row = 0;
+		// DB자원
+		PreparedStatement stmt = null;
+		ResultSet rs = null; // select가 아닌데 ResultSet을 선언한 이유는 키값을 리턴해야 하므로
+		String sql = "insert into goods (goods_name, goods_price, update_date, create_date, sold_out) values (?, ?, now(), now(), 'N');";
+		// 상품이 처음부터 품절상태는 아니므로 기본값은 N로 한다.
+		try {
+			stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			// stmt 셋팅
+			stmt.setString(1, goods.getGoodsName());
+			stmt.setInt(2, goods.getGoodsPrice());
+			System.out.println(stmt + " <-- stmt insertGoods");
+			// 1) insert가 실행이 되었다면
+			row = stmt.executeUpdate();
+			if (row > 0) {
+				System.out.println("stmt - insertGoods가 실행되었습니다.");
+				System.out.println(row + "<-- insert 성공한 row의 수 ");
+				// 2) select last_ai_key from... 키 값 가져오기
+				rs = stmt.getGeneratedKeys(); // getGeneratedKeys : 또 한번의 네트워크 통신 없이 바로 가져올 수 있다
+				System.out.println(rs + "<-- rs - insertGoods");
+				if (rs.next()) {
+					System.out.println("rs가 실행되었습니다.");
+					keyId = rs.getInt(1);
+					System.out.println(keyId + "<-- keyId - insertGoods에서 추가된 상품의 key ");
+				}
+			}
+		} finally {
+			// DB자원 해제
+			if (rs != null) {
+				rs.close();
+			}
+			if (stmt != null) {
+				stmt.close();
+			}
 		}
 		return keyId;
 	}

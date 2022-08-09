@@ -38,7 +38,7 @@ String filename = mRequest.getFilesystemName("goodsImg");
 System.out.println(filename + "<-- filename 새로 생성된 파일이름");
 
 //파일 형식 제한
-if (!(contentType.equals("image/gif") || contentType.equals("image/png") || contentType.equals("image/jpg"))) {
+if (!(contentType.equals("image/gif") || contentType.equals("image/png") || contentType.equals("image/jpeg"))) {
 	File f = new File(dir + "\\" + filename);
 	//이미 업로드된 파일을 삭제
 	if (f.exists()) {
@@ -47,7 +47,7 @@ if (!(contentType.equals("image/gif") || contentType.equals("image/png") || cont
 	//에러메세지
 	System.out.println("이미지 파일만 업로드 가능");
 	//String errorMsg = URLEncoder.encode("이미지 파일만 업로드 가능", "utf-8");
-	response.sendRedirect(request.getContextPath() + "/addGoodsForm.jsp");
+	response.sendRedirect(request.getContextPath() + "/admin/addGoodsForm.jsp");
 	return;
 }
 //addGoods에 보낼 파라미터 GoodsImg 객체  
@@ -59,10 +59,13 @@ goodsImg.setOriginFilename(originFilename);
 
 //리턴받을 값
 int row = new GoodsService().addGoods(goods, goodsImg);
+System.out.println(row + "<--row - addGoodsAction.jsp ");
 
-if(row == 1){
+if (row == 1) { //상품 추가 성공했을 경우 
 	System.out.println("상품 추가가 정상적으로 이루워졌습니다.");
-} else {
+	response.sendRedirect(request.getContextPath() + "/admin/adminGoodsList.jsp");
+} else { //상품 추가 실패했을 경우
 	System.out.println("상품 추가에 실패했습니다.");
+	response.sendRedirect(request.getContextPath() + "/admin/addGoodsForm.jsp");
 }
 %>

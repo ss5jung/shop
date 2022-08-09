@@ -16,57 +16,55 @@ public class GoodsService {
 	// DAO는 모든 이너클래스에서 사용할 것이므로 필드로 만들어둔다.
 	private GoodsDAO goodsDAO;
 	private GoodsImgDAO goodsImgDAO;
-	
-	
-	//상품 추가
+
+	// 상품 추가
 	public int addGoods(Goods goods, GoodsImg goodsImg) throws SQLException {
-		//파라미터 디버깅
+		// 파라미터 디버깅
 		System.out.println(goods);
 		System.out.println(goodsImg);
-		//리턴할 변수 선언
+		// 리턴할 변수 선언
 		int row = 0;
-		//DB 연동
+		// DB 연동
 		Connection conn = null;
-		
+
 		try {
 			conn = new DBUtil().getConnection();
 			System.out.println("DB 연동 성공 - addGoods");
 			conn.setAutoCommit(false);
-			
-			//DAO 객체 생성
+			// DAO 객체 생성
 			goodsDAO = new GoodsDAO();
 			goodsImgDAO = new GoodsImgDAO();
-			
-			//insertGoods 실행후 성공시 -> img 삽입
-			//goodsNo가 AutoIncrement로 자동생성되어 DB입력
-			//단, insertGoods메소드의 리턴값은 key값
-			int goodsNo = goodsDAO.insertGoods(conn, goods);	
-		
-			if(goodsNo != 0) {		//insertGoods가 정상적으로 실행되었다면
-				goodsImg.setGoodsNo(goodsNo);
-				if(goodsImgDAO.insertGoodsImg(conn, goodsImg) == 0) {	//이미지입력 실패시
-					throw new Exception();	//catch절로 이동
+
+			// 1)insertGoods 실행후 성공시 -> 2)img 삽입
+			// goodsNo가 AutoIncrement로 자동생성되어 DB입력
+			// 새로 생성된 key값이 리턴된다.
+			int goodsNo = goodsDAO.insertGoods(conn, goods);
+
+			if (goodsNo != 0) { // insertGoods가 정상적으로 실행되었다면
+				goodsImg.setGoodsNo(goodsNo); // 리턴 받아온 key값을 goodsImg의 goodsNo로 셋팅
+				row = goodsImgDAO.insertGoodsImg(conn, goodsImg);
+				if (row == 0) { // 이미지입력 실패시
+					throw new Exception(); // catch절로 이동
 				}
 			}
 			conn.commit();
-		} catch (Exception e) {
+		} catch (Exception e) { // 예외처리되면
 			e.printStackTrace();
 			try {
-				conn.rollback();	
+				conn.rollback(); // rollback해서 이전상태로 만들기
 			} catch (Exception e2) {
 				e.printStackTrace();
 			}
-
 		} finally {
-			if(conn != null) {
+			// DB자원 해제
+			if (conn != null) {
 				conn.close();
 			}
 		}
+		System.out.println(row + "<-- row - addGoods");
 		return row;
-	} 
+	}
 
-	
-	
 	// 상세페이지
 	public Map<String, Object> getGoodsAndImgOne(int goodsNo) throws SQLException {
 		// 전송받은 값 디버깅

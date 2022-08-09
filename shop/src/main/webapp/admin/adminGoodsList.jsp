@@ -7,9 +7,10 @@
 <%
 //인코딩
 request.setCharacterEncoding("utf-8");
+
 //접근제한
 //로그인하지 않은 상태이거나 고객일 경우에 접근차단하기
-if (session.getAttribute("id") == null || "Customer".equals((String)session.getAttribute("user"))) {
+if (session.getAttribute("id") == null || session.getAttribute("user").equals("Customer")) {
 	response.sendRedirect(request.getContextPath() + "/loginForm.jsp");
 	return;
 }
@@ -18,7 +19,7 @@ if (session.getAttribute("id") == null || "Customer".equals((String)session.getA
 final int rowPerPage = 10;
 //currentPage는 1로 초기화한다.
 int currentPage = 1;
-if (request.getParameter("currentPage") != null) { //전달되는 값이 있다면
+if (request.getParameter("currentPage") != null ) { //전달되는 값이 있다면
 	currentPage = Integer.parseInt(request.getParameter("currentPage")); //전달되는 값으로 현재페이지를 설정
 	//디버깅
 	System.out.println(currentPage + "<-- currentPage - adminGoodsList.jsp");
