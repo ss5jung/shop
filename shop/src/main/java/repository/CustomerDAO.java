@@ -4,10 +4,87 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import vo.Customer;
 
 public class CustomerDAO {
+	// 라스트 페이지
+	public int selectCustomerLastPage(Connection conn, int rowPerPage) throws SQLException {
+		// 파라미터 디버깅
+		System.out.println(rowPerPage + "<-- rowPerPage - selectCustomerLastPage");
+		// 리턴할 변수 선언 및 초기화
+		int lastPage = 0;
+
+		String sql = "SELECT count(*) count FROM customer";
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		int totalCount = 0;
+
+		try {
+			stmt = conn.prepareStatement(sql);
+			System.out.println(stmt + "<-- stmt");
+			rs = stmt.executeQuery();
+			System.out.println(rs + "<-- rs");
+			// 디버깅
+			if (rs.next()) {
+				totalCount = rs.getInt("count");
+				System.out.println(totalCount + "<--totalCount 전체 고객수");
+			}
+		} finally {
+			// DB자원 해제
+			if (rs != null) {
+				rs.close();
+			}
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+
+		// lastPage 연산 - 올림해서 lastPage구하기
+		lastPage = (int) Math.ceil((double) totalCount / rowPerPage);
+		return lastPage;
+	}
+
+	// 고객 목록
+	public List<Customer> selectCustomerList(Connection conn, int rowPerPage, int beginRow) throws SQLException {
+		// 파라미터 디버깅
+		System.out.println("selectCustomerList 파라미터 : rowPerPage ->" + rowPerPage + "beginRow ->" + beginRow);
+		// DB자원 생성
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		String sql = "SELECT customer_id customerId, customer_name customerName, customer_address customerAddress, customer_telephone customerTelephone, update_date updateDate, create_date createDate FROM customer ORDER BY create_date DESC LIMIT ?,?";
+		// 고객 리스트를 담을 ArrayList객체 생성
+		List<Customer> list = new ArrayList<>();
+		try {
+			// DB 객체 설정
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, beginRow);
+			stmt.setInt(2, rowPerPage);
+			System.out.println(stmt + "<-- stmt - selectCustomerList");
+			rs = stmt.executeQuery();
+			System.out.println(rs + "<-- rs");
+			while (rs.next()) {
+				// 한 명의 고객 정보를 넣을 customer 객체 생성
+				Customer customer = new Customer();
+				customer.setCustomerId(rs.getString("customerId"));
+				customer.setCustomerName(rs.getString("customerName"));
+				customer.setCustomerAddress(rs.getString("customerAddress"));
+				customer.setCustomerTelephone(rs.getString("customerTelephone"));
+				customer.setUpdateDate(rs.getString("updateDate"));
+				customer.setCreateDate(rs.getString("createDate"));
+				list.add(customer);
+			}
+		} finally {
+			// DB 자원 해제
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return list;
+	}
+
 	// 회원가입
 	public int insertCustomer(Connection conn, Customer paramCustomer) throws SQLException {
 		// 리턴할 변수 선언

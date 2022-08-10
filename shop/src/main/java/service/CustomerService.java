@@ -2,6 +2,7 @@ package service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import repository.CustomerDAO;
@@ -10,16 +11,62 @@ import repository.OutIdDAO;
 import vo.Customer;
 
 public class CustomerService {
+	// last 페이지 구하기
+	public int getCustomerLastPage(int rowPerPage) throws SQLException {
+		//리턴할 변수 값
+		int lastPage = 0;
+		//DB 자원
+		Connection conn = null;
+		try {
+			// DB연동
+			conn = new DBUtil().getConnection();
+			System.out.println("DB 연동 - getCustomerLastPage");
+			// lastPage DAO에서 리턴받기
+			lastPage = new CustomerDAO().selectCustomerLastPage(conn, rowPerPage);
+			System.out.println(lastPage + "lastPage - getCustomerLastPage");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// DB 자원 해제
+			if (conn != null) {
+				conn.close();
+				System.out.println("conn 연결 해제");
+			}
+		}
+		return lastPage;
+	}
+
 	// 고객 목록
-	public List<Customer> getCustomerList(int rowPerPage, int currentPage) {
-		//파라미터 디버깅
+	public List<Customer> getCustomerList(int rowPerPage, int currentPage) throws SQLException {
+		// 파라미터 디버깅
 		System.out.println(rowPerPage + "<-- rowPerPage - getCustomerList ");
 		System.out.println(currentPage + "<-- currentPage- getCustomerList");
-		//리턴할 객체 생성하기
-		List<Customer> list = null;
+		// 리턴할 객체 생성하기
+		List<Customer> list = new ArrayList<>();
+		// beginRow
+		int beginRow = (currentPage - 1) * rowPerPage;
+		System.out.println(beginRow + "<-- beginRow - getCustomerList");
+		// Connection 객체
+		Connection conn = null;
+		try {
+			conn = new DBUtil().getConnection();
+			System.out.println("Driver 연결 - getCustomerList");
+			// 고객리스트 DAO에서 받아오기
+			list = new CustomerDAO().selectCustomerList(conn, rowPerPage, currentPage);
+			// null 예외 처리
+			if (list == null) { // 전송 받은 값이 없다면
+				throw new Exception(); // 예외처리
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (conn != null) {
+				conn.close();
+			}
+		}
 		return list;
 	}
-	
+
 	// 회원가입
 	// signUpCustomerAction.jsp 호출시
 	public int addCustomer(Customer paramCustomer) {
@@ -32,8 +79,8 @@ public class CustomerService {
 			// DB에서 customer 정보 insert
 			row = new CustomerDAO().insertCustomer(conn, paramCustomer);
 			System.out.println(row + "<-- row CustomerService. addCustomer");
-			if(row == 0) {	//실행되지 않았다면
-				throw new Exception();	//오류로 이동
+			if (row == 0) { // 실행되지 않았다면
+				throw new Exception(); // 오류로 이동
 			}
 		} catch (Exception e) {
 			e.printStackTrace(); // console에 예외메세지 출력

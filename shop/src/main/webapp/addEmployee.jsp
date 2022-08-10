@@ -33,53 +33,41 @@ String idCkMsg = request.getParameter("idCkMsg");
 			<!-- 직원 아이디 중복검사 -->
 			<form action="<%=request.getContextPath()%>/idCheckAction.jsp?user=Employee" method="post" id="idCkEmployeeForm">
 				<fieldset>
-				<legend><b>Employee ID 중복검사</b></legend>
-				<table class="table table-bordered">
-					<tr>
-						<th>ID</th>
-						<td>
-							<input type="text" id="checkId" name="checkId">
-							<button type="button" id="idCkEmployeeBtn">ID중복검사</button> <!-- idCkMsg가 true이면 밑에 입력 false이면 다시 값 입력후 아이디 중복검사해 --> 
-							<%
-							 if (idCkMsg != null) {
-							 %> 
-							 <span style="color: red;"><%=idCkMsg%></span> <%
-							 }
-							 %>
-						 </td>
-					</tr>
-				</table>
+					<legend>
+						<b>Employee ID 중복검사</b>
+					</legend>
+					<table class="table table-bordered">
+						<tr>
+							<th>ID</th>
+							<td><input type="text" name="idck" id="idck">
+								<button type="button" id="idckBtn">ID 중복검사</button></td>
+						</tr>
+					</table>
 				</fieldset>
 			</form>
-			<!-- 중복 검사를 통과하면 회원가입 폼 뜬다. -->
-			<%
-			if (idCkBoolean != null && idCkBoolean.equals("true")) { // 중복검사에 통과한다면 
-				employeeId = request.getParameter("checkedId"); //통과한 아이디값 가져오기
-				System.out.println(employeeId + "<--employeeId : 중복검사 통과한 아이디");
-			%>
+
 			<form action="<%=request.getContextPath()%>/signUpEmployeeAction.jsp" method="post" id="signUpEmployeeForm">
 				<fieldset>
-				<legend><b>직원 회원가입</b></legend>
-				<table>
-					<tr>
-						<th>ID</th>
-						<td><input type="text" id="employeeId" name="employeeId" value="<%=employeeId%>" readonly="readonly"></td>
-					</tr>
-					<tr>
-						<th>Password</th>
-						<td><input type="password" id="employeePass" name="employeePass"></td>
-					</tr>
-					<tr>
-						<th>Name</th>
-						<td><input type="text" id="employeeName" name="employeeName"></td>
-					</tr>
-				</table>
-				<button type="button" class="btn btn-success" style="float: right;" id="signUpEmployeeBtn">회원가입</button>
+					<legend>
+						<b>직원 회원가입</b>
+					</legend>
+					<table>
+						<tr>
+							<th>ID</th>
+							<td><input type="text" id="employeeId" name="employeeId" readonly="readonly"></td>
+						</tr>
+						<tr>
+							<th>Password</th>
+							<td><input type="password" id="employeePass" name="employeePass"></td>
+						</tr>
+						<tr>
+							<th>Name</th>
+							<td><input type="text" id="employeeName" name="employeeName"></td>
+						</tr>
+					</table>
+					<button type="button" class="btn btn-success" style="float: right;" id="signUpEmployeeBtn">회원가입</button>
 				</fieldset>
 			</form>
-			<%
-			}
-			%>
 		</div>
 		<!-- /row -->
 	</div>
@@ -93,13 +81,35 @@ String idCkMsg = request.getParameter("idCkMsg");
 </body>
 <script>
 	/* 아이디 중복 검사 빈칸 검사 */
-	$('#idCkEmployeeBtn').click(function() {
-		if ($('#checkId').val() == '' || $('#checkId').val() == null) {
-			alert('중복검사 받으실 아이디를 입력하세요');
+	$('#idckBtn').click(function() {
+		if ($('#idck').val().length < 4) {
+			alert('id는 4자이상!');
 		} else {
-			$('#idCkEmployeeForm').submit();
+			// 비동기 호출	
+			$.ajax({
+				url : '/shop/idckController',
+				type : 'post',
+				data : {
+					idck : $('#idck').val()
+				},
+				success : function(json) {
+					// alert(json);
+					if (json == 'y') {
+						$('#employeeId').val($('#idck').val());
+					} else {
+						alert('이미 사용중인 아이디 입니다.');
+						$('#employeeId').val('');
+					}
+				},
+				//요청실패시 실행될 콜백함수
+				error : function(err) {
+					alert('요청 실패');
+					console.log(err);
+				}
+			});
 		}
 	});
+	
 	/* 회원가입 빈칸 검사*/
 	$('#signUpEmployeeBtn').click(function() {
 		if ($('#employeePass').val() == '') {

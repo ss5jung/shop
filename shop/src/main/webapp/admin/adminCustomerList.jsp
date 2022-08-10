@@ -1,3 +1,4 @@
+<%@page import="java.util.ArrayList"%>
 <%@page import="vo.Customer"%>
 <%@page import="service.CustomerService"%>
 <%@page import="java.util.List"%>
@@ -23,10 +24,11 @@ if (request.getParameter("currentPage") != null) {
 //리스트에 보여줄 데이터 가져오기
 List<Customer> list = null;
 list = new CustomerService().getCustomerList(rowPerPage, currentPage);
+System.out.println(list);
 
 //lastPage 구하기
-int lastPage = new OrdersService().getOrdersLastPage(rowPerPage);
-System.out.println(lastPage + "<-- lastPage - adminOrderList");
+int lastPage = new CustomerService().getCustomerLastPage(rowPerPage);
+System.out.println(lastPage + "<-- lastPage - adminCustomerList");
 %>
 <!DOCTYPE html>
 <html lang="euc-kr">
@@ -124,7 +126,7 @@ System.out.println(lastPage + "<-- lastPage - adminOrderList");
 					<hr>
 					<div class="card mb-4">
 						<div class="card-header">
-							<i class="fas fa-table me-1"></i> Orders Data
+							<i class="fas fa-table me-1"></i> Customers Data
 						</div>
 						<div class="card-body">
 							<table class="table table-boarder">
@@ -143,9 +145,6 @@ System.out.println(lastPage + "<-- lastPage - adminOrderList");
 									for (Customer c : list) {
 									%>
 									<tr>
-										<td>
-										<a href="<%=request.getContextPath()%>/admin/adminOrderOne.jsp?orderNo=<%=m.get("orderNo") %>"><%=m.get("orderNo") %></a>
-										</td>
 										<td><%=c.getCustomerId() %></td>
 										<td><%=c.getCustomerName() %></td>
 										<td><%=c.getCustomerAddress() %></td>

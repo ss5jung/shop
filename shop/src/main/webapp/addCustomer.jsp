@@ -33,62 +33,50 @@ String idCkMsg = request.getParameter("idCkMsg");
 			<!-- 고객 아이디 중복검사 -->
 			<form action="<%=request.getContextPath()%>/idCheckAction.jsp?user=Customer" method="post" id="idCkCustomerForm">
 				<fieldset>
-				<legend><b>Customer ID 중복검사</b></legend>
-				<table class="table table-bordered">
-					<tr>
-						<th>ID</th>
-						<td>
-							<input type="text" id="checkId" name="checkId">
-							<button type="button" id="idCkCustomerBtn">ID중복검사</button> <!-- idCkMsg가 true이면 밑에 입력 false이면 다시 값 입력후 아이디 중복검사해 --> 
-							<%
-							 if (idCkMsg != null) {
-							 %> 
-							 <span style="color: red;"><%=idCkMsg%></span> <%
-							 }
-							 %>
-						 </td>
-					</tr>
-				</table>
+					<legend>
+						<b>Customer ID 중복검사</b>
+					</legend>
+					<table class="table table-bordered">
+						<tr>
+							<th>ID</th>
+							<td><input type="text" name="idck" id="idck">
+								<button type="button" id="idckBtn">ID 중복검사</button></td>
+						</tr>
+					</table>
 				</fieldset>
 			</form>
 
-			<!-- 중복 검사를 통과하면 회원가입 폼 뜬다. -->
-			<%
-			if (idCkBoolean != null && idCkBoolean.equals("true")) { // 중복검사에 통과한다면 
-				customerId = request.getParameter("checkedId"); //통과한 아이디값 가져오기
-				System.out.println(customerId + "<--customerId : 중복검사 통과한 아이디");
-			%>
+
 			<form action="<%=request.getContextPath()%>/signUpCustomerAction.jsp" method="post" id="signUpCustomerForm">
 				<fieldset>
-				<legend><b>고객 회원가입</b></legend>
-				<table>
-					<tr>
-						<th>ID</th>
-						<td><input type="text" id="customerId" name="customerId" value="<%=customerId%>" readonly="readonly"></td>
-					</tr>
-					<tr>
-						<th>Password</th>
-						<td><input type="password" id="customerPass" name="customerPass"></td>
-					</tr>
-					<tr>
-						<th>Name</th>
-						<td><input type="text" id="customerName" name="customerName"></td>
-					</tr>
-					<tr>
-						<th>Address</th>
-						<td><input type="text" id="customerAddress" name="customerAddress"></td>
-					</tr>
-					<tr>
-						<th>Telephone</th>
-						<td><input type="text" id="customerTelephone" name="customerTelephone"></td>
-					</tr>
-				</table>
-				<button type="button" class="btn btn-success" style="float: right;" id="signUpCustomerBtn">회원가입</button>
+					<legend>
+						<b>고객 회원가입</b>
+					</legend>
+					<table>
+						<tr>
+							<th>ID</th>
+							<td><input type="text" name="customerId" id="customerId" readonly="readonly"></td>
+						</tr>
+						<tr>
+							<th>Password</th>
+							<td><input type="password" id="customerPass" name="customerPass"></td>
+						</tr>
+						<tr>
+							<th>Name</th>
+							<td><input type="text" id="customerName" name="customerName"></td>
+						</tr>
+						<tr>
+							<th>Address</th>
+							<td><input type="text" id="customerAddress" name="customerAddress"></td>
+						</tr>
+						<tr>
+							<th>Telephone</th>
+							<td><input type="text" id="customerTelephone" name="customerTelephone"></td>
+						</tr>
+					</table>
+					<button type="button" class="btn btn-success" style="float: right;" id="signUpCustomerBtn">회원가입</button>
 				</fieldset>
 			</form>
-			<%
-			}
-			%>
 		</div>
 		<!-- /row -->
 	</div>
@@ -102,13 +90,37 @@ String idCkMsg = request.getParameter("idCkMsg");
 </body>
 <script>
 	/* 아이디 중복 검사 빈칸 검사 */
-	$('#idCkCustomerBtn').click(function() {
-		if ($('#checkId').val() == '' || $('#checkId').val() == null) {
-			alert('중복검사 받으실 아이디를 입력하세요');
+	$('#idckBtn').click(function() {
+		if ($('#idck').val().length < 4) {
+			
+			alert('id는 4자이상!');
 		} else {
-			$('#idCkCustomerForm').submit();
+		
+			// 비동기 호출	
+			$.ajax({
+				url : '/shop/idckController',
+				type : 'post',
+				data : {
+					idck : $('#idck').val()
+				},
+				success : function(json) {
+					// alert(json);
+					if (json == 'y') {
+						$('#customerId').val($('#idck').val());
+					} else {
+						alert('이미 사용중인 아이디 입니다.');
+						$('#customerId').val('');
+					}
+				},
+				//요청실패시 실행될 콜백함수
+				error : function(err) {
+					alert('요청 실패');
+					console.log(err);
+				}
+			});
 		}
 	});
+
 	/* 회원가입 빈칸 검사*/
 	$('#signUpCustomerBtn').click(function() {
 		if ($('#customerPass').val() == '') {
