@@ -171,11 +171,11 @@ Map<String, Object> map = new OrdersService().getOrdersOne(orderNo);
 									<th>orderTotal</th>
 									<td><%=map.get("orderTotal")%></td>
 								</tr>
-
 							</table>
 							<!-- 버튼  -->
 							<div style="padding: 10px;">
 								<a href="<%=request.getContextPath()%>/admin/adminOrderOneUpdate.jsp?orderNo=<%=map.get("orderNo")%>"><button class="btn btn-primary" style="float: right; margin-left: 3px">수정</button></a> 
+								<a href="<%=request.getContextPath()%>/admin/adminOrderList.jsp"><button class="btn btn-secondary" style="float: right; margin-left: 3px">이전</button></a> 
 							</div>
 						</div>
 					</div>

@@ -10,8 +10,11 @@ import java.util.Map;
 import repository.DBUtil;
 import repository.GoodsDAO;
 import repository.OrdersDAO;
+import vo.Orders;
 
 public class OrdersService {
+	// 고객1의 주문 내역
+	
 	// 주문 내역 수정하기
 	public int addOrdersOne(Map<String,Object> map) throws SQLException {
 		//리턴할 변수 선언 및 초기화

@@ -82,7 +82,7 @@ Map<String, Object> goodsOne = new GoodsService().getGoodsAndImgOne(goodsNo);
 						<a class="nav-link active" href="<%=request.getContextPath()%>/admin/adminGoodsList.jsp">
 							<div class="sb-nav-link-icon">
 								<i class="fas fa-list-alt"></i>
-							</div> 상품관리 - 상세
+							</div> 상품관리
 						</a>
 						<!-- 주문목록/수정 -->
 						<a class="nav-link" href="<%=request.getContextPath()%>/admin/adminOrderList.jsp">
@@ -121,7 +121,7 @@ Map<String, Object> goodsOne = new GoodsService().getGoodsAndImgOne(goodsNo);
 						</div>
 						<div class="card-body">
 							<!-- 수정할 데이터  -->
-							<form action="<%=request.getContextPath()%>/admin/adminGoodsOneUpdate.jsp" method="post" id="adminGoodsOneUpdate">
+							<form action="<%=request.getContextPath()%>/admin/adminGoodsOneUpdateAction.jsp" method="post" id="adminGoodsOneUpdate">
 								<fieldset>
 									<table class="table table-bordered">
 										<tr>

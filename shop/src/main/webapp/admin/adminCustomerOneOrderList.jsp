@@ -1,9 +1,9 @@
+<%@page import="service.OrdersService"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Map"%>
 <%@page import="service.GoodsService"%>
-<%@page import="vo.Goods"%>
+<%@page import="vo.*"%>
 <%@page import="service.EmployeeService"%>
-<%@page import="vo.Employee"%>
 <%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
@@ -16,10 +16,9 @@ if (session.getAttribute("id") == null || session.getAttribute("user").equals("C
 	return;
 }
 //전송받은 값
-int goodsNo = Integer.parseInt(request.getParameter("goodsNo"));
-System.out.println("----" + goodsNo + " 상세페이지----");
-//goodsNo와 관련된 정보 및 이미지 가져오기
-Map<String, Object> goodsOne = new GoodsService().getGoodsAndImgOne(goodsNo);
+String customerId = request.getParameter("customerId");
+System.out.println("----" + customerId + " 주문리스트----");
+//customer_id와 연관된 주문가져오기
 %>
 <!DOCTYPE html>
 <html lang="euc-kr">
@@ -79,13 +78,13 @@ Map<String, Object> goodsOne = new GoodsService().getGoodsAndImgOne(goodsNo);
 							</div> 사원관리
 						</a>
 						<!-- 상품목록/등록/수정(품절)/석재(장바구니,주문이 없는 경우) -->
-						<a class="nav-link active" href="<%=request.getContextPath()%>/admin/adminGoodsList.jsp">
+						<a class="nav-link" href="<%=request.getContextPath()%>/admin/adminGoodsList.jsp">
 							<div class="sb-nav-link-icon">
 								<i class="fas fa-list-alt"></i>
 							</div> 상품관리
 						</a>
 						<!-- 주문목록/수정 -->
-						<a class="nav-link" href="<%=request.getContextPath()%>/admin/adminOrderList.jsp">
+						<a class="nav-link active" href="<%=request.getContextPath()%>/admin/adminOrderList.jsp">
 							<div class="sb-nav-link-icon">
 								<i class="fas fa-tachometer-alt"></i>
 							</div> 주문관리
@@ -113,63 +112,40 @@ Map<String, Object> goodsOne = new GoodsService().getGoodsAndImgOne(goodsNo);
 		<div id="layoutSidenav_content">
 			<main>
 				<div class="container-fluid px-4">
-					<h1 class="mt-4">상세페이지</h1>
+					<h2 class="mt-4"><%=customerId%>님의 주문내역
+					</h2>
 					<hr>
 					<div class="card mb-4">
 						<div class="card-header">
-							<i class="fas fa-table me-1"></i> GoodsOne
+							<i class="fas fa-table me-1"></i> 주문내역
 						</div>
 						<div class="card-body">
-							<!-- row -->
-							<div class="row">
-								<div class="col-lg-3" style="text-align: center;">
-									<img src="<%=request.getContextPath()%>/upload/<%=goodsOne.get("filename")%>" alt="제품이미지">
-								</div>
-								<div class="col-lg-9">
-									<table class="table table-bordered">
-										<tr>
-											<th>goodsNo</th>
-											<td><%=goodsOne.get("goodsNo")%></td>
-										</tr>
-										<tr>
-											<th>goodsName</th>
-											<td><%=goodsOne.get("goodsName")%></td>
-										</tr>
-										<tr>
-											<th>goodsPrice</th>
-											<td><%=goodsOne.get("goodsPrice")%></td>
-										</tr>
-										<tr>
-											<th>updateDate</th>
-											<td><%=goodsOne.get("updateDate")%></td>
-										</tr>
-										<tr>
-											<th>createDate</th>
-											<td><%=goodsOne.get("createDate")%></td>
-										</tr>
-										<tr>
-											<th>soldOut</th>
-											<td><%=goodsOne.get("soldOut")%></td>
-										</tr>
-										<tr>
-											<th>filename</th>
-											<td><%=goodsOne.get("filename")%></td>
-										</tr>
-										<tr>
-											<th>imgCreateDate</th>
-											<td><%=goodsOne.get("imgCreateDate")%></td>
-										</tr>
-									</table>
-								</div>
-							</div>
-							<!-- /row -->
-
-							<!-- 버튼  -->
-							<div style="padding: 10px;">
-								<a href="<%=request.getContextPath()%>/admin/adminGoodsOneUpdate.jsp?goodsNo=<%=goodsOne.get("goodsNo")%>"><button class="btn btn-primary" style="float: right; margin-left: 3px">수정</button></a> 
-								<a href="<%=request.getContextPath()%>/admin/adminGoodsOneDelete.jsp?goodsNo=<%=goodsOne.get("goodsNo")%>"><button class="btn btn-danger" style="float: right;">삭제</button></a>
-								<a href="<%=request.getContextPath()%>/admin/adminGoodsList.jsp"><button class="btn btn-secondary" style="float: right; margin-right: 3px">이전</button></a>
-							</div>
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<th>주문번호</th>
+										<th>상품번호</th>
+										<th>수량</th>
+										<th>가격</th>
+										<th>배송지</th>
+										<th>주문상태</th>
+										<th>수정일</th>
+										<th>주문일</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+									</tr>
+								</tbody>
+							</table>
 						</div>
 					</div>
 				</div>

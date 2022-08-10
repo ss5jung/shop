@@ -52,7 +52,7 @@ public class CustomerService {
 			conn = new DBUtil().getConnection();
 			System.out.println("Driver 연결 - getCustomerList");
 			// 고객리스트 DAO에서 받아오기
-			list = new CustomerDAO().selectCustomerList(conn, rowPerPage, currentPage);
+			list = new CustomerDAO().selectCustomerList(conn, rowPerPage, beginRow);
 			// null 예외 처리
 			if (list == null) { // 전송 받은 값이 없다면
 				throw new Exception(); // 예외처리

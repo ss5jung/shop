@@ -122,7 +122,7 @@ System.out.println(lastPage + "<-- lastPage - adminCustomerList");
 		<div id="layoutSidenav_content">
 			<main>
 				<div class="container-fluid px-4">
-					<h1 class="mt-4">주문관리</h1>
+					<h1 class="mt-4">고객관리</h1>
 					<hr>
 					<div class="card mb-4">
 						<div class="card-header">
@@ -134,10 +134,7 @@ System.out.println(lastPage + "<-- lastPage - adminCustomerList");
 									<tr>
 										<th>customerId</th>
 										<th>customerName</th>
-										<th>customerAddress</th>
-										<th>customerTelephone</th>
-										<th>updateDate</th>
-										<th>createDate</th>
+										<th>Join Date</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -145,12 +142,9 @@ System.out.println(lastPage + "<-- lastPage - adminCustomerList");
 									for (Customer c : list) {
 									%>
 									<tr>
-										<td><%=c.getCustomerId() %></td>
-										<td><%=c.getCustomerName() %></td>
-										<td><%=c.getCustomerAddress() %></td>
-										<td><%=c.getCustomerTelephone() %></td>
-										<td><%=c.getUpdateDate() %></td>
-										<td><%=c.getCreateDate() %></td>
+										<td><a href="<%=request.getContextPath()%>/admin/adminCustomerOneOrderList.jsp?customerId=<%=c.getCustomerId()%>"><%=c.getCustomerId()%></a></td>
+										<td><%=c.getCustomerName()%></td>
+										<td><%=c.getCreateDate()%></td>
 									</tr>
 									<%
 									}
@@ -158,6 +152,41 @@ System.out.println(lastPage + "<-- lastPage - adminCustomerList");
 								</tbody>
 							</table>
 						</div>
+						<!-- 페이징 -->
+						<div class="container">
+							<ul class="pagination justify-content-center">
+								<%
+								if (currentPage > 1) {
+								%>
+								<li class="page-item"><a class="page-link" href="<%=request.getContextPath()%>/admin/adminCustomerList.jsp?currentPage=<%=currentPage - 1%>">이전</a></li>
+								<%
+								} else {
+								%>
+								<li class="page-item disabled"><a class="page-link" href="<%=request.getContextPath()%>/admin/adminCustomerList.jsp?currentPage=<%=currentPage - 1%>">이전</a></li>
+								<%
+								}
+								%>
+								<%
+								if (currentPage < lastPage) {
+								%>
+								<li class="page-item"><a class="page-link" href="<%=request.getContextPath()%>/admin/adminCustomerList.jsp?currentPage=<%=currentPage + 1%>">다음</a></li>
+								<%
+								} else {
+								%>
+								<li class="page-item disabled"><a class="page-link" href="<%=request.getContextPath()%>/admin/adminCustomerList.jsp?currentPage=<%=currentPage + 1%>">다음</a></li>
+								<%
+								}
+								%>
+								<!-- 
+								<li class="page-item"><a class="page-link" href="#">이전</a></li>
+								<li class="page-item"><a class="page-link" href="#">1</a></li>
+								<li class="page-item"><a class="page-link" href="#">2</a></li>
+								<li class="page-item"><a class="page-link" href="#">3</a></li>
+								<li class="page-item"><a class="page-link" href="#">다음</a></li> 
+								-->
+							</ul>
+						</div>
+						<!-- /페이징 -->
 					</div>
 				</div>
 			</main>

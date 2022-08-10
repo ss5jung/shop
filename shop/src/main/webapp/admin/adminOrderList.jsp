@@ -144,7 +144,7 @@ System.out.println(lastPage + "<-- lastPage - adminOrderList");
 										<td>
 										<a href="<%=request.getContextPath()%>/admin/adminOrderOne.jsp?orderNo=<%=m.get("orderNo") %>"><%=m.get("orderNo") %></a>
 										</td>
-										<td><%=m.get("customerId") %></td>
+										<td><a href="<%=request.getContextPath()%>/admin/adminCustomerOneOrderList.jsp?customerId=<%=m.get("customerId") %>"><%=m.get("customerId") %></a></td>
 										<td><%=m.get("orderTotal") %></td>
 										<td><%=m.get("orderState") %></td>
 										<td><%=m.get("updateDate") %></td>
