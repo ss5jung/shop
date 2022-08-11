@@ -31,7 +31,7 @@ if (loginCustomer != null) { //로그인되면
 	session.setAttribute("id", loginCustomer.getCustomerId());
 	session.setAttribute("name", loginCustomer.getCustomerName());
 	//페이지 넘겨주기
-	response.sendRedirect(request.getContextPath() + "/index.jsp");
+	response.sendRedirect(request.getContextPath() + "/customer/customerGoodsList.jsp");
 } else {
 	System.out.println("customer 로그인 실패");
 	response.sendRedirect(request.getContextPath() + "/loginForm.jsp?errorMsg=check your id or password");

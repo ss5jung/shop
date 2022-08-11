@@ -141,20 +141,56 @@ System.out.println(lastPage + "<-- lastPage - adminOrderList");
 									for (Map<String, Object> m : list) {
 									%>
 									<tr>
-										<td>
-										<a href="<%=request.getContextPath()%>/admin/adminOrderOne.jsp?orderNo=<%=m.get("orderNo") %>"><%=m.get("orderNo") %></a>
-										</td>
-										<td><a href="<%=request.getContextPath()%>/admin/adminCustomerOneOrderList.jsp?customerId=<%=m.get("customerId") %>"><%=m.get("customerId") %></a></td>
-										<td><%=m.get("orderTotal") %></td>
-										<td><%=m.get("orderState") %></td>
-										<td><%=m.get("updateDate") %></td>
-										<td><%=m.get("createDate") %></td>
+										<td><a href="<%=request.getContextPath()%>/admin/adminOrderOne.jsp?orderNo=<%=m.get("orderNo")%>"><%=m.get("orderNo")%></a></td>
+										<td><a href="<%=request.getContextPath()%>/admin/adminCustomerOneOrderList.jsp?customerId=<%=m.get("customerId")%>"><%=m.get("customerId")%></a></td>
+										<td><%=m.get("orderTotal")%></td>
+										<td><%=m.get("orderState")%></td>
+										<td><%=m.get("updateDate")%></td>
+										<td><%=m.get("createDate")%></td>
 									</tr>
 									<%
 									}
 									%>
 								</tbody>
 							</table>
+							<!-- 페이징과 버튼 -->
+							<!-- row  -->
+							<div class="row">
+								<div class="col-lg-2"></div>
+								<!-- 페이징 -->
+								<div class="col-lg-8">
+									<ul class="pagination justify-content-center">
+										<%
+										if (currentPage > 1) {
+										%>
+										<li class="page-item"><a class="page-link" href="<%=request.getContextPath()%>/admin/adminOrderList.jsp?currentPage=<%=currentPage - 1%>">이전</a></li>
+										<%
+										} else {
+										%>
+										<li class="page-item disabled"><a class="page-link" href="<%=request.getContextPath()%>/admin/adminOrderList.jsp?currentPage=<%=currentPage - 1%>">이전</a></li>
+										<%
+										}
+										%>
+										<%
+										if (currentPage < lastPage) {
+										%>
+										<li class="page-item"><a class="page-link" href="<%=request.getContextPath()%>/admin/adminOrderList.jsp?currentPage=<%=currentPage + 1%>">다음</a></li>
+										<%
+										} else {
+										%>
+										<li class="page-item disabled"><a class="page-link" href="<%=request.getContextPath()%>/admin/adminOrderList.jsp?currentPage=<%=currentPage + 1%>">다음</a></li>
+										<%
+										}
+										%>
+									</ul>
+								</div>
+								<!-- /페이징 -->
+								<!-- 상품추가 -->
+								<div class="col-lg-2" style="text-align: right;">
+									<a href="<%=request.getContextPath()%>/admin/addGoodsForm.jsp"><button class="btn btn-primary">상품추가</button></a>
+								</div>
+							</div>
+							<!-- row  -->
 						</div>
 					</div>
 				</div>

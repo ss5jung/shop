@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import repository.CustomerDAO;
 import repository.DBUtil;
@@ -11,6 +12,8 @@ import repository.OutIdDAO;
 import vo.Customer;
 
 public class CustomerService {
+	private CustomerDAO customerDAO;
+	
 	// last 페이지 구하기
 	public int getCustomerLastPage(int rowPerPage) throws SQLException {
 		//리턴할 변수 값

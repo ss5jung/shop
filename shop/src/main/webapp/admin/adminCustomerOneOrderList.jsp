@@ -1,3 +1,4 @@
+<%@page import="java.util.List"%>
 <%@page import="service.OrdersService"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Map"%>
@@ -18,7 +19,8 @@ if (session.getAttribute("id") == null || session.getAttribute("user").equals("C
 //전송받은 값
 String customerId = request.getParameter("customerId");
 System.out.println("----" + customerId + " 주문리스트----");
-//customer_id와 연관된 주문가져오기
+//customer_id와 연관된 주문가져오기 - List<Order>
+List<Orders> list = new OrdersService().
 %>
 <!DOCTYPE html>
 <html lang="euc-kr">

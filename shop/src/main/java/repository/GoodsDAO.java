@@ -13,6 +13,28 @@ import java.util.Map;
 import vo.Goods;
 
 public class GoodsDAO {
+	// 고객 페이지 - 상품리스트
+	public List<Map<String, Object>> selectGoodsListByPage(Connection conn, int goodsNo) throws SQLException{
+		//파라미터 디버깅
+		System.out.println("customerGoodsListByPage - goodsNo>> "+goodsNo);
+		//리턴할 변수 선언
+		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
+		//DB 자원
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		String sql = "SELECT g.goods_no goodsNo, g.goods_name goodsName, g.goods_price goodsPrice, g.sold_out soldOut, gi.filename filename FROM goods g INNER JOIN goods_img gi USING(goods_no) ORDER BY g.create_date DESC LIMIT ?,?";
+		
+		 
+		try {
+			stmt = conn.prepareStatement(sql);
+			rs =
+		} finally {
+			if(rs != null) {rs.close();}
+			if(stmt != null) {stmt.close();}
+		}
+		return null; 
+	}
+	
 	// 상품 추가 - key 값 리턴
 	public int insertGoods(Connection conn, Goods goods) throws SQLException {
 		// 파라미터 디버깅

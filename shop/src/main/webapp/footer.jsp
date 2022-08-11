@@ -97,10 +97,10 @@
 <!-- /FOOTER -->
 
 <!-- jQuery Plugins -->
-<script src="js/jquery.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/slick.min.js"></script>
-<script src="js/nouislider.min.js"></script>
-<script src="js/jquery.zoom.min.js"></script>
-<script src="js/main.js"></script>
+<script src="<%=request.getContextPath() %>/js/jquery.min.js"></script>
+<script src="<%=request.getContextPath() %>/js/bootstrap.min.js"></script>
+<script src="<%=request.getContextPath() %>/js/slick.min.js"></script>
+<script src="<%=request.getContextPath() %>/js/nouislider.min.js"></script>
+<script src="<%=request.getContextPath() %>/js/jquery.zoom.min.js"></script>
+<script src="<%=request.getContextPath() %>/js/main.js"></script>
 <!-- /jQuery Plugins -->

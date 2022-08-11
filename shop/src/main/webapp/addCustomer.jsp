@@ -31,20 +31,14 @@ String idCkMsg = request.getParameter("idCkMsg");
 		<div class="row">
 			<!-- 흐름 : 아이디 입력 -> 중복검사 -> 통과하면   -> addCustomer -> 회원가입 폼 입력후 -> addCustomerAction -->
 			<!-- 고객 아이디 중복검사 -->
-			<form action="<%=request.getContextPath()%>/idCheckAction.jsp?user=Customer" method="post" id="idCkCustomerForm">
-				<fieldset>
-					<legend>
-						<b>Customer ID 중복검사</b>
-					</legend>
-					<table class="table table-bordered">
-						<tr>
-							<th>ID</th>
-							<td><input type="text" name="idck" id="idck">
-								<button type="button" id="idckBtn">ID 중복검사</button></td>
-						</tr>
-					</table>
-				</fieldset>
-			</form>
+			<b>Customer ID 중복검사</b>
+			<table class="table table-bordered">
+				<tr>
+					<th>ID</th>
+					<td><input type="text" name="idck" id="idck">
+						<button type="button" id="idckBtn">ID 중복검사</button></td>
+				</tr>
+			</table>
 
 
 			<form action="<%=request.getContextPath()%>/signUpCustomerAction.jsp" method="post" id="signUpCustomerForm">
@@ -92,10 +86,10 @@ String idCkMsg = request.getParameter("idCkMsg");
 	/* 아이디 중복 검사 빈칸 검사 */
 	$('#idckBtn').click(function() {
 		if ($('#idck').val().length < 4) {
-			
+
 			alert('id는 4자이상!');
 		} else {
-		
+
 			// 비동기 호출	
 			$.ajax({
 				url : '/shop/idckController',

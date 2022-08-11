@@ -17,6 +17,14 @@ public class GoodsService {
 	private GoodsDAO goodsDAO;
 	private GoodsImgDAO goodsImgDAO;
 
+	// 상품 목록
+	public List<Map<String, Object>> getCustomerGoodsListByPage(int rowPerPage, int currentPage) {
+		// 파라미터 디버깅
+		System.out.println( "getCustomerGoodsListByPage 파라미터 디버깅 : rowPerPage > " + rowPerPage + ",currentPage >" + currentPage);
+		
+		return null;
+	}
+
 	// 상품 추가
 	public int addGoods(Goods goods, GoodsImg goodsImg) throws SQLException {
 		// 파라미터 디버깅
