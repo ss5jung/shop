@@ -20,7 +20,7 @@ if (session.getAttribute("id") == null || session.getAttribute("user").equals("C
 String customerId = request.getParameter("customerId");
 System.out.println("----" + customerId + " 주문리스트----");
 //customer_id와 연관된 주문가져오기 - List<Order>
-List<Orders> list = new OrdersService().
+List<Map<String, Object>> list = new OrdersService().getCustomerOrdersList(customerId);
 %>
 <!DOCTYPE html>
 <html lang="euc-kr">
@@ -126,26 +126,37 @@ List<Orders> list = new OrdersService().
 								<thead>
 									<tr>
 										<th>주문번호</th>
-										<th>상품번호</th>
+										<th>상품명</th>
 										<th>수량</th>
 										<th>가격</th>
+										<th>합계</th>
 										<th>배송지</th>
 										<th>주문상태</th>
-										<th>수정일</th>
+										<th>고객명</th>
+										<th>전화번호</th>
 										<th>주문일</th>
 									</tr>
 								</thead>
 								<tbody>
+								<%
+									for(Map<String, Object> m : list){
+								%>
 									<tr>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
+										<td><%=m.get("orderNo") %></td>
+										<td><%=m.get("goodsName") %></td>
+										<td><%=m.get("orderQuantity") %></td>
+										<td><%=m.get("orderPrice") %></td>
+										<td><%=m.get("orderTotalPrice") %></td>
+										<td><%=m.get("orderAddr") %></td>
+										<td><%=m.get("orderState") %></td>
+										<td><%=m.get("customerName") %></td>
+										<td><%=m.get("customerTelephone") %></td>
+										<td><%=m.get("createDate") %></td>
+									</tr>								
+								<%
+									}
+								%>
+
 								</tbody>
 							</table>
 						</div>

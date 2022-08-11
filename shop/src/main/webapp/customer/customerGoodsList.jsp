@@ -10,13 +10,20 @@ int rowPerPage = 20;
 if (request.getParameter("rowPerPage") != null) {
 	rowPerPage = Integer.parseInt(request.getParameter("rowPerPage"));
 }
+System.out.println(rowPerPage + "<-- rowPerPage - 화면에 보여줄 상품 갯수");
+//sort 방법
+String orderSql = "popular";
+if (request.getParameter("orderSql") != null) {
+	orderSql = request.getParameter("orderSql");
+}
+System.out.println(orderSql + "<-- orderSql - sort방법");
 //현재페이지
 int currentPage = 1;
 if (request.getParameter("currentPage") != null) {
 	currentPage = Integer.parseInt(request.getParameter("currentPage"));
 }
 //상품리스트 Service에서 받아오기
-List<Map<String, Object>> list = new GoodsService().getCustomerGoodsListByPage(rowPerPage, currentPage);
+List<Map<String, Object>> list = new GoodsService().getCustomerGoodsListByPage(rowPerPage, currentPage, orderSql);
 //라스트페이지
 int lastPage = new GoodsService().getGoodsLastPage(rowPerPage);
 System.out.println(lastPage + "<-- lastPage customerGoodsList");
@@ -80,7 +87,7 @@ System.out.println(lastPage + "<-- lastPage customerGoodsList");
 					<!-- LOGO -->
 					<div class="col-md-3">
 						<div class="header-logo">
-							<a href="#" class="logo"> <img src="<%=request.getContextPath()%>/img/mamazon.png" style="width: 170px; margin-top: 16px" alt="">
+							<a href="<%=request.getContextPath() %>/customer/customerGoodsList.jsp" class="logo"> <img src="<%=request.getContextPath()%>/img/mamazon.png" style="width: 170px; margin-top: 16px" alt="">
 							</a>
 						</div>
 					</div>
@@ -321,21 +328,12 @@ System.out.println(lastPage + "<-- lastPage customerGoodsList");
 					<div class="row">
 						<div class="store-filter clearfix" style="float: right;">
 							<div class="store-sort">
-								<label> Sort By: 
-								<select class="input-select" id="sortBy" name="sortBy">
-										<option value="default">인기순</option>
-										<option value="bestSell">판매순</option>
-										<option value="lowPrice">낮은가격순</option>
-										<option value="hightPrice">높은가격순</option>
-										<option value="latest">최신순</option>
-								</select>
-								</label> 
-								<label> Show: 
-								<select class="input-select" id="rowPerPage" name="rowPerPage">
-										<option value="20">20</option>
-										<option value="40">40</option>
-								</select>
-								</label>
+								<a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?orderSql=popular">누적판매순</a> &nbsp;|&nbsp; 
+								<a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?orderSql=lastest">최신순</a> &nbsp;|&nbsp; 
+								<a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?orderSql=lowPrice">낮은가격순</a> &nbsp;|&nbsp; 
+								<a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?orderSql=highPrice">높은가격순</a> &nbsp;&nbsp; 
+								<a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?rowPerPage=20">20개씩</a> &nbsp;|&nbsp; 
+								<a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?rowPerPage=40">40개씩</a>
 							</div>
 						</div>
 					</div>
@@ -365,7 +363,7 @@ System.out.println(lastPage + "<-- lastPage customerGoodsList");
 									<h3 class="product-name">
 										<a href="#"><%=m.get("goodsName")%></a>
 									</h3>
-									<h4 class="product-price"><%=m.get("goodsPrice")%></h4>
+									<h4 class="product-price"><%=m.get("goodsPrice")%>원</h4>
 									<div class="product-rating">
 										<i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i>
 									</div>

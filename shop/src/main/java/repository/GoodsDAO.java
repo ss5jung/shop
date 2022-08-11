@@ -14,7 +14,7 @@ import vo.Goods;
 
 public class GoodsDAO {
 	// 고객 페이지 - 상품리스트
-	public List<Map<String, Object>> selectCustomerGoodsListByPage(Connection conn, int rowPerPage, int beginRow)
+	public List<Map<String, Object>> selectCustomerGoodsListByPage(Connection conn, int rowPerPage, int beginRow,String orderSql)
 			throws Exception {
 		// 파라미터 디버깅
 		System.out.println(beginRow + "<-- beginRow - selectCustomerGoodsListByPage");
@@ -24,18 +24,11 @@ public class GoodsDAO {
 		// DB 자원
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		String sql = "SELECT g.goods_no goodsNo, g.goods_name goodsName, g.goods_price goodsPrice, g.sold_out soldOut, IFNULL(t.sumNum, 0) sumNum, gi.filename filename FROM goods g LEFT JOIN (SELECT goods_no, SUM(order_quantity) sumNum FROM orders GROUP BY goods_no) t USING (goods_no) Inner JOIN goods_img gi USING(goods_no) ORDER BY IFNULL(t.sumNum, 0) DESC LIMIT ?,?";
-		/*
-		 SELECT g.goods_no goodsNo, g.goods_name goodsName, g.goods_price goodsPrice,
-		 g.sold_out soldOut, IFNULL(t.sumNum, 0) sumNum, gi.filename filename
-		 FROM goods g 
-		 LEFT JOIN (SELECT goods_no, SUM(order_quantity) sumNum FROM orders GROUP BY goods_no)t
-		 USING (goods_no) 
-		 Inner JOIN goods_img gi 
-		 USING(goods_no)
-		 ORDER BY IFNULL(t.sumNum, 0) DESC 
-		 LIMIT ?,?;
-		 */
+		String sql =  null;
+		if(orderSql.equals("popular")) {sql="SELECT g.goods_no goodsNo, g.goods_name goodsName, g.goods_price goodsPrice, g.sold_out soldOut, IFNULL(t.sumNum, 0) sumNum, gi.filename filename FROM goods g LEFT JOIN (SELECT goods_no, SUM(order_quantity) sumNum FROM orders GROUP BY goods_no) t USING (goods_no) Inner JOIN goods_img gi USING(goods_no) ORDER BY IFNULL(t.sumNum, 0) DESC LIMIT ?,?";}
+		else if(orderSql.equals("lastest")) {sql= "SELECT g.goods_no goodsNo, g.goods_name goodsName, g.goods_price goodsPrice, g.sold_out soldOut, IFNULL(t.sumNum, 0) sumNum, gi.filename filename FROM goods g LEFT JOIN (SELECT goods_no, SUM(order_quantity) sumNum FROM orders GROUP BY goods_no) t USING (goods_no) Inner JOIN goods_img gi USING(goods_no) ORDER BY g.create_date DESC LIMIT ?,?";}
+		else if(orderSql.equals("lowPrice")) {sql="SELECT g.goods_no goodsNo, g.goods_name goodsName, g.goods_price goodsPrice, g.sold_out soldOut, IFNULL(t.sumNum, 0) sumNum, gi.filename filename FROM goods g LEFT JOIN (SELECT goods_no, SUM(order_quantity) sumNum FROM orders GROUP BY goods_no) t USING (goods_no) Inner JOIN goods_img gi USING(goods_no) ORDER BY g.goods_price ASC LIMIT ?,?";}
+		else if(orderSql.equals("highPrice")) {sql="SELECT g.goods_no goodsNo, g.goods_name goodsName, g.goods_price goodsPrice, g.sold_out soldOut, IFNULL(t.sumNum, 0) sumNum, gi.filename filename FROM goods g LEFT JOIN (SELECT goods_no, SUM(order_quantity) sumNum FROM orders GROUP BY goods_no) t USING (goods_no) Inner JOIN goods_img gi USING(goods_no) ORDER BY g.goods_price DESC LIMIT ?,?";}
 		try {
 			//DB자원
 			stmt = conn.prepareStatement(sql);

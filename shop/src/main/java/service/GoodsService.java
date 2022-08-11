@@ -19,10 +19,11 @@ public class GoodsService {
 	private GoodsImgDAO goodsImgDAO;
 
 	// 상품 목록
-	public List<Map<String, Object>> getCustomerGoodsListByPage(int rowPerPage, int currentPage) throws SQLException {
+	public List<Map<String, Object>> getCustomerGoodsListByPage(int rowPerPage, int currentPage, String orderSql)
+			throws SQLException {
 		// 파라미터 디버깅
 		System.out.println("getCustomerGoodsListByPage 파라미터 디버깅 : " + "rowPerPage > " + rowPerPage + ",currentPage >"
-				+ currentPage);
+				+ currentPage + " ,orderSql >" + orderSql);
 		// beginRow
 		int beginRow = (currentPage - 1) * rowPerPage;
 		// DB자원 만들기
@@ -34,7 +35,7 @@ public class GoodsService {
 			conn = new DBUtil().getConnection();
 			System.out.println("getCustomerGoodsListByPage - Driver 연동 성공");
 			// 상품 리스트 받아오기
-			list = new GoodsDAO().selectCustomerGoodsListByPage(conn, rowPerPage, beginRow);
+			list = new GoodsDAO().selectCustomerGoodsListByPage(conn, rowPerPage, beginRow, orderSql);
 			if (list == null) {
 				System.out.println("getCustomerGoodsListByPage list가 null값");
 				throw new Exception();

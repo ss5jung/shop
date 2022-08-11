@@ -13,60 +13,82 @@ import repository.OrdersDAO;
 import vo.Orders;
 
 public class OrdersService {
-	/*
-	 * // 고객1의 주문 내역 public List<Orders>
-	 */
-	// 주문 내역 수정하기
-	public int addOrdersOne(Map<String,Object> map) throws SQLException {
-		//리턴할 변수 선언 및 초기화
-		int row = 0;
-		//DB 자원
+	// 고객1의 주문 내역
+	public List<Map<String, Object>> getCustomerOrdersList(String customerId) throws SQLException {
+		// 파라미터 디버깅
+		System.out.println(customerId + "<-- customerId - getCustomerOrdersList");
+		// DAO에서 주문내역을 받아올 객체 생성
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		// DB driver
 		Connection conn = null;
 		try {
-			//DB driver 연결
+			// Driver
+			conn = new DBUtil().getConnection();
+			System.out.println("getCustomerOrdersList Driver 연동 성공");
+			// DAO에서 고객 주문리스트 받아오기
+			list = new OrdersDAO().selectCustomerOrdersList(conn, customerId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// DB자원해제
+			if (conn != null) {
+				conn.close();
+			}
+		}
+		return list;
+	}
+
+	// 주문 내역 수정하기
+	public int addOrdersOne(Map<String, Object> map) throws SQLException {
+		// 리턴할 변수 선언 및 초기화
+		int row = 0;
+		// DB 자원
+		Connection conn = null;
+		try {
+			// DB driver 연결
 			conn = new DBUtil().getConnection();
 			System.out.println("addOrdersOne DB Driver 연결");
-			
+
 			row = new OrdersDAO().insertOrdersOne(conn, map);
 			System.out.println(row + "<-- addOrdersOne 실행된 row의 수");
-			if(row == 0) {	//row가 실행되지 않았으면
-				throw new Exception();	//예외처리
+			if (row == 0) { // row가 실행되지 않았으면
+				throw new Exception(); // 예외처리
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			//DB자원 해제
-			if(conn !=null) {
+			// DB자원 해제
+			if (conn != null) {
 				conn.close();
 			}
 		}
-		return row;	
+		return row;
 	}
-	
+
 	// 주문 상세 보기
 	public Map<String, Object> getOrdersOne(int orderNo) throws SQLException {
 		// 파라미터 디버깅
 		System.out.println("getOrdersOne 파라미터 디버깅 --> orderNo :" + orderNo);
 		// 리턴하려는 변수 생성
 		Map<String, Object> map = null; // 다형성
-		//DB 자원 초기화
+		// DB 자원 초기화
 		Connection conn = null;
 		try {
-			//DB 연동
+			// DB 연동
 			conn = new DBUtil().getConnection();
 			System.out.println("getOrdersOne - DB 연동");
-			//ordersNo의 정보 가져올 map 객체
+			// ordersNo의 정보 가져올 map 객체
 			map = new OrdersDAO().selectOrdersOne(conn, orderNo);
 			System.out.println(map + "<--map getOrdersOne");
-			
-			if(map == null) {	//map이 null이면
-				throw new Exception();	//catch절로 보내기
+
+			if (map == null) { // map이 null이면
+				throw new Exception(); // catch절로 보내기
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			//DB자원 해제
-			if(conn != null) {
+			// DB자원 해제
+			if (conn != null) {
 				conn.close();
 			}
 		}
@@ -99,10 +121,11 @@ public class OrdersService {
 	// 전체 주문 목록 - 관리자 페이지
 	public List<Map<String, Object>> getOrdersList(int rowPerPage, int currentPage) throws SQLException {
 		// 파라미터 디버깅
-		System.out.println("selectOrdersList 파라미터 디버깅 --> rowPerPage :" + rowPerPage + "  currentPage : " + currentPage);
+		System.out
+				.println("selectOrdersList 파라미터 디버깅 --> rowPerPage :" + rowPerPage + "  currentPage : " + currentPage);
 		// 리턴하려는 변수 생성
 		List<Map<String, Object>> list = null; // 다형성
-		int beginRow = (currentPage - 1)*rowPerPage;
+		int beginRow = (currentPage - 1) * rowPerPage;
 		// DB연동
 		Connection conn = null;
 		try {

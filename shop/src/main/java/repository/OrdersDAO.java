@@ -10,13 +10,58 @@ import java.util.List;
 import java.util.Map;
 
 public class OrdersDAO {
-	// 주문 내역 수정하기
-	public int insertOrdersOne(Connection conn, Map<String,Object> map) throws SQLException{
-		//리턴할 변수
-		int row  = 0;
-		//DB 자원 생성
+	// 고객1의 주문 내역
+	public List<Map<String, Object>> selectCustomerOrdersList(Connection conn, String customerId) throws SQLException {
+		// 파라미터 디버깅
+		System.out.println(customerId + "<-- customerId - selectCustomerOrdersList");
+		// DAO에서 주문내역을 받아올 객체 생성
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		// DB자원
 		PreparedStatement stmt = null;
-		String sql ="UPDATE orders "
+		ResultSet rs = null;
+		String sql = "SELECT  c.customer_id cutomerId, o.order_no orderNo, g.goods_name goodsName, o.order_quantity orderQuantity, o.order_price orderPrice, o.order_addr orderAddr, o.order_state orderState, c.customer_name customerName, c.customer_telephone customerTelephone, o.create_date createDate FROM orders o INNER JOIN goods g USING (goods_no) INNER JOIN customer c USING (customer_id) WHERE o.customer_id = ?";
+		try {
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, customerId);
+			System.out.println(stmt + "<-- stmt");
+			rs = stmt.executeQuery();
+			System.out.println(rs + "<-- rs");
+			while (rs.next()) { // rs가 실행된다면
+				// 1개의 주문내역을 넣을 Map 객체 생성
+				Map<String, Object> map = new HashMap<>();
+				//데이터 셋팅하기
+				map.put("cutomerId", rs.getString("cutomerId"));
+				map.put("orderNo", rs.getInt("orderNo"));
+				map.put("goodsName", rs.getString("goodsName"));
+				map.put("orderQuantity", rs.getInt("orderQuantity"));
+				map.put("orderPrice", rs.getInt("orderPrice"));
+				map.put("orderTotalPrice", rs.getInt("orderPrice")*rs.getInt("orderQuantity"));
+				map.put("orderAddr", rs.getString("orderAddr"));
+				map.put("orderState", rs.getString("orderState"));
+				map.put("customerName", rs.getString("customerName"));
+				map.put("customerTelephone", rs.getString("customerTelephone"));
+				map.put("createDate", rs.getString("createDate"));
+				list.add(map);
+			}
+		} finally {
+			// DB자원 해제
+			if (rs != null) {
+				rs.close();
+			}
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return list;
+	}
+
+	// 주문 내역 수정하기
+	public int insertOrdersOne(Connection conn, Map<String, Object> map) throws SQLException {
+		// 리턴할 변수
+		int row = 0;
+		// DB 자원 생성
+		PreparedStatement stmt = null;
+		String sql = "UPDATE orders "
 				+ "SET goods_no = ?, order_addr = ?, order_quantity = ?, order_price = ?, order_state = ?, update_date = NOW() "
 				+ "WHERE order_no = ?";
 		try {
@@ -24,19 +69,21 @@ public class OrdersDAO {
 			stmt.setInt(1, (int) map.get("orderNo"));
 			stmt.setString(2, (String) map.get("orderAddr"));
 			stmt.setInt(3, (int) map.get("orderQuantity"));
-			stmt.setInt(4, (int)map.get("orderPrice"));
+			stmt.setInt(4, (int) map.get("orderPrice"));
 			stmt.setString(5, (String) map.get("orderState"));
-			stmt.setInt(6, (int)map.get("orderNo"));
+			stmt.setInt(6, (int) map.get("orderNo"));
 			System.out.println(stmt + "<-- stmt - insertOrdersOne");
 			row = stmt.executeUpdate();
 			System.out.println(row + "<-- insertOrdersOne에서 실행된 row의 수");
 		} finally {
-			//DB자원 해제
-			if(stmt != null) {stmt.close();}
-		} 
+			// DB자원 해제
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
 		return row;
 	}
-	
+
 	// 주문 상세 보기
 	public Map<String, Object> selectOrdersOne(Connection conn, int orderNo) throws SQLException {
 		// 파라미터 디버깅
