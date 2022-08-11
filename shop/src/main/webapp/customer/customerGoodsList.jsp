@@ -17,6 +17,9 @@ if (request.getParameter("currentPage") != null) {
 }
 //상품리스트 Service에서 받아오기
 List<Map<String, Object>> list = new GoodsService().getCustomerGoodsListByPage(rowPerPage, currentPage);
+//라스트페이지
+int lastPage = new GoodsService().getGoodsLastPage(rowPerPage);
+System.out.println(lastPage + "<-- lastPage customerGoodsList");
 %>
 <!-- 위 아래를 분리하면 serlvet > 연결기술-- forword(request, response) > jsp -->
 <!-- View : 태그 -->
@@ -63,7 +66,7 @@ List<Map<String, Object>> list = new GoodsService().getCustomerGoodsListByPage(r
 				</ul>
 				<ul class="header-links pull-right">
 					<li><a href="#"><i class="fa fa-dollar"></i> USD</a></li>
-					<li><a href="#"><i class="fa fa-user-o"></i> My Account</a></li>
+					<li><a href="<%=request.getContextPath()%>/index.jsp"><i class="fa fa-user-o"></i> My Account</a></li>
 				</ul>
 			</div>
 		</div>
@@ -202,29 +205,135 @@ List<Map<String, Object>> list = new GoodsService().getCustomerGoodsListByPage(r
 		<!-- /container -->
 	</nav>
 	<!-- /NAVIGATION -->
+
 	<!-- SECTION -->
 	<div class="section">
 		<!-- container -->
 		<div class="container">
 			<!-- row -->
 			<div class="row">
+				<!-- ASIDE -->
+				<div id="aside" class="col-md-3">
+					<!-- aside Widget -->
+					<div class="aside">
+						<h3 class="aside-title">Categories</h3>
+						<div class="checkbox-filter">
+
+							<div class="input-checkbox">
+								<input type="checkbox" id="category-1">
+								<label for="category-1"> <span></span> Laptops <small>(120)</small>
+								</label>
+							</div>
+
+							<div class="input-checkbox">
+								<input type="checkbox" id="category-2">
+								<label for="category-2"> <span></span> Smartphones <small>(740)</small>
+								</label>
+							</div>
+
+							<div class="input-checkbox">
+								<input type="checkbox" id="category-3">
+								<label for="category-3"> <span></span> Cameras <small>(1450)</small>
+								</label>
+							</div>
+
+							<div class="input-checkbox">
+								<input type="checkbox" id="category-4">
+								<label for="category-4"> <span></span> Accessories <small>(578)</small>
+								</label>
+							</div>
+
+							<div class="input-checkbox">
+								<input type="checkbox" id="category-5">
+								<label for="category-5"> <span></span> Laptops <small>(120)</small>
+								</label>
+							</div>
+
+							<div class="input-checkbox">
+								<input type="checkbox" id="category-6">
+								<label for="category-6"> <span></span> Smartphones <small>(740)</small>
+								</label>
+							</div>
+						</div>
+					</div>
+					<!-- /aside Widget -->
+
+					<!-- aside Widget -->
+					<div class="aside">
+						<h3 class="aside-title">Price</h3>
+						<div class="price-filter">
+							<div id="price-slider"></div>
+							<div class="input-number price-min">
+								<input id="price-min" type="number">
+								<span class="qty-up">+</span> <span class="qty-down">-</span>
+							</div>
+							<span>-</span>
+							<div class="input-number price-max">
+								<input id="price-max" type="number">
+								<span class="qty-up">+</span> <span class="qty-down">-</span>
+							</div>
+						</div>
+					</div>
+					<!-- /aside Widget -->
+
+					<!-- aside Widget -->
+					<div class="aside">
+						<h3 class="aside-title">Brand</h3>
+						<div class="checkbox-filter">
+							<div class="input-checkbox">
+								<input type="checkbox" id="brand-1">
+								<label for="brand-1"> <span></span> SAMSUNG <small>(578)</small>
+								</label>
+							</div>
+							<div class="input-checkbox">
+								<input type="checkbox" id="brand-2">
+								<label for="brand-2"> <span></span> LG <small>(125)</small>
+								</label>
+							</div>
+							<div class="input-checkbox">
+								<input type="checkbox" id="brand-3">
+								<label for="brand-3"> <span></span> SONY <small>(755)</small>
+								</label>
+							</div>
+							<div class="input-checkbox">
+								<input type="checkbox" id="brand-4">
+								<label for="brand-4"> <span></span> SAMSUNG <small>(578)</small>
+								</label>
+							</div>
+							<div class="input-checkbox">
+								<input type="checkbox" id="brand-5">
+								<label for="brand-5"> <span></span> LG <small>(125)</small>
+								</label>
+							</div>
+							<div class="input-checkbox">
+								<input type="checkbox" id="brand-6">
+								<label for="brand-6"> <span></span> SONY <small>(755)</small>
+								</label>
+							</div>
+						</div>
+					</div>
+					<!-- /aside Widget -->
+				</div>
+				<!-- /ASIDE -->
 				<!-- STORE -->
-				<div id="store" class="col-lg-12">
+				<div id="store" class="col-lg-9">
 					<!-- store top filter -->
 					<div class="row">
 						<div class="store-filter clearfix" style="float: right;">
 							<div class="store-sort">
-								<label> Sort By: <select class="input-select">
-										<option value="0">인기순</option>
-										<option value="1">판매순</option>
-										<option value="1">낮은가격순</option>
-										<option value="1">높은가격순</option>
-										<option value="1">최신순</option>
+								<label> Sort By: 
+								<select class="input-select" id="sortBy" name="sortBy">
+										<option value="default">인기순</option>
+										<option value="bestSell">판매순</option>
+										<option value="lowPrice">낮은가격순</option>
+										<option value="hightPrice">높은가격순</option>
+										<option value="latest">최신순</option>
 								</select>
 								</label> 
-								<label> Show: <select class="input-select">
-										<option value="0">20</option>
-										<option value="1">40</option>
+								<label> Show: 
+								<select class="input-select" id="rowPerPage" name="rowPerPage">
+										<option value="20">20</option>
+										<option value="40">40</option>
 								</select>
 								</label>
 							</div>
@@ -237,92 +346,79 @@ List<Map<String, Object>> list = new GoodsService().getCustomerGoodsListByPage(r
 						int i = 1;
 						for (Map<String, Object> m : list) {
 						%>
-						<td>
-							<div>
-								<img src='<%=request.getContextPath()%>/upload/<%=m.get("filename")%>' width="200" height="200">
-							</div>
-							<div><%=m.get("goodsName")%></div>
-							<div><%=m.get("goodsPrice")%></div> <!-- 리뷰 개수 -->
-						</td>
-						<%
-						if (i % 4 == 0) {
-						%>
-						</tr>
-						<tr>
-							<%
-							}
-							i++;
-							}
-
-							int tdCnt = 4 - (list.size() % 4);
-							if (tdCnt == 4) {
-							tdCnt = 0;
-							}
-
-							for (int j = 0; j < tdCnt; j++) {
-							%>
-							<td>&nbsp;</td>
-							<%
-							}
-							%>
-
-
-
-
-
-							<!-- product -->
-							<div class="col-md-4 col-xs-6">
-								<div class="product">
-									<div class="product-img">
-										<img src="./img/product01.png" alt="">
-										<div class="product-label">
-											<span class="sale">-30%</span> <span class="new">NEW</span>
-										</div>
+						<div class="col-lg-3">
+							<div class="product">
+								<div class="product-img">
+									<img src="<%=request.getContextPath()%>/upload/<%=m.get("filename")%>" alt="<%=m.get("goodsName")%>">
+									<%
+									if ("Y".equals(m.get("soldOut"))) {
+									%>
+									<div class="product-label">
+										<span class="new">품절</span>
 									</div>
-									<div class="product-body">
-										<p class="product-category">Category</p>
-										<h3 class="product-name">
-											<a href="#">product name goes here</a>
-										</h3>
-										<h4 class="product-price">
-											$980.00
-											<del class="product-old-price">$990.00</del>
-										</h4>
-										<div class="product-rating">
-											<i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i>
-										</div>
-										<div class="product-btns">
-											<button class="add-to-wishlist">
-												<i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span>
-											</button>
-											<button class="add-to-compare">
-												<i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span>
-											</button>
-											<button class="quick-view">
-												<i class="fa fa-eye"></i><span class="tooltipp">quick view</span>
-											</button>
-										</div>
+									<%
+									}
+									%>
+								</div>
+								<div class="product-body">
+									<p class="product-category">Category</p>
+									<h3 class="product-name">
+										<a href="#"><%=m.get("goodsName")%></a>
+									</h3>
+									<h4 class="product-price"><%=m.get("goodsPrice")%></h4>
+									<div class="product-rating">
+										<i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i>
 									</div>
-									<div class="add-to-cart">
-										<button class="add-to-cart-btn">
-											<i class="fa fa-shopping-cart"></i> add to cart
+									<div class="product-btns">
+										<button class="add-to-wishlist">
+											<i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span>
+										</button>
+										<button class="quick-view">
+											<i class="fa fa-eye"></i><span class="tooltipp">Detail view</span>
 										</button>
 									</div>
 								</div>
 							</div>
-							<!-- /product -->
+						</div>
+						<%
+						if (i % 4 == 0) {
+						%>
+						<div class=row>
+							<br> <br>
+						</div>
+						<%
+						}
+						i++;
+						}
+						%>
 					</div>
 					<!-- /store products -->
-
 					<!-- store bottom filter -->
 					<!-- 페이징 -->
 					<div class="store-filter clearfix">
 						<ul class="store-pagination">
-							<li class="active">1</li>
-							<li><a href="#">2</a></li>
-							<li><a href="#">3</a></li>
-							<li><a href="#">4</a></li>
-							<li><a href="#"><i class="fa fa-angle-right"></i></a></li>
+							<%
+							if (currentPage > 1) { //1보다 크다면
+							%>
+							<li class="page-item"><a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?currentPage=<%=currentPage - 1%>"><i class="fa fa-angle-left"></i></a></li>
+							<%
+							} else { //1보다 작으면
+							%>
+							<li class="page-item disabled"><i class="fa fa-angle-left"></i></li>
+							<%
+							}
+							%>
+							<%
+							if (currentPage < lastPage) {
+							%>
+							<li class="page-item"><a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?currentPage=<%=currentPage + 1%>"><i class="fa fa-angle-right"></i></a></li>
+							<%
+							} else {
+							%>
+							<li class="page-item disabled"><i class="fa fa-angle-right"></i></li>
+							<%
+							}
+							%>
 						</ul>
 					</div>
 					<!-- /페이징 -->
@@ -441,4 +537,7 @@ List<Map<String, Object>> list = new GoodsService().getCustomerGoodsListByPage(r
 	<script src="<%=request.getContextPath()%>/js/jquery.zoom.min.js"></script>
 	<script src="<%=request.getContextPath()%>/js/main.js"></script>
 </body>
+<script>
+	
+</script>
 </html>

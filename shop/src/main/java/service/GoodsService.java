@@ -2,6 +2,7 @@ package service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -18,11 +19,35 @@ public class GoodsService {
 	private GoodsImgDAO goodsImgDAO;
 
 	// 상품 목록
-	public List<Map<String, Object>> getCustomerGoodsListByPage(int rowPerPage, int currentPage) {
+	public List<Map<String, Object>> getCustomerGoodsListByPage(int rowPerPage, int currentPage) throws SQLException {
 		// 파라미터 디버깅
-		System.out.println( "getCustomerGoodsListByPage 파라미터 디버깅 : rowPerPage > " + rowPerPage + ",currentPage >" + currentPage);
-		
-		return null;
+		System.out.println("getCustomerGoodsListByPage 파라미터 디버깅 : " + "rowPerPage > " + rowPerPage + ",currentPage >"
+				+ currentPage);
+		// beginRow
+		int beginRow = (currentPage - 1) * rowPerPage;
+		// DB자원 만들기
+		Connection conn = null;
+		// List객체 생성 - 상품리스트 받아오기
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		try {
+			// DB driver 연결
+			conn = new DBUtil().getConnection();
+			System.out.println("getCustomerGoodsListByPage - Driver 연동 성공");
+			// 상품 리스트 받아오기
+			list = new GoodsDAO().selectCustomerGoodsListByPage(conn, rowPerPage, beginRow);
+			if (list == null) {
+				System.out.println("getCustomerGoodsListByPage list가 null값");
+				throw new Exception();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// DB자원 해제
+			if (conn != null) {
+				conn.close();
+			}
+		}
+		return list;
 	}
 
 	// 상품 추가

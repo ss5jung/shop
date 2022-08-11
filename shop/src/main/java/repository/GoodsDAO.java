@@ -14,27 +14,58 @@ import vo.Goods;
 
 public class GoodsDAO {
 	// 고객 페이지 - 상품리스트
-	public List<Map<String, Object>> selectGoodsListByPage(Connection conn, int goodsNo) throws SQLException{
-		//파라미터 디버깅
-		System.out.println("customerGoodsListByPage - goodsNo>> "+goodsNo);
-		//리턴할 변수 선언
-		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
-		//DB 자원
+	public List<Map<String, Object>> selectCustomerGoodsListByPage(Connection conn, int rowPerPage, int beginRow)
+			throws Exception {
+		// 파라미터 디버깅
+		System.out.println(beginRow + "<-- beginRow - selectCustomerGoodsListByPage");
+		System.out.println(rowPerPage + "<-- rowPerPage - selectCustomerGoodsListByPage");
+		// 리턴할 변수 선언
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		// DB 자원
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		String sql = "SELECT g.goods_no goodsNo, g.goods_name goodsName, g.goods_price goodsPrice, g.sold_out soldOut, gi.filename filename FROM goods g INNER JOIN goods_img gi USING(goods_no) ORDER BY g.create_date DESC LIMIT ?,?";
-		
-		 
+		String sql = "SELECT g.goods_no goodsNo, g.goods_name goodsName, g.goods_price goodsPrice, g.sold_out soldOut, IFNULL(t.sumNum, 0) sumNum, gi.filename filename FROM goods g LEFT JOIN (SELECT goods_no, SUM(order_quantity) sumNum FROM orders GROUP BY goods_no) t USING (goods_no) Inner JOIN goods_img gi USING(goods_no) ORDER BY IFNULL(t.sumNum, 0) DESC LIMIT ?,?";
+		/*
+		 SELECT g.goods_no goodsNo, g.goods_name goodsName, g.goods_price goodsPrice,
+		 g.sold_out soldOut, IFNULL(t.sumNum, 0) sumNum, gi.filename filename
+		 FROM goods g 
+		 LEFT JOIN (SELECT goods_no, SUM(order_quantity) sumNum FROM orders GROUP BY goods_no)t
+		 USING (goods_no) 
+		 Inner JOIN goods_img gi 
+		 USING(goods_no)
+		 ORDER BY IFNULL(t.sumNum, 0) DESC 
+		 LIMIT ?,?;
+		 */
 		try {
+			//DB자원
 			stmt = conn.prepareStatement(sql);
-			rs =
+			stmt.setInt(1, beginRow);
+			stmt.setInt(2, rowPerPage);
+			System.out.println(stmt + "<-- stmt");
+			rs = stmt.executeQuery();
+			System.out.println(rs + "<-- rs" );
+			while (rs.next()) {
+				Map<String, Object> map = new HashMap<>();
+				map.put("goodsNo", rs.getInt("goodsNo"));
+				map.put("goodsName", rs.getString("goodsName"));
+				map.put("goodsPrice", rs.getString("goodsPrice"));
+				map.put("soldOut", rs.getString("soldOut"));
+				map.put("sumNum", rs.getString("sumNum"));
+				map.put("filename", rs.getString("filename"));
+				list.add(map);
+			}
 		} finally {
-			if(rs != null) {rs.close();}
-			if(stmt != null) {stmt.close();}
+			//DB자원해제
+			if (rs != null) {
+				rs.close();
+			}
+			if (stmt != null) {
+				stmt.close();
+			}
 		}
-		return null; 
+		return list;
 	}
-	
+
 	// 상품 추가 - key 값 리턴
 	public int insertGoods(Connection conn, Goods goods) throws SQLException {
 		// 파라미터 디버깅
