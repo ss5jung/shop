@@ -87,7 +87,7 @@ System.out.println(lastPage + "<-- lastPage customerGoodsList");
 					<!-- LOGO -->
 					<div class="col-md-3">
 						<div class="header-logo">
-							<a href="<%=request.getContextPath() %>/customer/customerGoodsList.jsp" class="logo"> <img src="<%=request.getContextPath()%>/img/mamazon.png" style="width: 170px; margin-top: 16px" alt="">
+							<a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp" class="logo"> <img src="<%=request.getContextPath()%>/img/mamazon.png" style="width: 170px; margin-top: 16px" alt="">
 							</a>
 						</div>
 					</div>
@@ -328,6 +328,7 @@ System.out.println(lastPage + "<-- lastPage customerGoodsList");
 					<div class="row">
 						<div class="store-filter clearfix" style="float: right;">
 							<div class="store-sort">
+								<a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?orderSql=hits">인기순</a> &nbsp;|&nbsp; 
 								<a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?orderSql=popular">누적판매순</a> &nbsp;|&nbsp; 
 								<a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?orderSql=lastest">최신순</a> &nbsp;|&nbsp; 
 								<a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?orderSql=lowPrice">낮은가격순</a> &nbsp;|&nbsp; 
@@ -363,7 +364,8 @@ System.out.println(lastPage + "<-- lastPage customerGoodsList");
 									<h3 class="product-name">
 										<a href="#"><%=m.get("goodsName")%></a>
 									</h3>
-									<h4 class="product-price"><%=m.get("goodsPrice")%>원</h4>
+									<h4 class="product-price"><%=m.get("goodsPrice")%>원
+									</h4>
 									<div class="product-rating">
 										<i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i>
 									</div>
