@@ -153,42 +153,45 @@ System.out.println(lastPage + "<-- lastPage - adminNoticeList");
 									%>
 								</tbody>
 							</table>
+							<!-- 페이징과 버튼 -->
+							<!-- row  -->
+							<div class="row">
+								<div class="col-lg-2"></div>
+								<!-- 페이징 -->
+								<div class="col-lg-8">
+									<ul class="pagination justify-content-center">
+										<%
+										if (currentPage > 1) {
+										%>
+										<li class="page-item"><a class="page-link" href="<%=request.getContextPath()%>/admin/adminNoticeList.jsp?currentPage=<%=currentPage - 1%>">이전</a></li>
+										<%
+										} else {
+										%>
+										<li class="page-item disabled"><a class="page-link" href="<%=request.getContextPath()%>/admin/adminNoticeList.jsp?currentPage=<%=currentPage - 1%>">이전</a></li>
+										<%
+										}
+										%>
+										<%
+										if (currentPage < lastPage) {
+										%>
+										<li class="page-item"><a class="page-link" href="<%=request.getContextPath()%>/admin/adminNoticeList.jsp?currentPage=<%=currentPage + 1%>">다음</a></li>
+										<%
+										} else {
+										%>
+										<li class="page-item disabled"><a class="page-link" href="<%=request.getContextPath()%>/admin/adminNoticeList.jsp?currentPage=<%=currentPage + 1%>">다음</a></li>
+										<%
+										}
+										%>
+									</ul>
+								</div>
+								<!-- /페이징 -->
+								<!-- 상품추가 -->
+								<div class="col-lg-2" style="text-align: right;">
+									<a href="<%=request.getContextPath()%>/admin/addNoticeForm.jsp"><button class="btn btn-primary">공지추가</button></a>
+								</div>
+							</div>
+							<!-- row  -->
 						</div>
-						<!-- 페이징 -->
-						<div class="container">
-							<ul class="pagination justify-content-center">
-								<%
-								if (currentPage > 1) {
-								%>
-								<li class="page-item"><a class="page-link" href="<%=request.getContextPath()%>/admin/adminNoticeList.jsp?currentPage=<%=currentPage - 1%>">이전</a></li>
-								<%
-								} else {
-								%>
-								<li class="page-item disabled"><a class="page-link" href="<%=request.getContextPath()%>/admin/adminNoticeList.jsp?currentPage=<%=currentPage - 1%>">이전</a></li>
-								<%
-								}
-								%>
-								<%
-								if (currentPage < lastPage) {
-								%>
-								<li class="page-item"><a class="page-link" href="<%=request.getContextPath()%>/admin/adminNoticeList.jsp?currentPage=<%=currentPage + 1%>">다음</a></li>
-								<%
-								} else {
-								%>
-								<li class="page-item disabled"><a class="page-link" href="<%=request.getContextPath()%>/admin/adminNoticeList.jsp?currentPage=<%=currentPage + 1%>">다음</a></li>
-								<%
-								}
-								%>
-								<!-- 
-								<li class="page-item"><a class="page-link" href="#">이전</a></li>
-								<li class="page-item"><a class="page-link" href="#">1</a></li>
-								<li class="page-item"><a class="page-link" href="#">2</a></li>
-								<li class="page-item"><a class="page-link" href="#">3</a></li>
-								<li class="page-item"><a class="page-link" href="#">다음</a></li> 
-								-->
-							</ul>
-						</div>
-						<!-- /페이징 -->
 					</div>
 				</div>
 			</main>

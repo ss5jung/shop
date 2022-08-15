@@ -33,6 +33,7 @@ Map<String, Object> goodsOne = new GoodsService().getGoodsAndImgOne(goodsNo);
 <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
 <link href="<%=request.getContextPath()%>/adminIndexBoot/css/styles.css" rel="stylesheet" />
 <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body class="sb-nav-fixed">
 	<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -121,7 +122,7 @@ Map<String, Object> goodsOne = new GoodsService().getGoodsAndImgOne(goodsNo);
 						</div>
 						<div class="card-body">
 							<!-- 수정할 데이터  -->
-							<form action="<%=request.getContextPath()%>/admin/adminGoodsOneUpdateAction.jsp" method="post" id="adminGoodsOneUpdate">
+							<form action="<%=request.getContextPath()%>/admin/adminGoodsOneUpdateAction.jsp" method="post" id="adminGoodsOneUpdate" enctype="multipart/form-data">
 								<fieldset>
 									<table class="table table-bordered">
 										<tr>
@@ -138,12 +139,12 @@ Map<String, Object> goodsOne = new GoodsService().getGoodsAndImgOne(goodsNo);
 										</tr>
 										<tr>
 											<th>soldOut</th>
-											<td>품절<input type="radio" id="soldOut" name="Y"> 재고있음<input type="radio" id="soldOut" name="N">
+											<td>품절<input type="radio" id="soldOut" name="soldOut" value="Y"> 재고있음<input type="radio" id="soldOut" name="soldOut" value="N">
 											</td>
 										</tr>
 										<tr>
 											<th>이미지 파일:</th>
-											<td><input type="file" name="file" id=""></td>
+											<td><input type="file" name="goodsImg" id="goodsImg"></td>
 										</tr>
 									</table>
 									<button type="button" class="btn btn-primary" id="btn">수정</button>
@@ -179,11 +180,13 @@ Map<String, Object> goodsOne = new GoodsService().getGoodsAndImgOne(goodsNo);
 </body>
 <script>
 	$('#btn').click(function(){
-		if ( $('#imgPw').val().length < 3){
-			alert('비밀번호를 입력하세요');
-		} else if( $('#imgTitle').val().length < 3){
-			alert('제목은 3자 이상');
-		} else if ( $('#imgFile').val().length < 1){
+		if ( $('#goodsName').val().length < 1){
+			alert('상품명을 입력하세요');
+		} else if( $('#goodsPrice').val().length < 3){
+			alert('상품의 가격을 입력하세요');
+		} else if( $('#soldOut').val().length < 1){
+			alert('품절여부를 확인해주세요');
+		} else if ( $('#goodsImg').val().length < 1){
 			alert('파일을 선택하세요');
 		} else {
 			$('#adminGoodsOneUpdate').submit();

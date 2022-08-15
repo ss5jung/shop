@@ -11,17 +11,10 @@
 request.setCharacterEncoding("utf-8");
 //접근제한
 //로그인하지 않은 상태이거나 고객일 경우에 접근차단하기
-if (session.getAttribute("id") == null || session.getAttribute("user").equals("Customer")) {
+if (session.getAttribute("id") == null || "Customer".equals((String) session.getAttribute("user"))) {
 	response.sendRedirect(request.getContextPath() + "/loginForm.jsp");
 	return;
 }
-//전송받은 값
-int goodsNo = Integer.parseInt(request.getParameter("goodsNo"));
-System.out.println("----" + goodsNo + " 상세페이지----");
-//goodsNo와 관련된 정보 및 이미지 가져오기
-Map<String, Object> goodsOne = new GoodsService().getGoodsAndImgOne(goodsNo);
-//리뷰 가져오기
-
 %>
 <!DOCTYPE html>
 <html lang="euc-kr">
@@ -34,6 +27,7 @@ Map<String, Object> goodsOne = new GoodsService().getGoodsAndImgOne(goodsNo);
 <title>Admin</title>
 <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
 <link href="<%=request.getContextPath()%>/adminIndexBoot/css/styles.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
 <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
 </head>
 <body class="sb-nav-fixed">
@@ -115,87 +109,32 @@ Map<String, Object> goodsOne = new GoodsService().getGoodsAndImgOne(goodsNo);
 		<div id="layoutSidenav_content">
 			<main>
 				<div class="container-fluid px-4">
-					<h1 class="mt-4">상세페이지</h1>
+					<h1 class="mt-4">공지관리</h1>
 					<hr>
 					<div class="card mb-4">
 						<div class="card-header">
-							<i class="fas fa-table me-1"></i> GoodsOne
+							<i class="fas fa-table me-1"></i> 공지사항 추가
 						</div>
 						<div class="card-body">
-							<!-- row -->
-							<div class="row">
-								<div class="col-lg-3" style="text-align: center;">
-									<img src="<%=request.getContextPath()%>/upload/<%=goodsOne.get("filename")%>" alt="제품이미지" style="width: 200px; height: 200px">
-								</div>
-								<div class="col-lg-9">
+							<form action="<%=request.getContextPath()%>/admin/addNoticeAction.jsp" method="post" id="addNoticeForm" >
+								<fieldset>
 									<table class="table table-bordered">
 										<tr>
-											<th>goodsNo</th>
-											<td><%=goodsOne.get("goodsNo")%></td>
+											<th>noticeTitle</th>
+											<td><input type="text" class="form-control" id="noticeTitle" name="noticeTitle"></td>
 										</tr>
 										<tr>
-											<th>goodsName</th>
-											<td><%=goodsOne.get("goodsName")%></td>
-										</tr>
-										<tr>
-											<th>goodsPrice</th>
-											<td><%=goodsOne.get("goodsPrice")%></td>
-										</tr>
-										<tr>
-											<th>updateDate</th>
-											<td><%=goodsOne.get("updateDate")%></td>
-										</tr>
-										<tr>
-											<th>createDate</th>
-											<td><%=goodsOne.get("createDate")%></td>
-										</tr>
-										<tr>
-											<th>soldOut</th>
-											<td><%=goodsOne.get("soldOut")%></td>
-										</tr>
-										<tr>
-											<th>filename</th>
-											<td><%=goodsOne.get("filename")%></td>
-										</tr>
-										<tr>
-											<th>imgCreateDate</th>
-											<td><%=goodsOne.get("imgCreateDate")%></td>
+											<th>noticeContent</th>
+											<td><textarea rows="5" style="width: 100%" id="noticeContent" name ="noticeContent"></textarea></td>
 										</tr>
 									</table>
-								</div>
-							</div>
-							<!-- /row -->
-							<!-- 버튼  -->
-							<div>
-								<button style="float: right; margin-left: 3px" class="btn btn-danger" onclick="deleteGooodsBtn()">삭제</button>
-								<a href="<%=request.getContextPath()%>/admin/adminGoodsOneUpdate.jsp?goodsNo=<%=goodsOne.get("goodsNo")%>"><button class="btn btn-primary" style="float: right; margin-left: 3px">수정</button></a> 
-								<a href="<%=request.getContextPath()%>/admin/adminGoodsList.jsp"><button class="btn btn-secondary" style="float: right; margin-right: 3px">목록</button></a>
-							</div>
+									<button type="button" id="addNoticeBtn" class="btn btn-primary" style="float: right;">공지사항 추가</button>
+								</fieldset>
+							</form>
 						</div>
 					</div>
 				</div>
 			</main>
-			<!-- review 화면 -->
-			<div>
-				<table class="table table-striped">
-					<thead>
-						<tr>
-							<th>customerId</th>
-							<th>reviewContent</th>
-							<th>updateDate</th>
-							<th>createDate</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
 
 			<!-- footer -->
 			<footer class="py-4 bg-light mt-auto">
@@ -221,11 +160,14 @@ Map<String, Object> goodsOne = new GoodsService().getGoodsAndImgOne(goodsNo);
 	<script src="<%=request.getContextPath()%>/adminIndexBoot/js/datatables-simple-demo.js"></script>
 </body>
 <script>
-function deleteGooodsBtn() {
- var result = confirm("상품을 삭제하시겠습니까?");
-  if (result == true) {
-	  location.href= "<%=request.getContextPath()%>/admin/adminGoodsOneDelete.jsp?goodsNo=<%=goodsOne.get("goodsNo")%>";
+	$('#addNoticeBtn').click(function() {
+		if ($('#noticeTitle').val().length < 1 ) {
+			alert('공지사항 제목을 입력하세요');
+		} else if ($('#noticeContent').val().length < 1 ) {
+			alert('공지사항 내용을 입력하세요');
+		} else {
+			$('#addNoticeForm').submit();
 		}
-	}
+	});
 </script>
 </html>

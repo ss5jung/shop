@@ -78,7 +78,7 @@ if (session.getAttribute("id") == null || "Customer".equals((String) session.get
 						<a class="nav-link active" href="<%=request.getContextPath()%>/admin/adminGoodsList.jsp">
 							<div class="sb-nav-link-icon">
 								<i class="fas fa-list-alt"></i>
-							</div> 상품관리 - 상품추가
+							</div> 상품관리
 						</a>
 						<!-- 주문목록/수정 -->
 						<a class="nav-link" href="<%=request.getContextPath()%>/admin/adminOrderList.jsp">
@@ -109,7 +109,7 @@ if (session.getAttribute("id") == null || "Customer".equals((String) session.get
 		<div id="layoutSidenav_content">
 			<main>
 				<div class="container-fluid px-4">
-					<h1 class="mt-4">상세페이지</h1>
+					<h1 class="mt-4">상품관리</h1>
 					<hr>
 					<div class="card mb-4">
 						<div class="card-header">

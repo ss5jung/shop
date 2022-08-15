@@ -10,6 +10,74 @@ import java.util.List;
 import vo.Notice;
 
 public class NoticeDAO {
+	//공지사항 추가하기
+	public int insertNotice(Connection conn, Notice notice) throws SQLException {
+		//리턴할 변수 선언
+		int row = 0;
+		//파라미터 디버깅
+		System.out.println("###NoticeDAO insertNotice"+notice);
+		//DB
+		PreparedStatement stmt = null;
+		String sql = "INSERT INTO notice (notice_title, notice_content, update_date, create_date) VALUES (?, ?, now(), now())";
+		try {
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, notice.getNotice_title());
+			stmt.setString(2, notice.getNotice_content());
+			row = stmt.executeUpdate();
+		} finally {
+			//DB자원 해제
+			if(stmt != null) {stmt.close();}
+		}
+		return row;
+	}
+	// 공지사항 삭제하기
+	public int deleteNotice(Connection conn, int noticeNo) throws SQLException {
+		//파라미터 디버깅
+		System.out.println(noticeNo + "<-- noticeNo - deleteNotice");
+		//리턴할 변수 선언
+		int row =0;
+		//DB 자원 
+		PreparedStatement stmt = null;
+		String sql = "DELETE FROM notice WHERE notice_no = ?";
+		try {
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, noticeNo);
+			System.out.println(stmt + "<-- stmt");
+			row = stmt.executeUpdate();
+		} finally {
+			//DB 자원 해제
+			if(stmt !=  null) {
+				stmt.close();
+			}
+		}
+		return row;
+	}
+	
+	// NoticeOne 수정하기
+	public int updateNotice(Connection conn, Notice notice) throws SQLException {
+		System.out.println("###########updateNotice - NoticeDAO");
+		// 파라미터 디버깅
+		System.out.println(notice);
+		// 리턴값 선언
+		int row = 0;
+		// 객체
+		PreparedStatement stmt = null;
+		String sql = "UPDATE notice SET notice_title = ?, notice_content = ? WHERE  notice_no = ?";
+		try {
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, notice.getNotice_title());
+			stmt.setString(2, notice.getNotice_content());
+			stmt.setInt(3, notice.getNotice_no());
+			System.out.println(stmt + "<-- stmt");
+			row= stmt.executeUpdate();
+		} finally {
+			//DB자원해제
+			if(stmt != null) {
+				stmt.close();
+			}
+		}
+		return row;
+	}
 
 	// 라스트 페이지
 	public int selectNoticeLastPage(Connection conn, int rowPerPage) throws SQLException {

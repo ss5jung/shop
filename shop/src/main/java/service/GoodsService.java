@@ -18,40 +18,7 @@ public class GoodsService {
 	private GoodsDAO goodsDAO;
 	private GoodsImgDAO goodsImgDAO;
 
-	// 상품 목록
-	public List<Map<String, Object>> getCustomerGoodsListByPage(int rowPerPage, int currentPage, String orderSql)
-			throws SQLException {
-		// 파라미터 디버깅
-		System.out.println("getCustomerGoodsListByPage 파라미터 디버깅 : " + "rowPerPage > " + rowPerPage + ",currentPage >"
-				+ currentPage + " ,orderSql >" + orderSql);
-		// beginRow
-		int beginRow = (currentPage - 1) * rowPerPage;
-		// DB자원 만들기
-		Connection conn = null;
-		// List객체 생성 - 상품리스트 받아오기
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		try {
-			// DB driver 연결
-			conn = new DBUtil().getConnection();
-			System.out.println("getCustomerGoodsListByPage - Driver 연동 성공");
-			// 상품 리스트 받아오기
-			list = new GoodsDAO().selectCustomerGoodsListByPage(conn, rowPerPage, beginRow, orderSql);
-			if (list == null) {
-				System.out.println("getCustomerGoodsListByPage list가 null값");
-				throw new Exception();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			// DB자원 해제
-			if (conn != null) {
-				conn.close();
-			}
-		}
-		return list;
-	}
-
-	// 상품 추가
+	// 상품 추가 C
 	public int addGoods(Goods goods, GoodsImg goodsImg) throws SQLException {
 		// 파라미터 디버깅
 		System.out.println(goods);
@@ -99,7 +66,127 @@ public class GoodsService {
 		return row;
 	}
 
-	// 상세페이지
+	// 상품 삭제하기 D
+	// DB에서 goods테이블의 goods_noorder와 FK랑 연결되어 있는 상품의 경우에는 삭제가 안 됨
+	public int deleteGoodsOne(int goodsNo) throws SQLException {
+		// 파라미터 디버깅
+		System.out.println(goodsNo + "<-- goodsNo -deleteGoodsOne GoodsService");
+		// DB연결
+		Connection conn = null;
+		// 리턴할 변수 선언
+		int imgRow = 0;
+		int row = 0;
+		try {
+			// 상품 이미지 삭제 -> 상품 정보 삭제
+			// DB 연결
+			conn = new DBUtil().getConnection();
+			System.out.println("deleteGoodsOne DB 연결 성공");
+			// sql문으로 조회할 DAO 객체 생성
+			goodsDAO = new GoodsDAO();
+			goodsImgDAO = new GoodsImgDAO();
+			// 개별 트랙잭션모드 끄기
+			conn.setAutoCommit(false);
+			// FK로 연결되어 있어서 goods_img에서 먼저 데이터를 삭제해야 됨
+			imgRow = goodsImgDAO.deleteGoodsOneImg(conn, goodsNo);
+			if (imgRow != 0) { // goods_img 테이블에서 삭제가 성공한다면
+				row = goodsDAO.deleteGoodsOne(conn, goodsNo);
+				if (row == 0) { // goods 테이블에서 데이터 삭제에 실패했다면
+					throw new Exception(); // 예외
+				}
+			}
+			// 변경된 내용 적용(커밋)하기
+			conn.commit();
+		} catch (Exception e) { // 예외처리되면
+			e.printStackTrace();
+			try {
+				conn.rollback(); // rollback해서 이전상태로 만들기
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		} finally {
+			// DB자원 해제
+			if (conn != null) {
+				conn.close();
+			}
+		}
+		return row;
+	}
+
+	// 상품 수정하기 U
+	public int updateGoodsOne(Goods goods, GoodsImg goodsImg) throws SQLException {
+		// 리턴하려는 변수 선언
+		int row = 0;
+		Connection conn = null;
+		try {
+			conn = new DBUtil().getConnection();
+			System.out.println("updateGoodsOne - DB 연결 성공");
+			// DAO 객체 생성
+			goodsDAO = new GoodsDAO();
+			goodsImgDAO = new GoodsImgDAO();
+			// 개별 트랙잭션모드 끄기
+			conn.setAutoCommit(false);
+			// goods 정보 수정
+			row = goodsDAO.updateGoodsOne(conn, goods);
+			// 정보 수정에 성공하면 img도 수정
+			if (row != 0) {
+				int imgRow = goodsImgDAO.updateGoodsImg(conn, goodsImg);
+				if(imgRow == 0) {
+					throw new Exception();
+				}
+			}
+			// 변경된 사항 적용하기
+			conn.commit();
+		} catch (Exception e) { // 예외처리되면
+			e.printStackTrace();
+			try {
+				conn.rollback(); // rollback해서 이전상태로 만들기
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		} finally {
+			// DB자원 해제
+			if (conn != null) {
+				conn.close();
+			}
+		}
+		return row;
+
+	}
+
+	// 상품 목록 R
+	public List<Map<String, Object>> getCustomerGoodsListByPage(int rowPerPage, int currentPage, String orderSql)
+			throws SQLException {
+		// 파라미터 디버깅
+		System.out.println("getCustomerGoodsListByPage 파라미터 디버깅 : " + "rowPerPage > " + rowPerPage + ",currentPage >"
+				+ currentPage + " ,orderSql >" + orderSql);
+		// beginRow
+		int beginRow = (currentPage - 1) * rowPerPage;
+		// DB자원 만들기
+		Connection conn = null;
+		// List객체 생성 - 상품리스트 받아오기
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		try {
+			// DB driver 연결
+			conn = new DBUtil().getConnection();
+			System.out.println("getCustomerGoodsListByPage - Driver 연동 성공");
+			// 상품 리스트 받아오기
+			list = new GoodsDAO().selectCustomerGoodsListByPage(conn, rowPerPage, beginRow, orderSql);
+			if (list == null) {
+				System.out.println("getCustomerGoodsListByPage list가 null값");
+				throw new Exception();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// DB자원 해제
+			if (conn != null) {
+				conn.close();
+			}
+		}
+		return list;
+	}
+
+	// 상세페이지 R
 	public Map<String, Object> getGoodsAndImgOne(int goodsNo) throws SQLException {
 		// 전송받은 값 디버깅
 		System.out.println(goodsNo + "<--goodsNo - getGoodsAndImgOne");
@@ -149,7 +236,7 @@ public class GoodsService {
 		return lastPage;
 	}
 
-	// 상품 리스트
+	// 상품 리스트 R
 	public List<Goods> getGoodsListByPage(int rowPerPage, int currentPage) throws SQLException, ClassNotFoundException {
 		// 리턴할 변수 생성
 		List<Goods> list = null;

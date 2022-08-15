@@ -123,7 +123,7 @@ Notice notice = new Notice();
 							<i class="fas fa-table me-1"></i>공지사항 수정
 						</div>
 						<div class="card-body">
-							<form action="<%=request.getContextPath()%>/admin/adminUpdateNoticeOneAction.jsp" method="post" id="updateNoticeForm">
+							<form action="<%=request.getContextPath()%>/admin/adminUpdateNoticeOneAction.jsp" method="post" enctype="multipart/form-data" id="updateNoticeForm">
 								<fieldset>
 									<table class="table table-boarder">
 										<tr>
@@ -178,7 +178,7 @@ Notice notice = new Notice();
  $('#updateBtn').click(function() {
 		if ($('#noticeTitle').val().length < 3 ) {
 			alert('제목을 3자 이상 입력하세요.');
-		} else if ($('#noticeContent').length < 10) {
+		} else if ($('#noticeContent').val().length < 10) {
 			alert('내용을 10자 이상 입력하세요.');
 		} else {
 			$('#updateNoticeForm').submit();

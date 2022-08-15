@@ -13,54 +13,8 @@ import java.util.Map;
 import vo.Goods;
 
 public class GoodsDAO {
-	// 고객 페이지 - 상품리스트
-	public List<Map<String, Object>> selectCustomerGoodsListByPage(Connection conn, int rowPerPage, int beginRow,String orderSql)
-			throws Exception {
-		// 파라미터 디버깅
-		System.out.println(beginRow + "<-- beginRow - selectCustomerGoodsListByPage");
-		System.out.println(rowPerPage + "<-- rowPerPage - selectCustomerGoodsListByPage");
-		// 리턴할 변수 선언
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		// DB 자원
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
-		String sql =  null;
-		if(orderSql.equals("popular")) {sql="SELECT g.goods_no goodsNo, g.goods_name goodsName, g.goods_price goodsPrice, g.sold_out soldOut, IFNULL(t.sumNum, 0) sumNum, gi.filename filename FROM goods g LEFT JOIN (SELECT goods_no, SUM(order_quantity) sumNum FROM orders GROUP BY goods_no) t USING (goods_no) Inner JOIN goods_img gi USING(goods_no) ORDER BY IFNULL(t.sumNum, 0) DESC LIMIT ?,?";}
-		if(orderSql.equals("hits")) {sql="SELECT g.goods_no goodsNo, g.goods_name goodsName, g.goods_price goodsPrice, g.sold_out soldOut, IFNULL(t.sumNum, 0) sumNum, gi.filename filename FROM goods g LEFT JOIN (SELECT goods_no, SUM(order_quantity) sumNum FROM orders GROUP BY goods_no) t USING (goods_no) Inner JOIN goods_img gi USING(goods_no) ORDER BY IFNULL(t.sumNum, 0) DESC LIMIT ?,?";}
-		else if(orderSql.equals("lastest")) {sql= "SELECT g.goods_no goodsNo, g.goods_name goodsName, g.goods_price goodsPrice, g.sold_out soldOut, IFNULL(t.sumNum, 0) sumNum, gi.filename filename FROM goods g LEFT JOIN (SELECT goods_no, SUM(order_quantity) sumNum FROM orders GROUP BY goods_no) t USING (goods_no) Inner JOIN goods_img gi USING(goods_no) ORDER BY g.create_date DESC LIMIT ?,?";}
-		else if(orderSql.equals("lowPrice")) {sql="SELECT g.goods_no goodsNo, g.goods_name goodsName, g.goods_price goodsPrice, g.sold_out soldOut, IFNULL(t.sumNum, 0) sumNum, gi.filename filename FROM goods g LEFT JOIN (SELECT goods_no, SUM(order_quantity) sumNum FROM orders GROUP BY goods_no) t USING (goods_no) Inner JOIN goods_img gi USING(goods_no) ORDER BY g.goods_price ASC LIMIT ?,?";}
-		else if(orderSql.equals("highPrice")) {sql="SELECT g.goods_no goodsNo, g.goods_name goodsName, g.goods_price goodsPrice, g.sold_out soldOut, IFNULL(t.sumNum, 0) sumNum, gi.filename filename FROM goods g LEFT JOIN (SELECT goods_no, SUM(order_quantity) sumNum FROM orders GROUP BY goods_no) t USING (goods_no) Inner JOIN goods_img gi USING(goods_no) ORDER BY g.goods_price DESC LIMIT ?,?";}
-		try {
-			//DB자원
-			stmt = conn.prepareStatement(sql);
-			stmt.setInt(1, beginRow);
-			stmt.setInt(2, rowPerPage);
-			System.out.println(stmt + "<-- stmt");
-			rs = stmt.executeQuery();
-			System.out.println(rs + "<-- rs" );
-			while (rs.next()) {
-				Map<String, Object> map = new HashMap<>();
-				map.put("goodsNo", rs.getInt("goodsNo"));
-				map.put("goodsName", rs.getString("goodsName"));
-				map.put("goodsPrice", rs.getString("goodsPrice"));
-				map.put("soldOut", rs.getString("soldOut"));
-				map.put("sumNum", rs.getString("sumNum"));
-				map.put("filename", rs.getString("filename"));
-				list.add(map);
-			}
-		} finally {
-			//DB자원해제
-			if (rs != null) {
-				rs.close();
-			}
-			if (stmt != null) {
-				stmt.close();
-			}
-		}
-		return list;
-	}
-
-	// 상품 추가 - key 값 리턴
+	/////////////////////////////////////////////////////////////////// admin mode
+	// 상품 추가하기 C [ key 값 리턴 ]
 	public int insertGoods(Connection conn, Goods goods) throws SQLException {
 		// 파라미터 디버깅
 		System.out.println(goods);
@@ -104,7 +58,51 @@ public class GoodsDAO {
 		return keyId;
 	}
 
-	// 상세페이지
+	// 상품 리스트 R
+	public List<Goods> selectGoodsListByPage(Connection conn, int rowPerPage, int beginRow) throws SQLException {
+		// 리턴값 선언 및 초기화
+		List<Goods> list = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+
+		String sql = "SELECT goods_no goodsNo, goods_name goodsName, goods_price goodsPrice, update_date updateDate, create_date createDate, sold_out soldOut FROM goods ORDER BY goods_no ASC LIMIT "
+				+ beginRow + "," + rowPerPage;
+
+		try {
+			// 상품 정보를 담은 list객체 선언
+			list = new ArrayList<Goods>();
+
+			stmt = conn.prepareStatement(sql);
+			System.out.println(stmt + "<-- stmt - selectGoodsListByPage");
+			rs = stmt.executeQuery();
+
+			while (rs.next()) { // 쿼리가 실행된다면
+				// 디버깅
+				System.out.println(rs + "<-- rs정상 실행 - selectGoodsListByPage");
+				Goods g = new Goods();
+				// 데이터 셋팅
+				g.setGoodsNo(rs.getInt("goodsNo"));
+				g.setGoodsName(rs.getString("goodsName"));
+				g.setGoodsPrice(rs.getInt("goodsPrice"));
+				g.setUpdateDate(rs.getString("updateDate"));
+				g.setCreateDate(rs.getString("createDate"));
+				g.setSoldOut(rs.getString("soldOut"));
+				System.out.println(g + "<-- g Goods 정보");
+				list.add(g);
+			}
+		} finally {
+			if (rs != null) {
+				rs.close();
+			}
+			if (stmt != null) {
+				stmt.close();
+			}
+			System.out.println("selectGoodsListByPage.jsp - DB연동 해제");
+		}
+		return list;
+	}
+
+	// 상품 상세보기 R
 	public Map<String, Object> selectGoodsAndImgOne(Connection conn, int goodsNo) throws SQLException {
 		// 파라미터 디버깅
 		System.out.println(goodsNo + "<-- goodsNo - selectGoodsAndImgOne");
@@ -149,14 +147,111 @@ public class GoodsDAO {
 				stmt.close();
 			}
 		}
-
-		/*
-		 * while(rs.next()) { map = new HashMap<String, Object>() map.put("goodsNo",
-		 * rs.getInt("goodsNo")); }
-		 * 
-		 * 쿼리에서 where 조건이 없다면..반환 타입 List<Map<String, Object>> list
-		 */
 		return map;
+	}
+
+	// 상품 정보 수정하기 U
+	public int updateGoodsOne(Connection conn, Goods goods) throws Exception {
+		int row = 0;
+		PreparedStatement stmt = null;
+		String sql = "UPDATE goods SET goods_name=? , goods_price = ?, update_date = now(), sold_out =? WHERE  goods_no= ? ";
+		try {
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, goods.getGoodsName());
+			stmt.setInt(2, goods.getGoodsPrice());
+			stmt.setString(3, goods.getSoldOut());
+			stmt.setInt(4, goods.getGoodsNo());
+			//디버깅
+			System.out.println(stmt + "<-- stmt");
+			row = stmt.executeUpdate();
+			if(row == 0) {	//수정안되면
+				throw new Exception();	//예외처리
+			}
+		} finally {
+			// DB자원 해제
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return row;
+	}
+
+	// 상품 정보 삭제하기 D
+	public int deleteGoodsOne(Connection conn, int goodsNo) throws SQLException {
+		// 파라미터 디버깅
+		System.out.println(goodsNo + "<-- goodsNo - deleteGoodsOne");
+		// 리턴할 변수 선언
+		int row = 0;
+		// DB 자원
+		PreparedStatement stmt = null;
+		String sql = "DELETE FROM goods WHERE goods_no = ?";
+		try {
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, goodsNo);
+			System.out.println(stmt + "<-- stmt");
+			row = stmt.executeUpdate();
+		} finally {
+			// DB 자원 해제
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return row;
+	}
+
+	/////////////////////////////////////////////////////////////////////// customer
+	// 고객 페이지 - 상품리스트
+	public List<Map<String, Object>> selectCustomerGoodsListByPage(Connection conn, int rowPerPage, int beginRow,
+			String orderSql) throws Exception {
+		// 파라미터 디버깅
+		System.out.println(beginRow + "<-- beginRow - selectCustomerGoodsListByPage");
+		System.out.println(rowPerPage + "<-- rowPerPage - selectCustomerGoodsListByPage");
+		// 리턴할 변수 선언
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		// DB 자원
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		if (orderSql.equals("popular")) {
+			sql = "SELECT g.goods_no goodsNo, g.goods_name goodsName, g.goods_price goodsPrice, g.sold_out soldOut, IFNULL(t.sumNum, 0) sumNum, gi.filename filename FROM goods g LEFT JOIN (SELECT goods_no, SUM(order_quantity) sumNum FROM orders GROUP BY goods_no) t USING (goods_no) Inner JOIN goods_img gi USING(goods_no) ORDER BY IFNULL(t.sumNum, 0) DESC LIMIT ?,?";
+		}
+		if (orderSql.equals("hits")) {
+			sql = "SELECT g.goods_no goodsNo, g.goods_name goodsName, g.goods_price goodsPrice, g.sold_out soldOut, IFNULL(t.sumNum, 0) sumNum, gi.filename filename FROM goods g LEFT JOIN (SELECT goods_no, SUM(order_quantity) sumNum FROM orders GROUP BY goods_no) t USING (goods_no) Inner JOIN goods_img gi USING(goods_no) ORDER BY IFNULL(t.sumNum, 0) DESC LIMIT ?,?";
+		} else if (orderSql.equals("lastest")) {
+			sql = "SELECT g.goods_no goodsNo, g.goods_name goodsName, g.goods_price goodsPrice, g.sold_out soldOut, IFNULL(t.sumNum, 0) sumNum, gi.filename filename FROM goods g LEFT JOIN (SELECT goods_no, SUM(order_quantity) sumNum FROM orders GROUP BY goods_no) t USING (goods_no) Inner JOIN goods_img gi USING(goods_no) ORDER BY g.create_date DESC LIMIT ?,?";
+		} else if (orderSql.equals("lowPrice")) {
+			sql = "SELECT g.goods_no goodsNo, g.goods_name goodsName, g.goods_price goodsPrice, g.sold_out soldOut, IFNULL(t.sumNum, 0) sumNum, gi.filename filename FROM goods g LEFT JOIN (SELECT goods_no, SUM(order_quantity) sumNum FROM orders GROUP BY goods_no) t USING (goods_no) Inner JOIN goods_img gi USING(goods_no) ORDER BY g.goods_price ASC LIMIT ?,?";
+		} else if (orderSql.equals("highPrice")) {
+			sql = "SELECT g.goods_no goodsNo, g.goods_name goodsName, g.goods_price goodsPrice, g.sold_out soldOut, IFNULL(t.sumNum, 0) sumNum, gi.filename filename FROM goods g LEFT JOIN (SELECT goods_no, SUM(order_quantity) sumNum FROM orders GROUP BY goods_no) t USING (goods_no) Inner JOIN goods_img gi USING(goods_no) ORDER BY g.goods_price DESC LIMIT ?,?";
+		}
+		try {
+			// DB자원
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, beginRow);
+			stmt.setInt(2, rowPerPage);
+			System.out.println(stmt + "<-- stmt");
+			rs = stmt.executeQuery();
+			System.out.println(rs + "<-- rs");
+			while (rs.next()) {
+				Map<String, Object> map = new HashMap<>();
+				map.put("goodsNo", rs.getInt("goodsNo"));
+				map.put("goodsName", rs.getString("goodsName"));
+				map.put("goodsPrice", rs.getString("goodsPrice"));
+				map.put("soldOut", rs.getString("soldOut"));
+				map.put("sumNum", rs.getString("sumNum"));
+				map.put("filename", rs.getString("filename"));
+				list.add(map);
+			}
+		} finally {
+			// DB자원해제
+			if (rs != null) {
+				rs.close();
+			}
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return list;
 	}
 
 	// 라스트 페이지
@@ -187,49 +282,5 @@ public class GoodsDAO {
 		lastPage = (int) Math.ceil((double) totalCount / rowPerPage);
 		return lastPage;
 	}
-
-	// 상품리스트
-	public List<Goods> selectGoodsListByPage(Connection conn, int rowPerPage, int beginRow) throws SQLException {
-		// 리턴값 선언 및 초기화
-		List<Goods> list = null;
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
-
-		String sql = "SELECT goods_no goodsNo, goods_name goodsName, goods_price goodsPrice, update_date updateDate, create_date createDate, sold_out soldOut FROM goods ORDER BY goods_no ASC LIMIT "
-				+ beginRow + "," + rowPerPage;
-
-		try {
-			// 상품 정보를 담은 list객체 선언
-			list = new ArrayList<Goods>();
-
-			stmt = conn.prepareStatement(sql);
-			System.out.println(stmt + "<-- stmt - selectGoodsListByPage");
-			rs = stmt.executeQuery();
-
-			while (rs.next()) { // 쿼리가 실행된다면
-				// 디버깅
-				System.out.println(rs + "<-- rs정상 실행 - selectGoodsListByPage");
-				Goods g = new Goods();
-				// 데이터 셋팅
-				g.setGoodsNo(rs.getInt("goodsNo"));
-				g.setGoodsName(rs.getString("goodsName"));
-				g.setGoodsPrice(rs.getInt("goodsPrice"));
-				g.setUpdateDate(rs.getString("updateDate"));
-				g.setCreateDate(rs.getString("createDate"));
-				g.setSoldOut(rs.getString("soldOut"));
-				System.out.println(g + "<-- g Goods 정보");
-				list.add(g);
-			}
-		} finally {
-			if (rs != null) {
-				rs.close();
-			}
-			if (stmt != null) {
-				stmt.close();
-			}
-			System.out.println("selectGoodsListByPage.jsp - DB연동 해제");
-		}
-		return list;
-	}// end selectGoodsListByPdate
 }
 // end class

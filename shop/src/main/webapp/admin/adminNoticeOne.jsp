@@ -146,8 +146,9 @@ notice = new NoticeService().getNoticeOne(noticeNo);
 							</table>
 							<!-- 버튼 -->
 							<div style="float: right;">
-								<a href="<%=request.getContextPath()%>/admin/adminNoticeList.jsp"><button class="btn btn-secondary">이전</button></a> 
+								<a href="<%=request.getContextPath()%>/admin/adminNoticeList.jsp"><button class="btn btn-secondary">목록</button></a> 
 								<a href="<%=request.getContextPath()%>/admin/adminUpdateNoticeOne.jsp?noticeNo=<%=notice.getNotice_no()%>"><button class="btn btn-primary">수정</button></a>
+								<button class="btn btn-danger" onclick="deleteNoticeBtn()">삭제</button>
 							</div>
 						</div>
 					</div>
@@ -177,4 +178,12 @@ notice = new NoticeService().getNoticeOne(noticeNo);
 	<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
 	<script src="<%=request.getContextPath()%>/adminIndexBoot/js/datatables-simple-demo.js"></script>
 </body>
+<script>
+function deleteNoticeBtn() {
+ var result = confirm("공지사항을 삭제하시겠습니까?");
+  if (result == true) {
+	  location.href="<%=request.getContextPath()%>/admin/deleteNoticeOneAction.jsp?noticeNo=<%=notice.getNotice_no()%>";
+		}
+	}
+</script>
 </html>

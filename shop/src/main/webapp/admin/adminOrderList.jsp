@@ -185,10 +185,6 @@ System.out.println(lastPage + "<-- lastPage - adminOrderList");
 									</ul>
 								</div>
 								<!-- /페이징 -->
-								<!-- 상품추가 -->
-								<div class="col-lg-2" style="text-align: right;">
-									<a href="<%=request.getContextPath()%>/admin/addGoodsForm.jsp"><button class="btn btn-primary">상품추가</button></a>
-								</div>
 							</div>
 							<!-- row  -->
 						</div>
