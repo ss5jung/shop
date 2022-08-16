@@ -1,3 +1,5 @@
+<%@page import="java.util.List"%>
+<%@page import="service.ReviewService"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Map"%>
 <%@page import="service.GoodsService"%>
@@ -21,7 +23,7 @@ System.out.println("----" + goodsNo + " 상세페이지----");
 //goodsNo와 관련된 정보 및 이미지 가져오기
 Map<String, Object> goodsOne = new GoodsService().getGoodsAndImgOne(goodsNo);
 //리뷰 가져오기
-
+List<Map<String, Object>> list = new ReviewService().getReviewList(goodsNo);
 %>
 <!DOCTYPE html>
 <html lang="euc-kr">
@@ -168,34 +170,44 @@ Map<String, Object> goodsOne = new GoodsService().getGoodsAndImgOne(goodsNo);
 							<!-- 버튼  -->
 							<div>
 								<button style="float: right; margin-left: 3px" class="btn btn-danger" onclick="deleteGooodsBtn()">삭제</button>
-								<a href="<%=request.getContextPath()%>/admin/adminGoodsOneUpdate.jsp?goodsNo=<%=goodsOne.get("goodsNo")%>"><button class="btn btn-primary" style="float: right; margin-left: 3px">수정</button></a> 
-								<a href="<%=request.getContextPath()%>/admin/adminGoodsList.jsp"><button class="btn btn-secondary" style="float: right; margin-right: 3px">목록</button></a>
+								<a href="<%=request.getContextPath()%>/admin/adminGoodsOneUpdate.jsp?goodsNo=<%=goodsOne.get("goodsNo")%>"><button class="btn btn-primary" style="float: right; margin-left: 3px">수정</button></a> <a href="<%=request.getContextPath()%>/admin/adminGoodsList.jsp"><button class="btn btn-secondary" style="float: right; margin-right: 3px">목록</button></a>
 							</div>
 						</div>
 					</div>
+					<!-- review 화면 -->
+					<div style="margin-top: 3%">
+						<h3>
+							<b>Review</b>
+						</h3>
+						<table class="table table-striped ">
+							<thead>
+								<tr>
+									<th>고객ID</th>
+									<th>내용</th>
+									<th>수정일</th>
+									<th>최초작성일</th>
+								</tr>
+							</thead>
+							<tbody>
+								<%
+								for (Map<String, Object> m : list) {
+								%>
+								<tr>
+									<td><%=m.get("customerId") %></td>
+									<td><%=m.get("reviewContent") %></td>
+									<td><%=m.get("updateDate") %></td>
+									<td><%=m.get("createDate") %></td>
+								</tr>
+								<%
+								}
+								%>
+							</tbody>
+						</table>
+					</div>
+					<!-- review 화면 -->
 				</div>
 			</main>
-			<!-- review 화면 -->
-			<div>
-				<table class="table table-striped">
-					<thead>
-						<tr>
-							<th>customerId</th>
-							<th>reviewContent</th>
-							<th>updateDate</th>
-							<th>createDate</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+
 
 			<!-- footer -->
 			<footer class="py-4 bg-light mt-auto">
@@ -224,7 +236,8 @@ Map<String, Object> goodsOne = new GoodsService().getGoodsAndImgOne(goodsNo);
 function deleteGooodsBtn() {
  var result = confirm("상품을 삭제하시겠습니까?");
   if (result == true) {
-	  location.href= "<%=request.getContextPath()%>/admin/adminGoodsOneDelete.jsp?goodsNo=<%=goodsOne.get("goodsNo")%>";
+	  location.href= "<%=request.getContextPath()%>/admin/adminGoodsOneDelete.jsp?goodsNo=<%=goodsOne.get("goodsNo")%>
+	";
 		}
 	}
 </script>

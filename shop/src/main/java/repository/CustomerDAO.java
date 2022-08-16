@@ -10,6 +10,84 @@ import java.util.List;
 import vo.Customer;
 
 public class CustomerDAO {
+	//임시 비밀번호 정보 수정
+	public int updateCustomerPass(Connection conn, Customer customer) throws Exception {
+		int row = 0;
+		PreparedStatement stmt = null;
+		String sql = "UPDATE  customer SET customer_pass=PASSWORD(?) WHERE customer_id= ? ";
+		try {
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, customer.getCustomerPass());
+			stmt.setString(2, customer.getCustomerId());
+			System.out.println(stmt + "<-- stmt");
+			row = stmt.executeUpdate();
+			if(row == 0) {
+				throw new Exception();
+			}
+		} finally {
+			// DB자원해제
+			if(stmt != null) {
+				stmt.close();
+			}
+		}
+		return row;
+	}
+	// 회원 강제 탈퇴
+	public int deleteCustomerOne(Connection conn, String customerId) throws Exception {
+		//리턴변수 생성
+		int row = 0;
+		//DB 
+		String sql ="DELETE FROM customer WHERE customer_id= ?";
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, customerId);
+			System.out.println(stmt + "<-- stmt");
+			row = stmt.executeUpdate();
+			if(row == 0) {
+				throw new Exception();
+			}
+		} finally {
+			//DB 자원 해제
+			if(stmt != null) {
+				stmt.close();
+			}
+		}
+		return row;
+	}
+	// 회원 정보 가져오기
+		public Customer selectCustomerOne(Connection conn, String customerId) throws SQLException {
+			//리턴객체 만들기
+			Customer customer = new Customer();
+			//DB 자원
+			String sql ="SELECT customer_id customerId, customer_name customerName, customer_address customerAddress, customer_telephone customerTelephone, update_date updateDate, create_date createDate FROM customer WHERE customer_id = ?";
+			PreparedStatement stmt = null;
+			ResultSet rs = null;
+			try {
+				stmt = conn.prepareStatement(sql);
+				stmt.setString(1, customerId);
+				System.out.println(stmt + "<-- stmt");
+				rs = stmt.executeQuery();
+				if(rs.next()) {
+					customer.setCustomerId(rs.getString("customerId"));
+					customer.setCustomerName(rs.getString("customerName"));
+					customer.setCustomerAddress(rs.getString("customerAddress"));
+					customer.setCustomerTelephone(rs.getString("customerTelephone"));
+					customer.setUpdateDate(rs.getString("updateDate"));
+					customer.setCreateDate(rs.getString("createDate"));
+				}
+			} finally {
+				// DB 자원 해제
+				if (rs != null) {
+					rs.close();
+				}
+				if (stmt != null) {
+					stmt.close();
+				}
+			}
+			return customer;
+		}
+		
 	// 라스트 페이지
 	public int selectCustomerLastPage(Connection conn, int rowPerPage) throws SQLException {
 		// 파라미터 디버깅

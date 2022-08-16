@@ -129,7 +129,7 @@ System.out.println(lastPage + "<-- lastPage - adminCustomerList");
 							<i class="fas fa-table me-1"></i> Customers Data
 						</div>
 						<div class="card-body">
-							<table class="table table-boarder">
+							<table class="table table-hover">
 								<thead>
 									<tr>
 										<th>customerId</th>

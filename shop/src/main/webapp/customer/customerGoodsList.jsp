@@ -38,7 +38,7 @@ System.out.println(lastPage + "<-- lastPage customerGoodsList");
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-<title>SHOP</title>
+<title>Mamazon</title>
 
 <!-- Google font -->
 <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
@@ -58,6 +58,7 @@ System.out.println(lastPage + "<-- lastPage customerGoodsList");
 
 <!-- Custom stlylesheet -->
 <link type="text/css" rel="stylesheet" href="<%=request.getContextPath()%>/css/style.css" />
+<link rel="icon" href="<%=request.getContextPath()%>/img/mamazonFavicon.svg" type="image/x-icon">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
@@ -328,13 +329,7 @@ System.out.println(lastPage + "<-- lastPage customerGoodsList");
 					<div class="row">
 						<div class="store-filter clearfix" style="float: right;">
 							<div class="store-sort">
-								<a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?orderSql=hits">인기순</a> &nbsp;|&nbsp; 
-								<a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?orderSql=popular">누적판매순</a> &nbsp;|&nbsp; 
-								<a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?orderSql=lastest">최신순</a> &nbsp;|&nbsp; 
-								<a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?orderSql=lowPrice">낮은가격순</a> &nbsp;|&nbsp; 
-								<a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?orderSql=highPrice">높은가격순</a> &nbsp;&nbsp; 
-								<a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?rowPerPage=20">20개씩</a> &nbsp;|&nbsp; 
-								<a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?rowPerPage=40">40개씩</a>
+								<a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?orderSql=hits">인기순</a> &nbsp;|&nbsp; <a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?orderSql=popular">누적판매순</a> &nbsp;|&nbsp; <a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?orderSql=lastest">최신순</a> &nbsp;|&nbsp; <a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?orderSql=lowPrice">낮은가격순</a> &nbsp;|&nbsp; <a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?orderSql=highPrice">높은가격순</a> &nbsp;&nbsp; <a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?rowPerPage=20">20개씩</a> &nbsp;|&nbsp; <a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?rowPerPage=40">40개씩</a>
 							</div>
 						</div>
 					</div>

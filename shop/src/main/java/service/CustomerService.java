@@ -13,12 +13,104 @@ import vo.Customer;
 
 public class CustomerService {
 	private CustomerDAO customerDAO;
+	//임시 비밀번호로 수정하기
+	public int modifyCustomerPass(Customer customer) throws SQLException {
+		//리턴 값
+		int row = 0;
+		//DB
+		Connection conn = null;
+		try {
+			conn = new DBUtil().getConnection();
+			System.out.println("DB 연결 - modifyCustomerPass");
+			row = new CustomerDAO().updateCustomerPass(conn, customer);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			//DB자원 해제
+			if(conn != null) {
+				conn.close();
+			}
+		}
+		return row;
+	}
 	
+	// 회원 강제 탈퇴
+	public Boolean removeCustomer(String customerId) throws SQLException {
+		// DB 자원
+		Connection conn = null;
+		try {
+			// DB연동
+			conn = new DBUtil().getConnection();
+			System.out.println("DB 연결 - getCustomerOne");
+			conn.setAutoCommit(false); // executeUpdate()실행시 자동 커밋을 막음
+			// DB에서 customer 정보 삭제 -> 백업
+			int removeCustomer = new CustomerDAO().deleteCustomerOne(conn, customerId);
+			// 디버깅
+			if (removeCustomer == 1) { // 정상적으로 삭제가 되면
+				System.out.println("removeCustomer - 회원정보 삭제가 정상적으로 이루워졌습니다.");
+				// outid 테이블에 탈퇴한 아이디 insert 하기
+				int insertOutId = new OutIdDAO().insertOutId(conn, customerId); // int 값 리턴
+				// 디버깅
+				if (insertOutId == 1) { // outid 테이블에 insert가 성공하면
+					System.out.println("insertOutId - 탈퇴한 회원ID가 정상적으로 outid 테이블에 insert되었습니다.");
+				} else { // outid 테이블에 insert에 실패하면
+					System.out.println("insertOutId -  탈퇴한 회원ID 백업실패");
+					// 오류발생시 캐치절로 이동
+					throw new Exception();
+				}
+			} else { // 삭제에 실패할 경우
+				System.out.println("removeCustomer - 회원정보 삭제가 실패하였습니다.");
+				// 오류발생시 캐치절로 이동
+				throw new Exception();
+			}
+			// 모든 데이터베이스 잠금을 해제
+			conn.commit();
+		} catch (Exception e) {
+			e.printStackTrace(); // console에 예외메세지 출력
+			try {
+				conn.rollback(); // 1) or 2) 실행시 예외가 발생하면 현재 conn 실행쿼리 모두 롤백
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			return false; // 탈퇴 실패
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return true;
+	}
+
+	// 회원 정보 가져오기
+	public Customer getCustomerOne(String customerId) throws SQLException {
+		// 리턴객체 만들기
+		Customer customer = new Customer();
+		// DB 자원
+		Connection conn = null;
+		try {
+			// DB연동
+			conn = new DBUtil().getConnection();
+			System.out.println("DB 연결 - getCustomerOne");
+			customer = new CustomerDAO().selectCustomerOne(conn, customerId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// DB 자원 해제
+			if (conn != null) {
+				conn.close();
+				System.out.println("getCustomerOne - conn 연결 해제");
+			}
+		}
+		return customer;
+	}
+
 	// last 페이지 구하기
 	public int getCustomerLastPage(int rowPerPage) throws SQLException {
-		//리턴할 변수 값
+		// 리턴할 변수 값
 		int lastPage = 0;
-		//DB 자원
+		// DB 자원
 		Connection conn = null;
 		try {
 			// DB연동

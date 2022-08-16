@@ -1,3 +1,4 @@
+<%@page import="service.CustomerService"%>
 <%@page import="java.util.List"%>
 <%@page import="service.OrdersService"%>
 <%@page import="java.util.HashMap"%>
@@ -19,6 +20,8 @@ if (session.getAttribute("id") == null || session.getAttribute("user").equals("C
 //전송받은 값
 String customerId = request.getParameter("customerId");
 System.out.println("----" + customerId + " 주문리스트----");
+//회원 정보 가져오기
+Customer customer = new CustomerService().getCustomerOne(customerId);
 //customer_id와 연관된 주문가져오기 - List<Order>
 List<Map<String, Object>> list = new OrdersService().getCustomerOrdersList(customerId);
 %>
@@ -34,6 +37,7 @@ List<Map<String, Object>> list = new OrdersService().getCustomerOrdersList(custo
 <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
 <link href="<%=request.getContextPath()%>/adminIndexBoot/css/styles.css" rel="stylesheet" />
 <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+
 </head>
 <body class="sb-nav-fixed">
 	<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -86,13 +90,13 @@ List<Map<String, Object>> list = new OrdersService().getCustomerOrdersList(custo
 							</div> 상품관리
 						</a>
 						<!-- 주문목록/수정 -->
-						<a class="nav-link active" href="<%=request.getContextPath()%>/admin/adminOrderList.jsp">
+						<a class="nav-link " href="<%=request.getContextPath()%>/admin/adminOrderList.jsp">
 							<div class="sb-nav-link-icon">
 								<i class="fas fa-tachometer-alt"></i>
 							</div> 주문관리
 						</a>
 						<!-- 고객목록/강제탈퇴/비밀번호수정(전달구현X) -->
-						<a class="nav-link" href="<%=request.getContextPath()%>/admin/adminCustomerList.jsp">
+						<a class="nav-link active" href="<%=request.getContextPath()%>/admin/adminCustomerList.jsp">
 							<div class="sb-nav-link-icon">
 								<i class="fas fa-users"></i>
 							</div> 고객관리
@@ -114,9 +118,36 @@ List<Map<String, Object>> list = new OrdersService().getCustomerOrdersList(custo
 		<div id="layoutSidenav_content">
 			<main>
 				<div class="container-fluid px-4">
-					<h2 class="mt-4"><%=customerId%>님의 주문내역
+					<h2 class="mt-4"><b><%=customerId%></b>님 회원 정보
+						<button class="btn btn-danger" onclick="deleteCustomerBtn()" style="float: right; width: 100px;">강제 탈퇴</button>
 					</h2>
 					<hr>
+					<div>
+						<table class="table table-bordered">
+							<tr>
+								<th>customerId</th>
+								<td><%=customer.getCustomerId()%></td>
+								<th>customerPass</th>
+								<td><button class="btn btn-warning btn-sm" onclick="updatePassBtn()" >비밀번호 수정</button></td>
+							</tr>
+							<tr>
+								<th>customerName</th>
+								<td><%=customer.getCustomerName()%></td>
+								<th>customerTelephone</th>
+								<td><%=customer.getCustomerTelephone()%></td>
+							</tr>
+							<tr>
+								<th>customerAddress</th>
+								<td colspan="3"><%=customer.getCustomerAddress()%></td>
+							</tr>
+							<tr>
+								<th>updateDate</th>
+								<td><%=customer.getUpdateDate()%></td>
+								<th>createDate</th>
+								<td><%=customer.getCreateDate()%></td>
+							</tr>
+						</table>
+					</div>
 					<div class="card mb-4">
 						<div class="card-header">
 							<i class="fas fa-table me-1"></i> 주문내역
@@ -138,24 +169,24 @@ List<Map<String, Object>> list = new OrdersService().getCustomerOrdersList(custo
 									</tr>
 								</thead>
 								<tbody>
-								<%
-									for(Map<String, Object> m : list){
-								%>
+									<%
+									for (Map<String, Object> m : list) {
+									%>
 									<tr>
-										<td><%=m.get("orderNo") %></td>
-										<td><%=m.get("goodsName") %></td>
-										<td><%=m.get("orderQuantity") %></td>
-										<td><%=m.get("orderPrice") %></td>
-										<td><%=m.get("orderTotalPrice") %></td>
-										<td><%=m.get("orderAddr") %></td>
-										<td><%=m.get("orderState") %></td>
-										<td><%=m.get("customerName") %></td>
-										<td><%=m.get("customerTelephone") %></td>
-										<td><%=m.get("createDate") %></td>
-									</tr>								
-								<%
+										<td><%=m.get("orderNo")%></td>
+										<td><%=m.get("goodsName")%></td>
+										<td><%=m.get("orderQuantity")%></td>
+										<td><%=m.get("orderPrice")%></td>
+										<td><%=m.get("orderTotalPrice")%></td>
+										<td><%=m.get("orderAddr")%></td>
+										<td><%=m.get("orderState")%></td>
+										<td><%=m.get("customerName")%></td>
+										<td><%=m.get("customerTelephone")%></td>
+										<td><%=m.get("createDate")%></td>
+									</tr>
+									<%
 									}
-								%>
+									%>
 
 								</tbody>
 							</table>
@@ -187,4 +218,18 @@ List<Map<String, Object>> list = new OrdersService().getCustomerOrdersList(custo
 	<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
 	<script src="<%=request.getContextPath()%>/adminIndexBoot/js/datatables-simple-demo.js"></script>
 </body>
+<script>
+function deleteCustomerBtn() {
+ var result = confirm("회원을 강제로 탈퇴시키겠습니까?");
+  if (result == true) {
+	  location.href= "<%=request.getContextPath()%>/admin/adminCustomerOneDelete.jsp?customerId=<%=customer.getCustomerId()%>";
+		}
+	}
+function updatePassBtn() {
+ var result = confirm("임시 비밀번호로 교체하시겠습니까?");
+  if (result == true) {
+	  location.href= "<%=request.getContextPath()%>/admin/adminCustomerOnePassUpdate.jsp?customerId=<%=customer.getCustomerId()%>";
+		}
+	}
+</script>
 </html>
