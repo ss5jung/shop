@@ -1,3 +1,4 @@
+<%@page import="service.CounterService"%>
 <%@page import="service.GoodsService"%>
 <%@page import="java.util.List"%>
 <%@page import="service.CustomerService"%>
@@ -27,6 +28,11 @@ List<Map<String, Object>> list = new GoodsService().getCustomerGoodsListByPage(r
 //라스트페이지
 int lastPage = new GoodsService().getGoodsLastPage(rowPerPage);
 System.out.println(lastPage + "<-- lastPage customerGoodsList");
+//오늘 방문자수, 총 방문자수
+CounterService counterService = new CounterService();
+int totalCounter = counterService.getTotalCount();
+int todayCounter = counterService.getTodayCount();
+int currentCount = (Integer)(application.getAttribute("currentCounter"));
 %>
 <!-- 위 아래를 분리하면 serlvet > 연결기술-- forword(request, response) > jsp -->
 <!-- View : 태그 -->
@@ -59,6 +65,7 @@ System.out.println(lastPage + "<-- lastPage customerGoodsList");
 <!-- Custom stlylesheet -->
 <link type="text/css" rel="stylesheet" href="<%=request.getContextPath()%>/css/style.css" />
 <link rel="icon" href="<%=request.getContextPath()%>/img/mamazonFavicon.svg" type="image/x-icon">
+<link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
@@ -68,13 +75,13 @@ System.out.println(lastPage + "<-- lastPage customerGoodsList");
 		<div id="top-header">
 			<div class="container">
 				<ul class="header-links pull-left">
-					<li><a href="#"><i class="fa fa-phone"></i> +021-95-51-84</a></li>
-					<li><a href="#"><i class="fa fa-envelope-o"></i> email@email.com</a></li>
-					<li><a href="#"><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a></li>
+					<li><i class="fa fa-user-o"></i> 오늘 방문자 수 : <%=todayCounter %></li>
+					<li><i class="fa fa-user-o"></i> 총 방문자 수 : <%=totalCounter %></li>
+					<li><i class="fa fa-user-o"></i> 현재 접속자 수 : <%=currentCount %></li>
 				</ul>
 				<ul class="header-links pull-right">
-					<li><a href="#"><i class="fa fa-dollar"></i> USD</a></li>
-					<li><a href="<%=request.getContextPath()%>/index.jsp"><i class="fa fa-user-o"></i> My Account</a></li>
+					<li><i class="fa fa-krw" aria-hidden="true"></i> WON</li>
+					<li><a href="<%=request.getContextPath()%>/index.jsp"><i class="fa fa-user-circle-o" aria-hidden="true"></i> My Account</a></li>
 				</ul>
 			</div>
 		</div>
@@ -220,116 +227,20 @@ System.out.println(lastPage + "<-- lastPage customerGoodsList");
 		<div class="container">
 			<!-- row -->
 			<div class="row">
-				<!-- ASIDE -->
-				<div id="aside" class="col-md-3">
-					<!-- aside Widget -->
-					<div class="aside">
-						<h3 class="aside-title">Categories</h3>
-						<div class="checkbox-filter">
-
-							<div class="input-checkbox">
-								<input type="checkbox" id="category-1">
-								<label for="category-1"> <span></span> Laptops <small>(120)</small>
-								</label>
-							</div>
-
-							<div class="input-checkbox">
-								<input type="checkbox" id="category-2">
-								<label for="category-2"> <span></span> Smartphones <small>(740)</small>
-								</label>
-							</div>
-
-							<div class="input-checkbox">
-								<input type="checkbox" id="category-3">
-								<label for="category-3"> <span></span> Cameras <small>(1450)</small>
-								</label>
-							</div>
-
-							<div class="input-checkbox">
-								<input type="checkbox" id="category-4">
-								<label for="category-4"> <span></span> Accessories <small>(578)</small>
-								</label>
-							</div>
-
-							<div class="input-checkbox">
-								<input type="checkbox" id="category-5">
-								<label for="category-5"> <span></span> Laptops <small>(120)</small>
-								</label>
-							</div>
-
-							<div class="input-checkbox">
-								<input type="checkbox" id="category-6">
-								<label for="category-6"> <span></span> Smartphones <small>(740)</small>
-								</label>
-							</div>
-						</div>
-					</div>
-					<!-- /aside Widget -->
-
-					<!-- aside Widget -->
-					<div class="aside">
-						<h3 class="aside-title">Price</h3>
-						<div class="price-filter">
-							<div id="price-slider"></div>
-							<div class="input-number price-min">
-								<input id="price-min" type="number">
-								<span class="qty-up">+</span> <span class="qty-down">-</span>
-							</div>
-							<span>-</span>
-							<div class="input-number price-max">
-								<input id="price-max" type="number">
-								<span class="qty-up">+</span> <span class="qty-down">-</span>
-							</div>
-						</div>
-					</div>
-					<!-- /aside Widget -->
-
-					<!-- aside Widget -->
-					<div class="aside">
-						<h3 class="aside-title">Brand</h3>
-						<div class="checkbox-filter">
-							<div class="input-checkbox">
-								<input type="checkbox" id="brand-1">
-								<label for="brand-1"> <span></span> SAMSUNG <small>(578)</small>
-								</label>
-							</div>
-							<div class="input-checkbox">
-								<input type="checkbox" id="brand-2">
-								<label for="brand-2"> <span></span> LG <small>(125)</small>
-								</label>
-							</div>
-							<div class="input-checkbox">
-								<input type="checkbox" id="brand-3">
-								<label for="brand-3"> <span></span> SONY <small>(755)</small>
-								</label>
-							</div>
-							<div class="input-checkbox">
-								<input type="checkbox" id="brand-4">
-								<label for="brand-4"> <span></span> SAMSUNG <small>(578)</small>
-								</label>
-							</div>
-							<div class="input-checkbox">
-								<input type="checkbox" id="brand-5">
-								<label for="brand-5"> <span></span> LG <small>(125)</small>
-								</label>
-							</div>
-							<div class="input-checkbox">
-								<input type="checkbox" id="brand-6">
-								<label for="brand-6"> <span></span> SONY <small>(755)</small>
-								</label>
-							</div>
-						</div>
-					</div>
-					<!-- /aside Widget -->
-				</div>
-				<!-- /ASIDE -->
 				<!-- STORE -->
-				<div id="store" class="col-lg-9">
+				<div id="store" class="col-lg-12">
 					<!-- store top filter -->
 					<div class="row">
 						<div class="store-filter clearfix" style="float: right;">
 							<div class="store-sort">
-								<a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?orderSql=hits">인기순</a> &nbsp;|&nbsp; <a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?orderSql=popular">누적판매순</a> &nbsp;|&nbsp; <a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?orderSql=lastest">최신순</a> &nbsp;|&nbsp; <a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?orderSql=lowPrice">낮은가격순</a> &nbsp;|&nbsp; <a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?orderSql=highPrice">높은가격순</a> &nbsp;&nbsp; <a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?rowPerPage=20">20개씩</a> &nbsp;|&nbsp; <a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?rowPerPage=40">40개씩</a>
+								<%-- <a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?orderSql=hits">인기순</a> &nbsp;|&nbsp;  --%>
+								<a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?orderSql=popular">누적판매순</a> &nbsp;|&nbsp; 
+								<a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?orderSql=lastest">최신순</a> &nbsp;|&nbsp; 
+								<a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?orderSql=lowPrice">낮은가격순</a> &nbsp;|&nbsp; 
+								<a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?orderSql=highPrice">높은가격순</a> 
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+								<a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?rowPerPage=20">20개씩</a> &nbsp;|&nbsp; 
+								<a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?rowPerPage=40">40개씩</a>
 							</div>
 						</div>
 					</div>
@@ -532,7 +443,4 @@ System.out.println(lastPage + "<-- lastPage customerGoodsList");
 	<script src="<%=request.getContextPath()%>/js/jquery.zoom.min.js"></script>
 	<script src="<%=request.getContextPath()%>/js/main.js"></script>
 </body>
-<script>
-	
-</script>
 </html>

@@ -31,10 +31,9 @@ String idCkMsg = request.getParameter("idCkMsg");
 		<div class="row">
 			<!-- 흐름 : 아이디 입력 -> 중복검사 -> 통과하면   -> addEmployee -> 회원가입 폼 입력후 -> addEmployeerAction -->
 			<!-- 직원 아이디 중복검사 -->
-			<b>Employee ID 중복검사</b>
-			<table class="table table-bordered">
+			<table class="table table-bordered" style="margin-bottom: 3%">
 				<tr>
-					<th>ID</th>
+					<th style="font-size: 15px">Employee ID 중복검사</th>
 					<td><input type="text" name="idck" id="idck">
 						<button type="button" id="idckBtn">ID 중복검사</button></td>
 				</tr>
@@ -45,18 +44,18 @@ String idCkMsg = request.getParameter("idCkMsg");
 					<legend>
 						<b>직원 회원가입</b>
 					</legend>
-					<table>
+					<table class="table table-bordered">
 						<tr>
 							<th>ID</th>
-							<td><input type="text" id="employeeId" name="employeeId" readonly="readonly"></td>
+							<td><input class="form-control" type="text" id="employeeId" name="employeeId" readonly="readonly"></td>
 						</tr>
 						<tr>
 							<th>Password</th>
-							<td><input type="password" id="employeePass" name="employeePass"></td>
+							<td><input class="form-control" type="password" id="employeePass" name="employeePass"></td>
 						</tr>
 						<tr>
 							<th>Name</th>
-							<td><input type="text" id="employeeName" name="employeeName"></td>
+							<td><input class="form-control" type="text" id="employeeName" name="employeeName"></td>
 						</tr>
 					</table>
 					<button type="button" class="btn btn-success" style="float: right;" id="signUpEmployeeBtn">회원가입</button>

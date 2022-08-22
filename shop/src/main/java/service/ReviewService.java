@@ -31,4 +31,5 @@ public class ReviewService {
 		return list;
 	}
 	//리뷰 삭제 : D
+	
 }

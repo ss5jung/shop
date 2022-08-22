@@ -10,7 +10,7 @@ request.setCharacterEncoding("utf-8");
 String customerId = request.getParameter("customerId");
 String customerPass = request.getParameter("customerPass");
 String customerName = request.getParameter("customerName");
-String customerAddress = request.getParameter("customerAddress");
+String customerAddress = request.getParameter("customerAddress") +" "+request.getParameter("customerDetailAddr");
 String customerTelephone = request.getParameter("customerTelephone");
 //전송받은 값 customer 객체 셋팅
 Customer requestCustomer = new Customer();

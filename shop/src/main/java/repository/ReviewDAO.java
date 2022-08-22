@@ -42,4 +42,16 @@ public class ReviewDAO {
 			}
 			return list;
 		}
+	
+	//리뷰 삭제
+	public int deleteReview(Connection conn, int orderNo) throws Exception{
+		//리턴값
+		int row = 0;
+		try {
+			
+		} finally {
+			// TODO: handle finally clause
+		}
+		return row;
+	}
 }

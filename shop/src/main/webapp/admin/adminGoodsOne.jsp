@@ -186,6 +186,7 @@ List<Map<String, Object>> list = new ReviewService().getReviewList(goodsNo);
 									<th>내용</th>
 									<th>수정일</th>
 									<th>최초작성일</th>
+									<th>삭제</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -197,6 +198,7 @@ List<Map<String, Object>> list = new ReviewService().getReviewList(goodsNo);
 									<td><%=m.get("reviewContent") %></td>
 									<td><%=m.get("updateDate") %></td>
 									<td><%=m.get("createDate") %></td>
+									<td><a href="<%=request.getContextPath() %>/adminDeleteReview.jsp?orderNo=<%=m.get("orderNo") %>" class="btn btn-danger btn-sm">리뷰삭제</a></td>
 								</tr>
 								<%
 								}
