@@ -11,31 +11,38 @@ import vo.Employee;
 public class EmployeeDAO {
 
 	// 라스트 페이지
-	public int selectGoodsLastPage(Connection conn, int rowPerPage) throws SQLException {
+	public int selectEmployeeLastPage(Connection conn, int rowPerPage) throws Exception {
 		// 전송된 값 디버깅
 		System.out.println(rowPerPage + "<-- rowPerPage");
 		// 리턴할 변수 선언 및 초기화
 		int lastPage = 0;
-
+		int totalCount = 0; // 총 직원 수
 		String sql = "SELECT count(*) count FROM employee";
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		int totalCount = 0;
 
 		try {
 			stmt = conn.prepareStatement(sql);
+			System.out.println(stmt + "<-- stmt #selectEmployeeLastPage");
 			rs = stmt.executeQuery();
-			// 디버깅
-			if (rs.next()) {
+			if (rs.next()) { // rs가 실행된다면
 				totalCount = rs.getInt("count");
 				System.out.println(totalCount + "<--totalCount 전체직원 인원");
+				// lastPage 연산 - 올림해서 lastPage구하기
+				lastPage = (int) Math.ceil((double) totalCount / rowPerPage);
+				System.out.println(lastPage + "<-- lastPage - selectEmployeeLastPage");
+			} else {
+				System.out.println("selectEmployeeLastPage totalCount 구하기 실패");
+				throw new Exception();
 			}
 		} finally {
-			rs.close();
-			stmt.close();
+			if (rs != null) {
+				rs.close();
+			}
+			if (stmt != null) {
+				stmt.close();
+			}
 		}
-		// lastPage 연산 - 올림해서 lastPage구하기
-		lastPage = (int) Math.ceil((double) totalCount / rowPerPage);
 		return lastPage;
 	}
 
@@ -96,7 +103,7 @@ public class EmployeeDAO {
 				list.add(e);
 			}
 		} finally {
-			//DB 자원해제
+			// DB 자원해제
 			if (rs != null) {
 				rs.close();
 			}

@@ -10,11 +10,11 @@ import repository.DBUtil;
 import repository.ReviewDAO;
 
 public class ReviewService {
-	//리뷰 리스트 : R
-	public List<Map<String,Object>> getReviewList(int goodsNo) throws SQLException{
-		//리턴할 객체 생성
-		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
-		//DB
+	// 리뷰 리스트 : R
+	public List<Map<String, Object>> getReviewList(int goodsNo) throws SQLException {
+		// 리턴할 객체 생성
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		// DB
 		Connection conn = null;
 		try {
 			conn = new DBUtil().getConnection();
@@ -23,13 +23,34 @@ public class ReviewService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			//DB 자원해제
-			if(conn != null) {
+			// DB 자원해제
+			if (conn != null) {
 				conn.close();
 			}
 		}
 		return list;
 	}
-	//리뷰 삭제 : D
-	
+
+	// 리뷰 삭제 : D
+	public int removeReview(int orderNo) throws Exception {
+		// 리턴값
+		int row = 0;
+		Connection conn = null;
+		try {
+			conn = new DBUtil().getConnection();
+			System.out.println("removeReview DB 연결");
+			row = new ReviewDAO().deleteReview(conn, orderNo);
+			if(row == 0) {
+				throw new Exception();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// DB 자원해제
+			if (conn != null) {
+				conn.close();
+			}
+		}
+		return row;
+	}
 }

@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 public class SignDAO {
 	// ajax 버전 아이디 중복검사
-	public String selectIdCheck(Connection conn, String idck) throws SQLException {
+	public String selectIdCheck(Connection conn, String idck) throws Exception {
 		//리턴할 id 체크값
 		String id = null;
 		//DB자원 생성
@@ -29,7 +29,7 @@ public class SignDAO {
 			System.out.println(stmt + "<-- stmt - selectIdCheck");
 			
 			rs = stmt.executeQuery();
-			if(rs.next()){
+			if(rs.next() == true){
 				System.out.println(rs + "<-- rs 실행됨");
 				id = rs.getString("t.id");
 			}

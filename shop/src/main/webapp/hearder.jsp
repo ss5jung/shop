@@ -1,32 +1,42 @@
+<%@page import="service.CounterService"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+//오늘 방문자수, 총 방문자수
+CounterService counterService = new CounterService();
+int totalCounter = counterService.getTotalCount();
+int todayCounter = counterService.getTodayCount();
+int currentCount = (Integer) (application.getAttribute("currentCounter"));
+%>
 <!DOCTYPE html>
-<html lang="euc-kr">
+<html lang="ko">
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-<title>SHOP</title>
+<title>Mamazon</title>
 
 <!-- Google font -->
 <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
 
 <!-- Bootstrap -->
-<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" />
+<link type="text/css" rel="stylesheet" href="<%=request.getContextPath()%>/css/bootstrap.min.css" />
 
 <!-- Slick -->
-<link type="text/css" rel="stylesheet" href="css/slick.css" />
-<link type="text/css" rel="stylesheet" href="css/slick-theme.css" />
+<link type="text/css" rel="stylesheet" href="<%=request.getContextPath()%>/css/slick.css" />
+<link type="text/css" rel="stylesheet" href="<%=request.getContextPath()%>/css/slick-theme.css" />
 
 <!-- nouislider -->
-<link type="text/css" rel="stylesheet" href="css/nouislider.min.css" />
+<link type="text/css" rel="stylesheet" href="<%=request.getContextPath()%>/css/nouislider.min.css" />
 
 <!-- Font Awesome Icon -->
-<link rel="stylesheet" href="css/font-awesome.min.css">
+<link rel="stylesheet" href="<%=request.getContextPath()%>/css/font-awesome.min.css">
 
 <!-- Custom stlylesheet -->
-<link type="text/css" rel="stylesheet" href="css/style.css" />
+<link type="text/css" rel="stylesheet" href="<%=request.getContextPath()%>/css/style.css" />
+<link rel="icon" href="<%=request.getContextPath()%>/img/mamazonFavicon.svg" type="image/x-icon">
+<link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
@@ -36,9 +46,9 @@
 		<div id="top-header">
 			<div class="container">
 				<ul class="header-links pull-left">
-					<li><a href="#"><i class="fa fa-phone"></i> +021-95-51-84</a></li>
-					<li><a href="#"><i class="fa fa-envelope-o"></i> fnsk0423@gmail.com</a></li>
-					<li><a href="#"><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a></li>
+					<li><i class="fa fa-user-o"></i> 현재 접속자 수 : <%=currentCount%></li>
+					<li><i class="fa fa-user-o"></i> 오늘 방문자 수 : <%=todayCounter%></li>
+					<li><i class="fa fa-user-o"></i> 총 방문자 수 : <%=totalCounter%></li>
 				</ul>
 				<ul class="header-links pull-right">
 					<li><a href="<%=request.getContextPath()%>/index.jsp"><i class="fa fa-user-o"></i> My Account</a></li>
@@ -55,13 +65,14 @@
 					<!-- LOGO -->
 					<div class="col-md-3">
 						<div class="header-logo">
-							<a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp" class="logo"> <img src="./img/mamazon.png" style="width: 170px; margin-top: 13px" alt="마마존 로고">
+							<a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp" class="logo"> <img src="<%=request.getContextPath()%>/img/mamazon.png" style="width: 170px; margin-top: 13px" alt="마마존 로고">
 							</a>
 						</div>
 					</div>
 					<!-- /LOGO -->
 
 					<!-- SEARCH BAR -->
+					<!-- 검색창 -->
 					<div class="col-md-6">
 						<div class="header-search">
 							<form>

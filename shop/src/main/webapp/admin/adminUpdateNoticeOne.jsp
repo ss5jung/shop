@@ -16,10 +16,16 @@ if (session.getAttribute("id") == null || session.getAttribute("user").equals("C
 	response.sendRedirect(request.getContextPath() + "/loginForm.jsp");
 	return;
 }
-//noticeNo
-int noticeNo = Integer.parseInt(request.getParameter("noticeNo"));
-System.out.println(noticeNo + "<-- noticeNo - adminUpdateNoticeOne.jsp");
-
+//전송받은 값
+int noticeNo = 0;
+if(request.getParameter("noticeNo") != null){	//전송받은 공지번호가 없으면 공지리스트로 리턴
+	noticeNo = Integer.parseInt(request.getParameter("noticeNo"));
+	System.out.println(noticeNo + "<-- noticeNo - adminUpdateNoticeOne.jsp");
+} else{
+	System.out.println("Error. 요청받은 noticeNo 없습니다.");
+	response.sendRedirect(request.getContextPath() + "/admin/adminNoticeList.jsp");
+	return;
+}
 //전송할 데이터 저장할 공간 만들기
 Notice notice = new Notice();
 %>
@@ -123,7 +129,7 @@ Notice notice = new Notice();
 							<i class="fas fa-table me-1"></i>공지사항 수정
 						</div>
 						<div class="card-body">
-							<form action="<%=request.getContextPath()%>/admin/adminUpdateNoticeOneAction.jsp" method="post" enctype="multipart/form-data" id="updateNoticeForm">
+							<form action="<%=request.getContextPath()%>/admin/adminUpdateNoticeOneAction.jsp" method="post"  id="updateNoticeForm">
 								<fieldset>
 									<table class="table table-boarder">
 										<tr>

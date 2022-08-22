@@ -8,8 +8,9 @@ import javax.servlet.annotation.WebListener;
 public class DirverListener implements ServletContextListener {
 
 	public void contextInitialized(ServletContextEvent sce) {
-		// 현재접속자 수
+		//현재 접속자 수 0로 설정
 		sce.getServletContext().setAttribute("currentCounter", 0);
+		
 		//
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");

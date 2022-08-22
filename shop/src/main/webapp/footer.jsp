@@ -12,9 +12,9 @@
 						<h3 class="footer-title">About Us</h3>
 						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.</p>
 						<ul class="footer-links">
-							<li><a href="#"><i class="fa fa-map-marker"></i>1734 Stonecoal Road</a></li>
-							<li><a href="#"><i class="fa fa-phone"></i>+021-95-51-84</a></li>
-							<li><a href="#"><i class="fa fa-envelope-o"></i>email@email.com</a></li>
+							<li><a href="#"><i class="fa fa-map-marker"></i>서울 금천구 가산디지털2로 115</a></li>
+							<li><a href="#"><i class="fa fa-phone"></i>+82-02-2108-5900</a></li>
+							<li><a href="#"><i class="fa fa-envelope-o"></i>fnsk0423@gmail.com</a></li>
 						</ul>
 					</div>
 				</div>

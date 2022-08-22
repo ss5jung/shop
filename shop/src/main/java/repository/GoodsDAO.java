@@ -255,7 +255,7 @@ public class GoodsDAO {
 	}
 
 	// 라스트 페이지
-	public int selectGoodsLastPage(Connection conn, int rowPerPage) throws SQLException {
+	public int selectGoodsLastPage(Connection conn, int rowPerPage) throws Exception {
 		// 전송된 값 디버깅
 		System.out.println(rowPerPage + "<-- rowPerPage");
 		// 리턴할 변수 선언 및 초기화

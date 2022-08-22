@@ -47,10 +47,20 @@ public class ReviewDAO {
 	public int deleteReview(Connection conn, int orderNo) throws Exception{
 		//리턴값
 		int row = 0;
+		PreparedStatement stmt = null;
+		String sql ="DELETE FROM review WHERE  order_no=?";
 		try {
-			
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, orderNo);
+			System.out.println(stmt + "<-- stmt -deleteReview");
+			row = stmt.executeUpdate();
+			if(row == 0) {
+				System.out.println("리뷰 삭제 실패!");
+			}
 		} finally {
-			// TODO: handle finally clause
+			if(stmt != null) {
+				stmt.close();
+			}
 		}
 		return row;
 	}

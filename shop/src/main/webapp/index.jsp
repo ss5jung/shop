@@ -8,7 +8,7 @@ if (session.getAttribute("id") == null) {
 	return;
 }
 %>
-<%@include file="./hearder.jsp"%>
+<%@include file="/hearder.jsp"%>
 
 <!-- BREADCRUMB -->
 <div id="breadcrumb" class="section">
@@ -48,12 +48,13 @@ if (session.getAttribute("id") == null) {
 					<td><%=session.getAttribute("name")%></td>
 				</tr>
 			</table>
-			<a href="<%=request.getContextPath()%>/signOut.jsp"><button type="button" class="btn btn-danger" style="float: left;">회원 탈퇴</button></a> 
-			<a href="<%=request.getContextPath()%>/logout.jsp"><button type="button" class="btn btn-success" style="float: right;">로그아웃</button></a>
+			<a href="<%=request.getContextPath()%>/signOut.jsp"><button type="button" class="btn btn-danger" style="float: left;">회원 탈퇴</button></a> <a href="<%=request.getContextPath()%>/logout.jsp"><button type="button" class="btn btn-success" style="float: right;">로그아웃</button></a>
 			<%
 			if (session.getAttribute("user").equals("Employee")) { //직원일 경우에만 관리자모드 버튼 구현
 			%>
-			<a href="<%=request.getContextPath()%>/admin/adminIndex.jsp"> <button type="button" class="btn btn-link" style="float: right;"> <strong>관리자모드</strong> </button></a>
+			<a href="<%=request.getContextPath()%>/admin/adminIndex.jsp">
+				<button type="button" class="btn btn-info" style="float: right; margin-right: 5px">관리자모드</button>
+			</a>
 			<%
 			}
 			%>

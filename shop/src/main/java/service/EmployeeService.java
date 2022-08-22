@@ -12,16 +12,18 @@ import vo.Employee;
 
 public class EmployeeService {
 	//last 페이지 구하기
-	public int getEmployeeLastPage(int rowPerPage) throws SQLException {
+	public int getEmployeeLastPage(int rowPerPage) throws Exception {
+		//리턴값
 		int lastPage = 0;
+		//DB
 		Connection conn = null;
 		try {
 			// DB연동
 			conn = new DBUtil().getConnection();
-			System.out.println("DB 연동 - getEmployeeLastPage");
+			System.out.println("DB 연결 성공 - getEmployeeLastPage");
 			// lastPage
-			lastPage = new GoodsDAO().selectGoodsLastPage(conn, rowPerPage);
-			System.out.println(lastPage + "lastPage - Goods");
+			lastPage = new EmployeeDAO().selectEmployeeLastPage(conn, rowPerPage);
+			System.out.println(lastPage + "<-- lastPage - getEmployeeLastPage");
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

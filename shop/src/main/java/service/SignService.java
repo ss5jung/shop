@@ -10,7 +10,8 @@ import repository.SignDAO;
 public class SignService {
 	// SignDAO signDAO = new SignDAO(); --> 이 상황에서는 개별적으로 갖는 것보다 멤버변수로 갖는게 더 낫다.
 	private SignDAO signDAO;
-
+	private DBUtil dbUtil;
+	
 	// ajax 버전 아이디 중복검사
 	public String getIdCheck(String idck) {
 		// 파라미터 디버깅
@@ -21,7 +22,8 @@ public class SignService {
 		Connection conn = null;
 		try {
 			// DB driver 연결
-			conn = new DBUtil().getConnection();
+			dbUtil = new DBUtil();
+			conn = dbUtil.getConnection();
 			this.signDAO = new SignDAO();
 			// DAO에서 리턴받은 값 저장
 			id = signDAO.selectIdCheck(conn, idck);

@@ -15,7 +15,7 @@
 	//service 실행확인 변수
 	int row = new EmployeeService().modifyEmployeeActive(active, adminId);
 	
-	if(row == 1){	//DAO가 정상적으로 작동하면
+	if(row != 0){	//DAO가 정상적으로 작동하면
 		//디버깅
 		System.out.println("접근권한이 정상적으로 변경되었습니다.");
 	} else {	//실패한다면

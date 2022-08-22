@@ -18,15 +18,22 @@ if (session.getAttribute("id") == null || session.getAttribute("user").equals("C
 	return;
 }
 //전송받은 값
-int goodsNo = Integer.parseInt(request.getParameter("goodsNo"));
-System.out.println("----" + goodsNo + " 상세페이지----");
+int goodsNo = 0;
+if(request.getParameter("goodsNo") != null){	//전송받은 상품번호가 없으면 상품리스트로 리턴
+	goodsNo = Integer.parseInt(request.getParameter("goodsNo"));
+} else{
+	System.out.println("Error. 요청받은 goodsNo가 없습니다.");
+	response.sendRedirect(request.getContextPath() + "/admin/adminGoodsList.jsp");
+	return;
+}
+System.out.println("====" + goodsNo + "번 상세페이지====");
 //goodsNo와 관련된 정보 및 이미지 가져오기
 Map<String, Object> goodsOne = new GoodsService().getGoodsAndImgOne(goodsNo);
 //리뷰 가져오기
 List<Map<String, Object>> list = new ReviewService().getReviewList(goodsNo);
 %>
 <!DOCTYPE html>
-<html lang="euc-kr">
+<html lang="ko">
 <head>
 <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -41,32 +48,24 @@ List<Map<String, Object>> list = new ReviewService().getReviewList(goodsNo);
 <body class="sb-nav-fixed">
 	<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
 		<!-- Navbar Brand-->
-		<a class="navbar-brand ps-3" href="<%=request.getContextPath()%>/adminIndex.jsp"> <img alt="mamazon" src="<%=request.getContextPath()%>/img/mamazon.png" style="margin-top: 15px">
+		<a class="navbar-brand ps-3" href="<%=request.getContextPath()%>/admin/adminIndex.jsp"> 
+			<img alt="mamazon" src="<%=request.getContextPath()%>/img/mamazon.png" style="margin-top: 15px">
 		</a>
 		<!-- Sidebar Toggle-->
 		<button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!">
 			<i class="fas fa-bars"></i>
 		</button>
-		<span style="color: white;"><%=session.getAttribute("name")%>님</span>
-		<!-- Navbar Search-->
-		<form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-			<div class="input-group">
-				<input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
-				<button class="btn btn-primary" id="btnNavbarSearch" type="button">
-					<i class="fas fa-search"></i>
-				</button>
-			</div>
-		</form>
+		
 		<!-- Navbar-->
-		<ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
-			<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> <i class="fas fa-user fa-fw"></i>
-			</a>
+		<ul class="d-none d-md-inline-block navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+			<li class="nav-item dropdown">
+				<a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> 
+					<i class="fas fa-user fa-fw"></i><span style="color: white;"><%=session.getAttribute("name")%>님</span>
+				</a>
 				<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-					<li><a class="dropdown-item" href="#!">Settings</a></li>
-					<li><a class="dropdown-item" href="#!">Activity Log</a></li>
-					<li><hr class="dropdown-divider" /></li>
 					<li><a class="dropdown-item" href="<%=request.getContextPath()%>/logout.jsp">Logout</a></li>
-				</ul></li>
+				</ul>	
+			</li>
 		</ul>
 		<!-- /Navbar-->
 	</nav>
@@ -170,7 +169,8 @@ List<Map<String, Object>> list = new ReviewService().getReviewList(goodsNo);
 							<!-- 버튼  -->
 							<div>
 								<button style="float: right; margin-left: 3px" class="btn btn-danger" onclick="deleteGooodsBtn()">삭제</button>
-								<a href="<%=request.getContextPath()%>/admin/adminGoodsOneUpdate.jsp?goodsNo=<%=goodsOne.get("goodsNo")%>"><button class="btn btn-primary" style="float: right; margin-left: 3px">수정</button></a> <a href="<%=request.getContextPath()%>/admin/adminGoodsList.jsp"><button class="btn btn-secondary" style="float: right; margin-right: 3px">목록</button></a>
+								<a href="<%=request.getContextPath()%>/admin/adminGoodsOneUpdate.jsp?goodsNo=<%=goodsOne.get("goodsNo")%>"><button class="btn btn-primary" style="float: right; margin-left: 3px">수정</button></a> 
+								<a href="<%=request.getContextPath()%>/admin/adminGoodsList.jsp"><button class="btn btn-secondary" style="float: right; margin-right: 3px">목록</button></a>
 							</div>
 						</div>
 					</div>
@@ -194,11 +194,11 @@ List<Map<String, Object>> list = new ReviewService().getReviewList(goodsNo);
 								for (Map<String, Object> m : list) {
 								%>
 								<tr>
-									<td><%=m.get("customerId") %></td>
-									<td><%=m.get("reviewContent") %></td>
-									<td><%=m.get("updateDate") %></td>
-									<td><%=m.get("createDate") %></td>
-									<td><a href="<%=request.getContextPath() %>/adminDeleteReview.jsp?orderNo=<%=m.get("orderNo") %>" class="btn btn-danger btn-sm">리뷰삭제</a></td>
+									<td><%=m.get("customerId")%></td>
+									<td><%=m.get("reviewContent")%></td>
+									<td><%=m.get("updateDate")%></td>
+									<td><%=m.get("createDate")%></td>
+									<td><a href="<%=request.getContextPath()%>/admin/adminDeleteReview.jsp?orderNo=<%=m.get("orderNo")%>" class="btn btn-danger btn-sm">리뷰삭제</a></td>
 								</tr>
 								<%
 								}
@@ -238,8 +238,7 @@ List<Map<String, Object>> list = new ReviewService().getReviewList(goodsNo);
 function deleteGooodsBtn() {
  var result = confirm("상품을 삭제하시겠습니까?");
   if (result == true) {
-	  location.href= "<%=request.getContextPath()%>/admin/adminGoodsOneDelete.jsp?goodsNo=<%=goodsOne.get("goodsNo")%>
-	";
+	  location.href= "<%=request.getContextPath()%>/admin/adminGoodsOneDelete.jsp?goodsNo=<%=goodsOne.get("goodsNo")%>";
 		}
 	}
 </script>

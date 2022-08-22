@@ -9,7 +9,7 @@ request.setCharacterEncoding("utf-8");
 //전송받은 값
 String employeeId = request.getParameter("employeeId");
 String employeePass = request.getParameter("employeePass");
-String employeeName = request.getParameter("customerName");
+String employeeName = request.getParameter("employeeName");
 //전송받은 값 employee 객체 셋팅
 Employee requestEmployee = new Employee();
 requestEmployee.setEmployeeId(employeeId);
