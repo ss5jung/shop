@@ -94,7 +94,7 @@ System.out.println(lastPage + "<-- lastPage customerGoodsList");
 							<div class="product-body">
 								<p class="product-category">Category</p>
 								<h3 class="product-name">
-									<a href="#"><%=m.get("goodsName")%></a>
+									<a href="<%=request.getContextPath()%>/customer/productOne.jsp?goodsNo=<%=m.get("goodsNo")%>"><%=m.get("goodsName")%></a>
 								</h3>
 								<h4 class="product-price"><%=m.get("goodsPrice")%>원
 								</h4>
@@ -106,7 +106,7 @@ System.out.println(lastPage + "<-- lastPage customerGoodsList");
 										<i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span>
 									</button>
 									<button class="quick-view">
-										<i class="fa fa-eye"></i><span class="tooltipp">Detail view</span>
+										<a href="<%=request.getContextPath()%>/customer/productOne.jsp?goodsNo=<%=m.get("goodsNo")%>"><i class="fa fa-eye"></i><span class="tooltipp">Detail view</span>
 									</button>
 								</div>
 							</div>

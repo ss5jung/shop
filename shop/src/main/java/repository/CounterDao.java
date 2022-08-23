@@ -6,20 +6,21 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class CounterDao {
-	public String selectCounterToday(Connection conn) throws SQLException {
+	public int selectCounterToday(Connection conn) throws SQLException {
 		// 리턴값
-		String today = null;
+		int today = 0;
 		// DB 자원
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		String sql = "SELECT DATE_FORMAT((SELECT NOW() FROM DUAL), '%Y/%m/%d') today";
+//		String sql = "SELECT DATE_FORMAT((SELECT NOW() FROM DUAL), '%Y/%m/%d') today";
+		String sql = "SELECT COUNT(*) cnt FROM counter WHERE counter_date = (SELECT DATE_FORMAT((SELECT NOW() FROM DUAL), '%Y/%m/%d') today)";
 		try {
 			stmt = conn.prepareStatement(sql);
 			System.out.println(stmt + "<-- stmt");
 			rs = stmt.executeQuery();
 			if (rs.next()) {
-				today = rs.getString("today");
-				System.out.println("오늘의 날짜 :" + today);
+				today = rs.getInt("cnt");
+				System.out.println(today + "<-- today 날짜데이터 유무");
 			}
 		} finally {
 			// DB 자원 해제
