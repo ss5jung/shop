@@ -3,14 +3,12 @@ package service;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import repository.DBUtil;
-import repository.GoodsDAO;
 import repository.OrdersDAO;
-import vo.Orders;
+import repository.ReviewDAO;
 
 public class OrdersService {
 	// 고객1의 주문 내역

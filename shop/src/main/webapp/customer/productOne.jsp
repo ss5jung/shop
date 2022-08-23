@@ -1,398 +1,211 @@
+<%@page import="service.OrdersService"%>
+<%@page import="java.util.List"%>
+<%@page import="service.ReviewService"%>
+<%@page import="java.util.HashMap"%>
+<%@page import="java.util.Map"%>
+<%@page import="service.GoodsService"%>
+<%@page import="vo.Goods"%>
+<%@page import="service.EmployeeService"%>
+<%@page import="vo.Employee"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+//인코딩
+request.setCharacterEncoding("utf-8");
+//접근제한 X
+//전송받은 값
+int goodsNo = 0;
+if (request.getParameter("goodsNo") != null) { //전송받은 상품번호가 없으면 상품리스트로 리턴
+	goodsNo = Integer.parseInt(request.getParameter("goodsNo"));
+} else {
+	System.out.println("Error. 요청받은 goodsNo가 없습니다.");
+	response.sendRedirect(request.getContextPath() + "/customer/customerGoodsList.jsp");
+	return;
+}
+System.out.println("====" + goodsNo + "번 제품 상세페이지====");
+//goodsNo와 관련된 정보 및 이미지 가져오기
+Map<String, Object> goodsOne = new GoodsService().getGoodsAndImgOne(goodsNo);
+System.out.println(goodsOne);
+//리뷰 가져오기
+List<Map<String, Object>> list = new ReviewService().getReviewList(goodsNo);
+//접속한 아이디
+String loginId = (String) session.getAttribute("id");
+System.out.println(loginId + "<-- loginId");
+//로그인한 계정이 현재 상품을 구매한 적이 있는지 확인
+int reviewCk = new ReviewService().getReviewCk(loginId, goodsNo);	//0이면 리뷰 작성가능 
+System.out.println(reviewCk + "<-- reviewCk");
+%>
 <%@include file="/hearder.jsp"%>
 
-	<!-- NAVIGATION -->
-	<nav id="navigation">
-		<!-- container -->
-		<div class="container">
-			<!-- responsive-nav -->
-			<div id="responsive-nav">
-				<!-- NAV -->
-				<ul class="main-nav nav navbar-nav">
-					<li class="active"><a href="#">Home</a></li>
-					<li><a href="#">Hot Deals</a></li>
-					<li><a href="#">Categories</a></li>
-					<li><a href="#">Laptops</a></li>
-					<li><a href="#">Smartphones</a></li>
-					<li><a href="#">Cameras</a></li>
-					<li><a href="#">Accessories</a></li>
-				</ul>
-				<!-- /NAV -->
-			</div>
-			<!-- /responsive-nav -->
+<!-- NAVIGATION -->
+<nav id="navigation">
+	<!-- container -->
+	<div class="container">
+		<!-- responsive-nav -->
+		<div id="responsive-nav">
+			<!-- NAV -->
+			<ul class="main-nav nav navbar-nav">
+				<li class="active"><a href="#">Home</a></li>
+				<li><a href="#">Hot Deals</a></li>
+				<li><a href="#">Categories</a></li>
+				<li><a href="#">Laptops</a></li>
+				<li><a href="#">Smartphones</a></li>
+				<li><a href="#">Cameras</a></li>
+				<li><a href="#">Accessories</a></li>
+			</ul>
+			<!-- /NAV -->
 		</div>
-		<!-- /container -->
-	</nav>
-	<!-- /NAVIGATION -->
-
-	<!-- SECTION -->
-	<div class="section">
-		<!-- container -->
-		<div class="container">
-			<!-- row -->
-			<div class="row">
-				<!-- Product main img -->
-				<div class="col-lg-7">
-					<div id="product-main-img">
-						<div class="product-preview">
-							<img src="<%=request.getContextPath()%>/img/product01.png" alt="" style="width: 90%">
-						</div>
-					</div>
-				</div>
-				<!-- /Product main img -->
-
-				<!-- Product details -->
-				<div class="col-lg-5">
-					<div class="product-details">
-						<h2 class="product-name">product name goes here</h2>
-						<div>
-							<div class="product-rating">
-								<i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star-o"></i>
-							</div>
-							<a class="review-link" href="#">10 Review(s) | Add your review</a>
-						</div>
-						<div>
-							<h3 class="product-price">
-								$980.00
-								<del class="product-old-price">$990.00</del>
-							</h3>
-							<span class="product-available">In Stock</span>
-						</div>
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-
-						<div class="product-options">
-							<label> Size <select class="input-select">
-									<option value="0">X</option>
-							</select>
-							</label> <label> Color <select class="input-select">
-									<option value="0">Red</option>
-							</select>
-							</label>
-						</div>
-
-						<div class="add-to-cart">
-							<div class="qty-label">
-								Qty
-								<div class="input-number">
-									<input type="number">
-									<span class="qty-up">+</span> <span class="qty-down">-</span>
-								</div>
-							</div>
-							<button class="add-to-cart-btn">
-								<i class="fa fa-shopping-cart"></i> add to cart
-							</button>
-						</div>
-
-						<ul class="product-btns">
-							<li><a href="#"><i class="fa fa-heart-o"></i> add to wishlist</a></li>
-							<li><a href="#"><i class="fa fa-exchange"></i> add to compare</a></li>
-						</ul>
-
-						<ul class="product-links">
-							<li>Category:</li>
-							<li><a href="#">Headphones</a></li>
-							<li><a href="#">Accessories</a></li>
-						</ul>
-
-						<ul class="product-links">
-							<li>Share:</li>
-							<li><a href="#"><i class="fa fa-facebook"></i></a></li>
-							<li><a href="#"><i class="fa fa-twitter"></i></a></li>
-							<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-							<li><a href="#"><i class="fa fa-envelope"></i></a></li>
-						</ul>
-
-					</div>
-				</div>
-				<!-- /Product details -->
-
-				<!-- Product tab -->
-				<div class="col-md-12">
-					<div id="product-tab">
-						<!-- product tab nav -->
-						<ul class="tab-nav">
-							<li class="active"><a data-toggle="tab" href="#tab1">Description</a></li>
-							<li><a data-toggle="tab" href="#tab2">Details</a></li>
-							<li><a data-toggle="tab" href="#tab3">Reviews (3)</a></li>
-						</ul>
-						<!-- /product tab nav -->
-
-						<!-- product tab content -->
-						<div class="tab-content">
-							<!-- tab1  -->
-							<div id="tab1" class="tab-pane fade in active">
-								<div class="row">
-									<div class="col-md-12">
-										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-									</div>
-								</div>
-							</div>
-							<!-- /tab1  -->
-
-							<!-- tab2  -->
-							<div id="tab2" class="tab-pane fade in">
-								<div class="row">
-									<div class="col-md-12">
-										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-									</div>
-								</div>
-							</div>
-							<!-- /tab2  -->
-
-							<!-- tab3  -->
-							<div id="tab3" class="tab-pane fade in">
-								<div class="row">
-									<!-- Rating -->
-									<div class="col-md-3">
-										<div id="rating">
-											<div class="rating-avg">
-												<span>4.5</span>
-												<div class="rating-stars">
-													<i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star-o"></i>
-												</div>
-											</div>
-											<ul class="rating">
-												<li>
-													<div class="rating-stars">
-														<i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i>
-													</div>
-													<div class="rating-progress">
-														<div style="width: 80%;"></div>
-													</div> <span class="sum">3</span>
-												</li>
-												<li>
-													<div class="rating-stars">
-														<i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star-o"></i>
-													</div>
-													<div class="rating-progress">
-														<div style="width: 60%;"></div>
-													</div> <span class="sum">2</span>
-												</li>
-												<li>
-													<div class="rating-stars">
-														<i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i>
-													</div>
-													<div class="rating-progress">
-														<div></div>
-													</div> <span class="sum">0</span>
-												</li>
-												<li>
-													<div class="rating-stars">
-														<i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i>
-													</div>
-													<div class="rating-progress">
-														<div></div>
-													</div> <span class="sum">0</span>
-												</li>
-												<li>
-													<div class="rating-stars">
-														<i class="fa fa-star"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i>
-													</div>
-													<div class="rating-progress">
-														<div></div>
-													</div> <span class="sum">0</span>
-												</li>
-											</ul>
-										</div>
-									</div>
-									<!-- /Rating -->
-
-									<!-- Reviews -->
-									<div class="col-md-6">
-										<div id="reviews">
-											<ul class="reviews">
-												<li>
-													<div class="review-heading">
-														<h5 class="name">John</h5>
-														<p class="date">27 DEC 2018, 8:0 PM</p>
-														<div class="review-rating">
-															<i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star-o empty"></i>
-														</div>
-													</div>
-													<div class="review-body">
-														<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-													</div>
-												</li>
-												<li>
-													<div class="review-heading">
-														<h5 class="name">John</h5>
-														<p class="date">27 DEC 2018, 8:0 PM</p>
-														<div class="review-rating">
-															<i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star-o empty"></i>
-														</div>
-													</div>
-													<div class="review-body">
-														<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-													</div>
-												</li>
-												<li>
-													<div class="review-heading">
-														<h5 class="name">John</h5>
-														<p class="date">27 DEC 2018, 8:0 PM</p>
-														<div class="review-rating">
-															<i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star-o empty"></i>
-														</div>
-													</div>
-													<div class="review-body">
-														<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-													</div>
-												</li>
-											</ul>
-											<ul class="reviews-pagination">
-												<li class="active">1</li>
-												<li><a href="#">2</a></li>
-												<li><a href="#">3</a></li>
-												<li><a href="#">4</a></li>
-												<li><a href="#"><i class="fa fa-angle-right"></i></a></li>
-											</ul>
-										</div>
-									</div>
-									<!-- /Reviews -->
-
-									<!-- Review Form -->
-									<div class="col-md-3">
-										<div id="review-form">
-											<form class="review-form">
-												<input class="input" type="text" placeholder="Your Name">
-												<input class="input" type="email" placeholder="Your Email">
-												<textarea class="input" placeholder="Your Review"></textarea>
-												<div class="input-rating">
-													<span>Your Rating: </span>
-													<div class="stars">
-														<input id="star5" name="rating" value="5" type="radio">
-														<label for="star5"></label>
-														<input id="star4" name="rating" value="4" type="radio">
-														<label for="star4"></label>
-														<input id="star3" name="rating" value="3" type="radio">
-														<label for="star3"></label>
-														<input id="star2" name="rating" value="2" type="radio">
-														<label for="star2"></label>
-														<input id="star1" name="rating" value="1" type="radio">
-														<label for="star1"></label>
-													</div>
-												</div>
-												<button class="primary-btn">Submit</button>
-											</form>
-										</div>
-									</div>
-									<!-- /Review Form -->
-								</div>
-							</div>
-							<!-- /tab3  -->
-						</div>
-						<!-- /product tab content  -->
-					</div>
-				</div>
-				<!-- /product tab -->
-			</div>
-			<!-- /row -->
-		</div>
-		<!-- /container -->
+		<!-- /responsive-nav -->
 	</div>
-	<!-- /SECTION -->
+	<!-- /container -->
+</nav>
+<!-- /NAVIGATION -->
 
-	<!-- FOOTER -->
-	<footer id="footer">
-		<!-- top footer -->
-		<div class="section">
-			<!-- container -->
-			<div class="container">
-				<!-- row -->
-				<div class="row">
-					<div class="col-md-3 col-xs-6">
-						<div class="footer">
-							<h3 class="footer-title">About Us</h3>
-							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.</p>
-							<ul class="footer-links">
-								<li><a href="#"><i class="fa fa-map-marker"></i>1734 Stonecoal Road</a></li>
-								<li><a href="#"><i class="fa fa-phone"></i>+021-95-51-84</a></li>
-								<li><a href="#"><i class="fa fa-envelope-o"></i>email@email.com</a></li>
-							</ul>
-						</div>
-					</div>
-
-					<div class="col-md-3 col-xs-6">
-						<div class="footer">
-							<h3 class="footer-title">Categories</h3>
-							<ul class="footer-links">
-								<li><a href="#">Hot deals</a></li>
-								<li><a href="#">Laptops</a></li>
-								<li><a href="#">Smartphones</a></li>
-								<li><a href="#">Cameras</a></li>
-								<li><a href="#">Accessories</a></li>
-							</ul>
-						</div>
-					</div>
-
-					<div class="clearfix visible-xs"></div>
-
-					<div class="col-md-3 col-xs-6">
-						<div class="footer">
-							<h3 class="footer-title">Information</h3>
-							<ul class="footer-links">
-								<li><a href="#">About Us</a></li>
-								<li><a href="#">Contact Us</a></li>
-								<li><a href="#">Privacy Policy</a></li>
-								<li><a href="#">Orders and Returns</a></li>
-								<li><a href="#">Terms & Conditions</a></li>
-							</ul>
-						</div>
-					</div>
-
-					<div class="col-md-3 col-xs-6">
-						<div class="footer">
-							<h3 class="footer-title">Service</h3>
-							<ul class="footer-links">
-								<li><a href="#">My Account</a></li>
-								<li><a href="#">View Cart</a></li>
-								<li><a href="#">Wishlist</a></li>
-								<li><a href="#">Track My Order</a></li>
-								<li><a href="#">Help</a></li>
-							</ul>
-						</div>
+<!-- SECTION -->
+<div class="section">
+	<!-- container -->
+	<div class="container">
+		<!-- row -->
+		<div class="row">
+			<!-- Product main img -->
+			<div class="col-lg-7">
+				<div id="product-main-img">
+					<div class="product-preview">
+						<img src="<%=request.getContextPath()%>/upload/<%=goodsOne.get("filename")%>" alt="제품이미지" style="width: 70%">
 					</div>
 				</div>
-				<!-- /row -->
 			</div>
-			<!-- /container -->
-		</div>
-		<!-- /top footer -->
+			<!-- /Product main img -->
 
-		<!-- bottom footer -->
-		<div id="bottom-footer" class="section">
-			<div class="container">
-				<!-- row -->
-				<div class="row">
-					<div class="col-md-12 text-center">
-						<ul class="footer-payments">
-							<li><a href="#"><i class="fa fa-cc-visa"></i></a></li>
-							<li><a href="#"><i class="fa fa-credit-card"></i></a></li>
-							<li><a href="#"><i class="fa fa-cc-paypal"></i></a></li>
-							<li><a href="#"><i class="fa fa-cc-mastercard"></i></a></li>
-							<li><a href="#"><i class="fa fa-cc-discover"></i></a></li>
-							<li><a href="#"><i class="fa fa-cc-amex"></i></a></li>
-						</ul>
-						<span class="copyright"> <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --> Copyright &copy;<script>
-							document.write(new Date().getFullYear());
-						</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a> <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-						</span>
+			<!-- Product details -->
+			<div class="col-lg-5">
+				<div class="product-details">
+					<h2 class="product-name"><%=goodsOne.get("goodsName")%></h2>
+					<div>
+						<div class="product-rating">
+							<i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star-o"></i>
+						</div>
+						<a class="review-link" href="#">10 Review(s) | Add your review</a>
 					</div>
-				</div>
-				<!-- /row -->
-			</div>
-			<!-- /container -->
-		</div>
-		<!-- /bottom footer -->
-	</footer>
-	<!-- /FOOTER -->
+					<div>
+						<h3 class="product-price">
+							<%=goodsOne.get("goodsPrice")%>원
+						</h3>
+						<%
+						if (goodsOne.get("soldOut") != "N") {
+						%>
+						<span class="product-available">In Stock</span>
+						<%
+						} else {
+						%>
+						<span class="new">품절</span>
+						<%
+						}
+						%>
 
-	<!-- jQuery Plugins -->
-	<script src="js/jquery.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/slick.min.js"></script>
-	<script src="js/nouislider.min.js"></script>
-	<script src="js/jquery.zoom.min.js"></script>
-	<script src="js/main.js"></script>
+					</div>
+					<div class="add-to-cart">
+						<form action="<%=request.getContextPath()%>/customer/addCart.jsp">
+							<div class="qty-label">
+								수량
+								<input type="hidden" id="goodsNo" name="goodsNo" value="<%=goodsOne.get("goodsNo")%>">
+								<input type="hidden" id="goodsPrice" name="goodsPrice" value="<%=goodsOne.get("goodsPrice")%>">
+								<input type="number" id="goodsQuantity" name="goodsQuantity" min="1">
+								<button class="add-to-cart-btn" type="submit">
+									<i class="fa fa-shopping-cart"></i> add to cart
+								</button>
+							</div>
+						</form>
+					</div>
+					<ul class="product-btns">
+						<li><a href="<%=request.getContextPath()%>/customer/wishlist.jsp?goodsOne=<%=goodsOne.get("goodsNo")%>"><i class="fa fa-heart-o"></i> add to wishlist</a></li>
+					</ul>
+				</div>
+			</div>
+			<!-- /Product details -->
+			<!-- Product tab -->
+			<div class="row">
+				<div id="product-tab">
+					<!-- Reviews -->
+					<div class="col-md-12">
+						<div id="reviews">
+							<h3 style="margin-top: 5%">Reviews</h3>
+							<ul class="reviews">
+								<%
+								for (Map<String, Object> m : list) {
+								%>
+								<li>
+									<div class="review-heading">
+										<h5 class="name"><%=m.get("customerId")%></h5>
+										<p class="date"><%=m.get("updateDate")%></p>
+										<div class="review-rating">
+											<%
+											int star = (int) m.get("star");
+											for (int i = 0; i < star; i++) {
+											%>
+											<i class="fa fa-star"></i>
+											<%
+											}
+											%>
+										</div>
+									</div>
+									<div class="review-body">
+										<p><%=m.get("reviewContent")%></p>
+									</div>
+								</li>
+								<%
+								}
+								%>
+							</ul>
+						</div>
+					</div>
+					<!-- /Reviews -->
+
+					<!-- Review Form -->
+					<%
+					if (reviewCk == 0) { // 로그인을 해야하고 리뷰를 작성한 적이 없어야 한다.
+					%>
+					<!-- 상품 구매한 사람만 구매가능 -->
+					<div class="col-md-12">
+						<div id="review-form">
+							<form class="review-form">
+								<input class="input" type="text" placeholder="Your Name">
+								<input class="input" type="email" placeholder="Your Email">
+								<textarea class="input" placeholder="Your Review"></textarea>
+								<div class="input-rating">
+									<span>Your Rating: </span>
+									<div class="stars">
+										<input id="star5" name="rating" value="5" type="radio">
+										<label for="star5"></label>
+										<input id="star4" name="rating" value="4" type="radio">
+										<label for="star4"></label>
+										<input id="star3" name="rating" value="3" type="radio">
+										<label for="star3"></label>
+										<input id="star2" name="rating" value="2" type="radio">
+										<label for="star2"></label>
+										<input id="star1" name="rating" value="1" type="radio">
+										<label for="star1"></label>
+									</div>
+								</div>
+								<button class="primary-btn">Submit</button>
+							</form>
+						</div>
+					</div>
+					<%
+					}
+					%>
+					<!-- /Review Form -->
+				</div>
+			</div>
+			<!-- /product tab -->
+		</div>
+		<!-- /row -->
+	</div>
+	<!-- /container -->
+</div>
+<!-- /SECTION -->
+
+<%@include file="/footer.jsp"%>
 
 </body>
 </html>

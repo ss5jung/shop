@@ -10,6 +10,45 @@ import java.util.List;
 import java.util.Map;
 
 public class OrdersDAO {
+	// 특정 상품을 고객1이 구매한 적이 있는지 확인 -> 리뷰 작성
+	public int selectOrderCk(Connection conn, String customerId, int goodsNo) throws Exception {
+		//리턴값
+		int orderNo =0;
+		//아이디가 null값이면 예외처리
+		if(customerId == null) {
+			System.out.println("고객아이디가 null값입니다.");
+			throw new Exception();
+		}
+		// DB자원
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		String sql = "SELECT order_no orderNo FROM orders WHERE goods_no = ? AND customer_id = ?";
+		try {
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, goodsNo);
+			stmt.setString(2, customerId);
+			System.out.println(stmt + "<-- stmt");
+			rs = stmt.executeQuery();
+			if(rs.next()) {
+				orderNo = rs.getInt("orderNo");
+				if(orderNo == 0) {
+					System.out.println("주문내역이 없습니다.");
+					throw new Exception();
+				}
+				System.out.println(orderNo + "<-- orderNo");
+			}
+		} finally {
+			// DB자원 해제
+			if (rs != null) {
+				rs.close();
+			}
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return orderNo;
+	}
+
 	// 고객1의 주문 내역
 	public List<Map<String, Object>> selectCustomerOrdersList(Connection conn, String customerId) throws SQLException {
 		// 파라미터 디버깅
@@ -25,17 +64,16 @@ public class OrdersDAO {
 			stmt.setString(1, customerId);
 			System.out.println(stmt + "<-- stmt");
 			rs = stmt.executeQuery();
-			System.out.println(rs + "<-- rs");
 			while (rs.next()) { // rs가 실행된다면
 				// 1개의 주문내역을 넣을 Map 객체 생성
 				Map<String, Object> map = new HashMap<>();
-				//데이터 셋팅하기
+				// 데이터 셋팅하기
 				map.put("cutomerId", rs.getString("cutomerId"));
 				map.put("orderNo", rs.getInt("orderNo"));
 				map.put("goodsName", rs.getString("goodsName"));
 				map.put("orderQuantity", rs.getInt("orderQuantity"));
 				map.put("orderPrice", rs.getInt("orderPrice"));
-				map.put("orderTotalPrice", rs.getInt("orderPrice")*rs.getInt("orderQuantity"));
+				map.put("orderTotalPrice", rs.getInt("orderPrice") * rs.getInt("orderQuantity"));
 				map.put("orderAddr", rs.getString("orderAddr"));
 				map.put("orderState", rs.getString("orderState"));
 				map.put("customerName", rs.getString("customerName"));
