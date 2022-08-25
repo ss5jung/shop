@@ -165,7 +165,7 @@ public class EmployeeDAO {
 		// 새로 받아오는 객체
 		Employee loginEmployee = null;
 		// 로그인한 Employee의 정보를 받아오기 위한 sql
-		String sql = "SELECT employee_id employeeId, employee_name employeeName FROM employee where employee_id=? and employee_pass=PASSWORD(?)";
+		String sql = "SELECT employee_id employeeId, employee_name employeeName, update_date updateDate, create_date createDate, active FROM employee where employee_id=? and employee_pass=PASSWORD(?)";
 		// DB연동
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
@@ -184,6 +184,9 @@ public class EmployeeDAO {
 				loginEmployee = new Employee();
 				loginEmployee.setEmployeeId(rs.getString("employeeId"));
 				loginEmployee.setEmployeeName(rs.getString("employeeName"));
+				loginEmployee.setUpdateDate(rs.getString("updateDate"));
+				loginEmployee.setCreateDate(rs.getString("createDate"));
+				loginEmployee.setActive(rs.getString("active"));
 				System.out.println("selectEmployeeByIdAndPw에 데이터 셋팅 성공");
 			}
 		} finally {

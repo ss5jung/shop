@@ -11,11 +11,12 @@ import repository.OutIdDAO;
 import vo.Employee;
 
 public class EmployeeService {
-	//last 페이지 구하기
+	// 
+	// last 페이지 구하기
 	public int getEmployeeLastPage(int rowPerPage) throws Exception {
-		//리턴값
+		// 리턴값
 		int lastPage = 0;
-		//DB
+		// DB
 		Connection conn = null;
 		try {
 			// DB연동
@@ -43,25 +44,25 @@ public class EmployeeService {
 		int row = 0;
 		Connection conn = null;
 		try {
-			//conn DB 연동하기
+			// conn DB 연동하기
 			conn = new DBUtil().getConnection();
-			//디버깅
+			// 디버깅
 			System.out.println(conn + "<-- conn modifyEmployeeActive 정상 연결");
-			//DAO로 전송
-			row = new EmployeeDAO().modifyEmployeeActive(conn, active,adminId);
-			//디버깅
+			// DAO로 전송
+			row = new EmployeeDAO().modifyEmployeeActive(conn, active, adminId);
+			// 디버깅
 			System.out.println(row + "<-- row ");
-			if (row == 1) { //DAO 정상적으로 실행시
+			if (row == 1) { // DAO 정상적으로 실행시
 				System.out.println("modifyEmployeeActive DAO가 정상적으로 작동하였습니다.");
-			} else {  //DAO 실행 실패시
+			} else { // DAO 실행 실패시
 				System.out.println("modifyEmployeeActive DAO 실행 실패");
 				throw new Exception();
 			}
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			//DB 자원 해제
-			if(conn != null) {
+			// DB 자원 해제
+			if (conn != null) {
 				conn.close();
 			}
 		}
