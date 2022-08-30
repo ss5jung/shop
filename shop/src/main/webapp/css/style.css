@@ -1536,6 +1536,20 @@ textarea.input {
   border: 2px solid transparent;
   height: 40px;
   padding: 0 30px;
+  background-color: #f76778;
+  color: #FFF;
+  text-transform: uppercase;
+  font-weight: 700;
+  border-radius: 40px;
+  -webkit-transition: 0.2s all;
+  transition: 0.2s all;
+}
+
+.product-details .add-to-cart .buy-now-btn {
+  position: relative;
+  border: 2px solid transparent;
+  height: 40px;
+  padding: 0 30px;
   background-color: #ef233c;
   color: #FFF;
   text-transform: uppercase;
@@ -1546,6 +1560,18 @@ textarea.input {
 }
 
 .product-details .add-to-cart .add-to-cart-btn>i {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 40px;
+  height: 40px;
+  line-height: 38px;
+  color: #D10024;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.product-details .add-to-cart .buy-now-btn>i {
   position: absolute;
   left: 0;
   top: 0;

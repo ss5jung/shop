@@ -24,6 +24,10 @@ System.out.println("----" + customerId + " 주문리스트----");
 Customer customer = new CustomerService().getCustomerOne(customerId);
 //customer_id와 연관된 주문가져오기 - List<Order>
 List<Map<String, Object>> list = new OrdersService().getCustomerOrdersList(customerId);
+System.out.println(list +"<-- list");
+if(list.isEmpty()){
+	System.out.println("주문 내역이 존재하지 않습니다");
+}
 %>
 <!DOCTYPE html>
 <html lang="euc-kr">
@@ -162,21 +166,27 @@ List<Map<String, Object>> list = new OrdersService().getCustomerOrdersList(custo
 								</thead>
 								<tbody>
 									<%
-									for (Map<String, Object> m : list) {
+									if(list.isEmpty()){
 									%>
-									<tr>
-										<td><%=m.get("orderNo")%></td>
-										<td><%=m.get("goodsName")%></td>
-										<td><%=m.get("orderQuantity")%></td>
-										<td><%=m.get("orderPrice")%></td>
-										<td><%=m.get("orderTotalPrice")%></td>
-										<td><%=m.get("orderAddr")%></td>
-										<td><%=m.get("orderState")%></td>
-										<td><%=m.get("customerName")%></td>
-										<td><%=m.get("customerTelephone")%></td>
-										<td><%=m.get("createDate")%></td>
-									</tr>
+										<tr><td colspan="10" style="text-align: center;">주문 내역이 존재하지 않습니다</td></tr>
 									<%
+									} else {
+										for (Map<String, Object> m : list) {
+										%>
+										<tr>
+											<td><%=m.get("orderNo")%></td>
+											<td><%=m.get("goodsName")%></td>
+											<td><%=m.get("orderQuantity")%></td>
+											<td><%=m.get("orderPrice")%></td>
+											<td><%=m.get("orderTotalPrice")%></td>
+											<td><%=m.get("orderAddr")%></td>
+											<td><%=m.get("orderState")%></td>
+											<td><%=m.get("customerName")%></td>
+											<td><%=m.get("customerTelephone")%></td>
+											<td><%=m.get("createDate")%></td>
+										</tr>
+										<%
+										}
 									}
 									%>
 

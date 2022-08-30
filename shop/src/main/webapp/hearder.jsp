@@ -1,10 +1,11 @@
 <%@page import="service.CounterService"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
-//오늘 방문자수, 총 방문자수
+//오늘 방문자수, 총 방문자수, 현재 접속자수 
 CounterService counterService = new CounterService();
-int totalCounter = counterService.getTotalCount();
+counterService.count();
 int todayCounter = counterService.getTodayCount();
+int totalCounter = counterService.getTotalCount();
 int currentCount = (Integer) (application.getAttribute("currentCounter"));
 %>
 <!DOCTYPE html>

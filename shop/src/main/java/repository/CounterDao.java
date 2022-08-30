@@ -6,20 +6,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class CounterDao {
-	public String selectCounterToday(Connection conn) throws SQLException {
+	//counter 테이블에 날짜 정보 있는지 확인
+	public int selectCounterToday(Connection conn) throws Exception {
 		// 리턴값
-		String today = null;
+		int today = 0;
 		// DB 자원
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		String sql = "SELECT DATE_FORMAT((SELECT NOW() FROM DUAL), '%Y/%m/%d') today";
+		String sql = "SELECT COUNT(*) cnt FROM counter WHERE counter_date = (SELECT DATE_FORMAT((SELECT NOW() FROM DUAL), '%Y/%m/%d'));";
 		try {
 			stmt = conn.prepareStatement(sql);
 			System.out.println(stmt + "<-- stmt");
 			rs = stmt.executeQuery();
 			if (rs.next()) {
-				today = rs.getString("today");
-				System.out.println("오늘의 날짜 :" + today);
+				today = rs.getInt("cnt");
 			}
 		} finally {
 			// DB 자원 해제
@@ -30,12 +30,11 @@ public class CounterDao {
 				stmt.close();
 			}
 		}
-		// SELECT DATE_FORMAT((SELECT NOW() FROM DUAL), '%Y/%m/%d') = CURDATE;
 		return today;
 	}
 
 	// 오늘날짜에 카운트가 없으면
-	public void insertCounter(Connection conn) throws SQLException {
+	public void insertCounter(Connection conn) throws Exception {
 		// DB 자원
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
@@ -59,7 +58,7 @@ public class CounterDao {
 	}
 
 	// 오늘날짜에 카운트가 기존에 있을 경우
-	public void updateCounter(Connection conn) throws SQLException {
+	public void updateCounter(Connection conn) throws Exception {
 		// DB 자원
 		PreparedStatement stmt = null;
 		ResultSet rs = null;

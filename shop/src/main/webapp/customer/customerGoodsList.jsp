@@ -94,7 +94,7 @@ System.out.println(lastPage + "<-- lastPage customerGoodsList");
 							<div class="product-body">
 								<p class="product-category">Category</p>
 								<h3 class="product-name">
-									<a href="#"><%=m.get("goodsName")%></a>
+									<a href="<%=request.getContextPath()%>/customer/goodsDetail.jsp?goodsNo=<%=m.get("goodsNo")%>"><%=m.get("goodsName")%></a>
 								</h3>
 								<h4 class="product-price"><%=m.get("goodsPrice")%>원
 								</h4>

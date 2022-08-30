@@ -18,7 +18,8 @@ public class CounterService {
 		try {
 			conn = dbUtil.getConnection();
 			System.out.println("#count DB 연결 성공!");
-			if (counterDao.selectCounterToday(conn) == null) { // 오늘날짜 카운터가 없으면 1 입력
+			
+			if (counterDao.selectCounterToday(conn) == 0) { // 오늘날짜 카운터가 없으면 1 입력
 				System.out.println("todayCounter 없음");
 				counterDao.insertCounter(conn);
 			} else { // 오늘날짜의 카운터가 있으면 +1 업데이터
@@ -47,7 +48,7 @@ public class CounterService {
 		Connection conn = null;
 		try {
 			conn = dbUtil.getConnection();
-			System.out.println("#getTodayCount DB 연결 성공!");
+			System.out.println("#getTotalCount DB 연결 성공!");
 			totalCount = counterDao.selectTotalCount(conn);
 		} catch (Exception e) {
 			e.printStackTrace();

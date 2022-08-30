@@ -182,7 +182,7 @@ public class OrdersDAO {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		String sql = "SELECT o.order_no orderNo, g.goods_no goodsNo, o.order_quantity orderQuantity, o.order_price orderPrice, o.order_state orderState, o.customer_id customerId, o.update_date updateDate, o.create_date createDate "
-				+ "FROM orders o " + "INNER JOIN goods g " + "USING (goods_no) " + "ORDER BY o.order_no DESC "
+				+ "FROM orders o " + "INNER JOIN goods g " + "USING (goods_no) " + "ORDER BY o.create_date DESC "
 				+ "LIMIT ?,?";
 
 		try {
