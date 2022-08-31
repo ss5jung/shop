@@ -76,13 +76,8 @@ int currentCount = (Integer) (application.getAttribute("currentCounter"));
 					<!-- 검색창 -->
 					<div class="col-md-6">
 						<div class="header-search">
-							<form>
-								<select class="input-select">
-									<option value="0">All Categories</option>
-									<option value="1">Category 01</option>
-									<option value="1">Category 02</option>
-								</select>
-								<input class="input" placeholder="Search here">
+							<form action="<%=request.getContextPath()%>/customer/researchGoods.jsp" method="get">
+								<input class="input-select" style="width: 75%" type="text" name="goodsName" placeholder="검색어를 입력해주세요" >
 								<button class="search-btn">Search</button>
 							</form>
 						</div>

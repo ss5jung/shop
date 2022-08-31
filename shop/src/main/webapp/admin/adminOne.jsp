@@ -1,3 +1,5 @@
+<%@page import="service.EmployeeService"%>
+<%@page import="vo.Employee"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
 //인코딩
@@ -8,6 +10,8 @@ if (session.getAttribute("id") == null || session.getAttribute("user").equals("C
 	response.sendRedirect(request.getContextPath() + "/loginForm.jsp");
 	return;
 }
+//로그인정보 받아오기
+Employee loginEmployee = (Employee) (session.getAttribute("loginEmployee"));
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -21,72 +25,28 @@ if (session.getAttribute("id") == null || session.getAttribute("user").equals("C
 <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
 <link href="<%=request.getContextPath()%>/adminIndexBoot/css/styles.css" rel="stylesheet" />
 <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"> </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"> </script>
-<script>
-$(document).ready(function(){
-   var x = [];
-   var y = [];
-   $.ajax({
-      url : '/shop/controller/getCountByOrder',
-      type : 'get',
-      success : function(json){
-         console.log(json);
-         $(json).each(function(index, item){
-            x.push(item.ym); // 값 넣어주기
-            y.push(item.cnt);   // 값 넣어주기
-            let html = '<tr>'
-            html += '<td>'+ item.dname +'</td>'
-            html += '<td>'+ item.cnt +'</td>'
-            html += '</tr>'
-            $('#deptCnt').append(html);
-         });
-         var barColors = ["red", "green","blue","orange","brown","purple","yellow","orange"];
-
-         new Chart("myChart1", {
-           type: "bar",
-           data: {
-             labels: x,
-             datasets: [{
-               backgroundColor: barColors,
-               data: y
-             }]
-           },
-           options: {
-             legend: {display: false},
-             title: {
-               display: true,
-               text: "월별 주문량"
-             }
-           }
-         });
-      }
-   });
-});
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js">
+	
 </script>
 </head>
 <body class="sb-nav-fixed">
 	<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
 		<!-- Navbar Brand-->
-		<a class="navbar-brand ps-3" href="<%=request.getContextPath()%>/admin/adminIndex.jsp"> 
-			<img alt="mamazon" src="<%=request.getContextPath()%>/img/mamazon.png" style="margin-top: 15px">
+		<a class="navbar-brand ps-3" href="<%=request.getContextPath()%>/admin/adminIndex.jsp"> <img alt="mamazon" src="<%=request.getContextPath()%>/img/mamazon.png" style="margin-top: 15px">
 		</a>
 		<!-- Sidebar Toggle-->
 		<button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!">
 			<i class="fas fa-bars"></i>
 		</button>
-		
+
 		<!-- Navbar-->
 		<ul class="d-none d-md-inline-block navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
-			<li class="nav-item dropdown">
-				<a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> 
-					<i class="fas fa-user fa-fw"></i><span style="color: white;"><%=session.getAttribute("name")%>님</span>
-				</a>
+			<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> <i class="fas fa-user fa-fw"></i><span style="color: white;"><%=session.getAttribute("name")%>님</span>
+			</a>
 				<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
 					<li><a class="dropdown-item" href="<%=request.getContextPath()%>/admin/adminOne.jsp">내정보</a></li>
 					<li><a class="dropdown-item" href="<%=request.getContextPath()%>/logout.jsp">Logout</a></li>
-				</ul>	
-			</li>
+				</ul></li>
 		</ul>
 		<!-- /Navbar-->
 	</nav>
@@ -137,57 +97,36 @@ $(document).ready(function(){
 		<div id="layoutSidenav_content">
 			<main>
 				<div class="container-fluid px-4">
-					<h1 class="mt-4">Charts</h1>
+					<h1 class="mt-4">내정보</h1>
 					<ol class="breadcrumb mb-4">
 						<li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
 						<li class="breadcrumb-item active">Charts</li>
 					</ol>
 					<div class="card mb-4">
-						<div class="card-body">
-							<%=session.getAttribute("name")%>(<%=session.getAttribute("id")%>) 관리자님, 안녕하세요.
-						</div>
+						<table class="table table-boreder">
+							<tr>
+								<th>employeeId</th>
+								<td><%=loginEmployee.getEmployeeId()%></td>
+							</tr>
+							<tr>
+								<th>employeeName</th>
+								<td><%=loginEmployee.getEmployeeName()%></td>
+							</tr>
+							<tr>
+								<th>active</th>
+								<td><%=loginEmployee.getActive()%></td>
+							</tr>
+							<tr>
+								<th>updateDate</th>
+								<td><%=loginEmployee.getUpdateDate()%></td>
+							</tr>
+							<tr>
+								<th>createDate</th>
+								<td><%=loginEmployee.getCreateDate()%></td>
+							</tr>
+						</table>
+						<a href="<%=request.getContextPath()%>/admin/adminSignOut.jsp"><button type="button" class="btn btn-danger" style="float: right;">회원 탈퇴</button></a> 
 					</div>
-					<div class="card mb-4">
-						<div class="card-header">
-							<i class="fas fa-chart-bar me-1"></i> 월별 주문량
-						</div>
-						<div class="card-body">
-							<canvas id="myChart1" width="100%" height="30"></canvas>
-						</div>
-					</div>
-					<!-- 					<div class="card mb-4">
-						<div class="card-header">
-							<i class="fas fa-chart-area me-1"></i> Area Chart Example
-						</div>
-						<div class="card-body">
-							<canvas id="myAreaChart" width="100%" height="30"></canvas>
-						</div>
-						<div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-					</div> -->
-<!-- 					<div class="row">
-						<div class="col-lg-6">
-							<div class="card mb-4">
-								<div class="card-header">
-									<i class="fas fa-chart-bar me-1"></i> Bar Chart Example
-								</div>
-								<div class="card-body">
-									<canvas id="myBarChart" width="100%" height="50"></canvas>
-								</div>
-								<div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-							</div>
-						</div>
-						<div class="col-lg-6">
-							<div class="card mb-4">
-								<div class="card-header">
-									<i class="fas fa-chart-pie me-1"></i> Pie Chart Example
-								</div>
-								<div class="card-body">
-									<canvas id="myPieChart" width="100%" height="50"></canvas>
-								</div>
-								<div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-							</div>
-						</div>
-					</div> -->
 				</div>
 			</main>
 			<!-- footer -->

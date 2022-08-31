@@ -6,20 +6,33 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class CounterDao {
+<<<<<<< HEAD
 	//counter 테이블에 날짜 정보 있는지 확인
 	public int selectCounterToday(Connection conn) throws Exception {
+=======
+	public int selectCounterToday(Connection conn) throws SQLException {
+>>>>>>> branch 'master' of https://github.com/ss5jung/shop.git
 		// 리턴값
 		int today = 0;
 		// DB 자원
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
+<<<<<<< HEAD
 		String sql = "SELECT COUNT(*) cnt FROM counter WHERE counter_date = (SELECT DATE_FORMAT((SELECT NOW() FROM DUAL), '%Y/%m/%d'));";
+=======
+//		String sql = "SELECT DATE_FORMAT((SELECT NOW() FROM DUAL), '%Y/%m/%d') today";
+		String sql = "SELECT COUNT(*) cnt FROM counter WHERE counter_date = (SELECT DATE_FORMAT((SELECT NOW() FROM DUAL), '%Y/%m/%d') today)";
+>>>>>>> branch 'master' of https://github.com/ss5jung/shop.git
 		try {
 			stmt = conn.prepareStatement(sql);
 			System.out.println(stmt + "<-- stmt");
 			rs = stmt.executeQuery();
 			if (rs.next()) {
 				today = rs.getInt("cnt");
+<<<<<<< HEAD
+=======
+				System.out.println(today + "<-- today 날짜데이터 유무");
+>>>>>>> branch 'master' of https://github.com/ss5jung/shop.git
 			}
 		} finally {
 			// DB 자원 해제

@@ -10,6 +10,27 @@ import repository.DBUtil;
 import repository.ReviewDAO;
 
 public class ReviewService {
+	// 리뷰 작성여부
+	public int getReviewCk(String loginId, int goodsNo) throws Exception {
+		// 리턴값
+		int row = 0;
+		Connection conn = null;
+		try {
+			conn = new DBUtil().getConnection();
+			System.out.println("getReviewCk DB 연결");
+			row = new ReviewDAO().selectReviewCk(conn, loginId, goodsNo);	//리뷰가 작성되어 있으면 1 없으면 0
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// DB 자원해제
+			if (conn != null) {
+				conn.close();
+			}
+		}
+		System.out.println("리뷰 작성 여부 row --> " + row);
+		return row;
+	}
+
 	// 리뷰 리스트 : R
 	public List<Map<String, Object>> getReviewList(int goodsNo) throws SQLException {
 		// 리턴할 객체 생성
@@ -40,7 +61,7 @@ public class ReviewService {
 			conn = new DBUtil().getConnection();
 			System.out.println("removeReview DB 연결");
 			row = new ReviewDAO().deleteReview(conn, orderNo);
-			if(row == 0) {
+			if (row == 0) {
 				throw new Exception();
 			}
 		} catch (Exception e) {

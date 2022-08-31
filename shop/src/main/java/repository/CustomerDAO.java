@@ -219,7 +219,7 @@ public class CustomerDAO {
 		// 새로 받아오는 객체
 		Customer selectCustomerByIdAndPw = null;
 		// 로그인한 customer의 정보를 받아오기 위한 sql
-		String sql = "SELECT customer_id customerId, customer_pass customerPass, customer_name customerName FROM customer where customer_id=? and customer_pass=PASSWORD(?)";
+		String sql = "SELECT customer_id customerId, customer_pass customerPass, customer_name customerName, customer_address customerAddress, customer_telephone customerTelephone, update_date updateDate, create_date createDate FROM customer where customer_id=? and customer_pass=PASSWORD(?)";
 		// DB연동
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
@@ -237,6 +237,11 @@ public class CustomerDAO {
 				selectCustomerByIdAndPw = new Customer();
 				selectCustomerByIdAndPw.setCustomerId(rs.getString("customerId"));
 				selectCustomerByIdAndPw.setCustomerName(rs.getString("customerName"));
+				selectCustomerByIdAndPw.setCustomerPass(rs.getString("customerPass"));
+				selectCustomerByIdAndPw.setCustomerAddress(rs.getString("customerAddress"));
+				selectCustomerByIdAndPw.setCustomerTelephone(rs.getString("customerTelephone"));
+				selectCustomerByIdAndPw.setUpdateDate(rs.getString("updateDate"));
+				selectCustomerByIdAndPw.setCreateDate(rs.getString("createDate"));
 				System.out.println("selectCustomerByIdAndPw에 데이터 셋팅 성공");
 			}
 		} finally {
