@@ -18,10 +18,6 @@ public class CounterService {
 		try {
 			conn = dbUtil.getConnection();
 			System.out.println("#count DB 연결 성공!");
-<<<<<<< HEAD
-			
-=======
->>>>>>> branch 'master' of https://github.com/ss5jung/shop.git
 			if (counterDao.selectCounterToday(conn) == 0) { // 오늘날짜 카운터가 없으면 1 입력
 				System.out.println("todayCounter 없음");
 				counterDao.insertCounter(conn);

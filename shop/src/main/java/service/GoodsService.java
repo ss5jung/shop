@@ -187,7 +187,7 @@ public class GoodsService {
 	}
 
 	// 상세페이지 R
-	public Map<String, Object> getGoodsAndImgOne(int goodsNo) throws SQLException {
+	public Map<String, Object> getGoodsAndImgOne(int goodsNo) throws Exception {
 		// 전송받은 값 디버깅
 		System.out.println(goodsNo + "<--goodsNo - getGoodsAndImgOne");
 		// 리턴할 변수 선언

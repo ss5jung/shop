@@ -111,31 +111,40 @@ public class GoodsDAO {
 		// DB 자원 선언
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		String sql = "SELECT g.*, gi.* FROM goods g INNER JOIN goods_img gi USING (goods_no) WHERE g.goods_no = ?";
+		String sql = "SELECT "
+				+ "g.goods_no goodsNo"
+				+ ", g.goods_name goodsName"
+				+ ", g.goods_price goodsPrice"
+				+ ", g.update_date updateDate"
+				+ ", g.create_date createDate"
+				+ ", g.sold_out soldOut"
+				+ ", gi.filename filename"
+				+ ", gi.origin_filename originFilename"
+				+ ", gi.content_type contentType "
+				+ "FROM goods g "
+				+ "INNER JOIN goods_img gi "
+				+ "USING (goods_no) "
+				+ "WHERE g.goods_no = ?";
+		
 		try {
 			stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, goodsNo);
 			System.out.println(stmt + "<-- stmt - selectGoodsAndImgOne");
 
 			rs = stmt.executeQuery();
-			System.out.println(rs + "<-- rs - selectGoodsAndImgOne");
-
 			if (rs.next()) { // rs가 존재한다면
 				// 데이터 셋팅할 map 객체 생성
 				map = new HashMap<String, Object>();
 				// 데이터 셋팅
-				map.put("goodsNo", rs.getInt("g.goods_no"));
-				map.put("goodsName", rs.getString("g.goods_name"));
-				map.put("goodsPrice", rs.getInt("g.goods_price"));
-				map.put("goodsDetail", rs.getString("g.goods_detail"));
-				map.put("updateDate", rs.getString("g.update_date"));
-				map.put("createDate", rs.getString("g.create_date"));
-				map.put("soldOut", rs.getString("g.sold_out"));
-				map.put("filename", rs.getString("gi.filename"));
-				map.put("originFilename", rs.getString("gi.origin_filename"));
-				map.put("contentType", rs.getString("gi.content_type"));
-				map.put("imgCreateDate", rs.getString("gi.create_date"));
-
+				map.put("goodsNo", rs.getInt("goodsNo"));
+				map.put("goodsName", rs.getString("goodsName"));
+				map.put("goodsPrice", rs.getInt("goodsPrice"));
+				map.put("updateDate", rs.getString("updateDate"));
+				map.put("createDate", rs.getString("createDate"));
+				map.put("soldOut", rs.getString("soldOut"));
+				map.put("filename", rs.getString("filename"));
+				map.put("originFilename", rs.getString("originFilename"));
+				map.put("contentType", rs.getString("contentType"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -44,7 +44,7 @@ public class ReviewDAO {
 			//리턴할 객체 생성
 			List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
 			//DB
-			String sql = "SELECT r.order_no orderNo, r.review_content reviewContent, r.star star, r.update_date updateDate, r.create_date createDate, o.customer_id customerId FROM review r INNER JOIN orders o USING (order_no) WHERE o.goods_no = ?";
+			String sql = "SELECT r.order_no orderNo, r.review_content reviewContent, r.update_date updateDate, r.create_date createDate, o.customer_id customerId FROM review r INNER JOIN orders o USING (order_no) WHERE o.goods_no = ?";
 			PreparedStatement stmt = null;
 			ResultSet rs = null;
 			try {
@@ -54,7 +54,6 @@ public class ReviewDAO {
 				while(rs.next()) {
 					Map<String, Object>  m = new HashMap<String, Object>();
 					m.put("orderNo", rs.getInt("orderNo"));
-					m.put("star", rs.getInt("star"));
 					m.put("reviewContent", rs.getString("reviewContent"));
 					m.put("updateDate", rs.getString("updateDate"));
 					m.put("createDate", rs.getString("createDate"));

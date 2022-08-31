@@ -94,23 +94,17 @@ System.out.println(lastPage + "<-- lastPage customerGoodsList");
 							<div class="product-body">
 								<p class="product-category">Category</p>
 								<h3 class="product-name">
-<<<<<<< HEAD
 									<a href="<%=request.getContextPath()%>/customer/goodsDetail.jsp?goodsNo=<%=m.get("goodsNo")%>"><%=m.get("goodsName")%></a>
-=======
-									<a href="<%=request.getContextPath()%>/customer/productOne.jsp?goodsNo=<%=m.get("goodsNo")%>"><%=m.get("goodsName")%></a>
->>>>>>> branch 'master' of https://github.com/ss5jung/shop.git
 								</h3>
 								<h4 class="product-price"><%=m.get("goodsPrice")%>원
 								</h4>
-								<div class="product-rating">
-									<i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i>
-								</div>
+								<hr>
 								<div class="product-btns">
-									<button class="add-to-wishlist">
-										<i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span>
+									<button class="add-to-cart-btn">
+										<i class="fa fa-shopping-cart"></i><span class="tooltipp">Add to Cart</span>
 									</button>
-									<button class="quick-view">
-										<a href="<%=request.getContextPath()%>/customer/productOne.jsp?goodsNo=<%=m.get("goodsNo")%>"><i class="fa fa-eye"></i><span class="tooltipp">Detail view</span>
+									<button class="quick-view" id="detailViewBtn">
+										<i class="fa fa-eye"></i><span class="tooltipp">Detail view</span>
 									</button>
 								</div>
 							</div>
