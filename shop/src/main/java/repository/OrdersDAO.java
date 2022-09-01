@@ -9,13 +9,62 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import vo.Orders;
+
 public class OrdersDAO {
+	// 주문 취소(삭제)
+	public int deleteOrder(Connection conn, int orderNo) throws Exception {
+		// 리턴값
+		int row = 0;
+		PreparedStatement stmt = null;
+		String sql = "DELETE FROM orders WHERE  order_no = ? AND (order_state='결제대기' OR order_state='주문완료')";
+		try {
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, orderNo);
+			// 디버깅
+			System.out.println(stmt + "<-- stmt - deleteOrder");
+			row = stmt.executeUpdate();
+		} finally {
+			// DB자원 해제
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return row;
+	}
+
+	// 주문하기
+	public int insertOrder(Connection conn, Orders order) throws Exception {
+		// 리턴값
+		int row = 0;
+		PreparedStatement stmt = null;
+		String sql = "INSERT INTO orders (goods_no, customer_id, order_quantity, order_price, order_addr, order_state, update_date, create_date) VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())";
+		try {
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, order.getGoodsNo());
+			stmt.setString(2, order.getCustomerId());
+			stmt.setInt(3, order.getOrderQuantity());
+			stmt.setInt(4, order.getOrderPrice());
+			stmt.setString(5, order.getOrderAddr());
+			stmt.setString(6, order.getOrderState());
+			// 디버깅
+			System.out.println(stmt + "<-- stmt");
+			row = stmt.executeUpdate();
+		} finally {
+			// DB자원 해제
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return row;
+	}
+
 	// 특정 상품을 고객1이 구매한 적이 있는지 확인 -> 리뷰 작성
 	public int selectOrderCk(Connection conn, String customerId, int goodsNo) throws Exception {
-		//리턴값
-		int orderNo =0;
-		//아이디가 null값이면 예외처리
-		if(customerId == null) {
+		// 리턴값
+		int orderNo = 0;
+		// 아이디가 null값이면 예외처리
+		if (customerId == null) {
 			System.out.println("고객아이디가 null값입니다.");
 			throw new Exception();
 		}
@@ -29,9 +78,9 @@ public class OrdersDAO {
 			stmt.setString(2, customerId);
 			System.out.println(stmt + "<-- stmt");
 			rs = stmt.executeQuery();
-			if(rs.next()) {
+			if (rs.next()) {
 				orderNo = rs.getInt("orderNo");
-				if(orderNo == 0) {
+				if (orderNo == 0) {
 					System.out.println("주문내역이 없습니다.");
 					throw new Exception();
 				}
@@ -93,6 +142,29 @@ public class OrdersDAO {
 		return list;
 	}
 
+	// 주문 수정 - 고객버전
+	public int updateOrderByCustomer(Connection conn, Map<String, Object> map) throws SQLException {
+		// 리턴할 변수
+		int row = 0;
+		// DB 자원 생성
+		PreparedStatement stmt = null;
+		String sql = "UPDATE orders SET order_quantity = ? WHERE  order_no = ? AND (order_state='결제대기' OR order_state='주문완료')";
+		try {
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, (int) map.get("orderQuantity"));
+			stmt.setInt(2, (int) map.get("orderNo"));
+			System.out.println(stmt + "<-- stmt - updateOrderByCustomer");
+			row = stmt.executeUpdate();
+			System.out.println(row + "<-- updateOrderByCustomer에서 실행된 row의 수");
+		} finally {
+			// DB자원 해제
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return row;
+	}
+	
 	// 주문 내역 수정하기
 	public int insertOrdersOne(Connection conn, Map<String, Object> map) throws SQLException {
 		// 리턴할 변수
