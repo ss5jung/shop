@@ -143,7 +143,7 @@ public class OrdersDAO {
 	}
 
 	// 주문 수정 - 고객버전
-	public int updateOrderByCustomer(Connection conn, Map<String, Object> map) throws SQLException {
+	public int updateOrderByCustomer(Connection conn, Orders order) throws SQLException {
 		// 리턴할 변수
 		int row = 0;
 		// DB 자원 생성
@@ -151,8 +151,8 @@ public class OrdersDAO {
 		String sql = "UPDATE orders SET order_quantity = ? WHERE  order_no = ? AND (order_state='결제대기' OR order_state='주문완료')";
 		try {
 			stmt = conn.prepareStatement(sql);
-			stmt.setInt(1, (int) map.get("orderQuantity"));
-			stmt.setInt(2, (int) map.get("orderNo"));
+			stmt.setInt(1, (int) order.getOrderQuantity());
+			stmt.setInt(2, (int) order.getOrderNo());
 			System.out.println(stmt + "<-- stmt - updateOrderByCustomer");
 			row = stmt.executeUpdate();
 			System.out.println(row + "<-- updateOrderByCustomer에서 실행된 row의 수");
@@ -164,8 +164,8 @@ public class OrdersDAO {
 		}
 		return row;
 	}
-	
-	// 주문 내역 수정하기
+
+	// 주문 내역 수정하기 - 직원버전
 	public int insertOrdersOne(Connection conn, Map<String, Object> map) throws SQLException {
 		// 리턴할 변수
 		int row = 0;
@@ -277,7 +277,11 @@ public class OrdersDAO {
 		}
 
 		// lastPage 연산 - 올림해서 lastPage구하기
-		lastPage = (int) Math.ceil((double) totalCount / rowPerPage);
+		if (totalCount % rowPerPage == 0) { // 30/10 = 3
+			lastPage = totalCount / rowPerPage;
+		} else { // 32/10 =4
+			lastPage = (int) Math.ceil((double) totalCount / rowPerPage);
+		}
 		return lastPage;
 	}
 
@@ -327,19 +331,4 @@ public class OrdersDAO {
 		return list;
 	}
 
-	// 특정 고객의 주문 목록 - 관리자페이지 & 고객페이지
-	public List<Map<String, Object>> selectOrdersListByCustomer(Connection conn, String customerId, int rowPerPage,
-			int beginRow) {
-		// 파라미터 디버깅
-		System.out.println("selectOrdersListByCustomer 파라미터 디버깅 --> customerId : " + customerId + " rowPerPage : "
-				+ rowPerPage + "  beginRow : " + beginRow);
-		// 리턴하려는 변수 생성
-		List<Map<String, Object>> list = new ArrayList<>(); // 다형성
-		/*
-		 * SELECT o.*, g.* FROM order o INNER JOIN goods g USING (goods_no) WHERE
-		 * customer_id = ? ORDER BY create_date DESC LIMIT ?,?
-		 */
-
-		return list;
-	}
 }

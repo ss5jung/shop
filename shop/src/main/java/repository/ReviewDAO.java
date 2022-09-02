@@ -60,6 +60,7 @@ public class ReviewDAO {
 				stmt.close();
 			}
 		}
+		System.out.println(row + "<-- row - insertReview");
 		return row;
 	}
 

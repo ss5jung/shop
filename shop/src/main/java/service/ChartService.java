@@ -7,10 +7,9 @@ import java.util.Map;
 
 import repository.ChartDao;
 import repository.DBUtil;
-import repository.IChartDao;
 
 public class ChartService implements IChartService {
-	private IChartDao chartDao;
+	private ChartDao chartDao;
 
 	@Override
 	public List<Map<String, Object>> getCountByOrder() {

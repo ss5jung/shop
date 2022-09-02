@@ -8,8 +8,12 @@ import java.util.Map;
 
 import repository.DBUtil;
 import repository.ReviewDAO;
+import vo.Review;
 
 public class ReviewService {
+	private DBUtil dbUtil;
+	private ReviewDAO reviewDAO;
+
 	// 리뷰 작성여부
 	public int getReviewCk(String loginId, int goodsNo) throws Exception {
 		// 리턴값
@@ -18,7 +22,7 @@ public class ReviewService {
 		try {
 			conn = new DBUtil().getConnection();
 			System.out.println("getReviewCk DB 연결");
-			row = new ReviewDAO().selectReviewCk(conn, loginId, goodsNo);	//리뷰가 작성되어 있으면 1 없으면 0
+			row = new ReviewDAO().selectReviewCk(conn, loginId, goodsNo); // 리뷰가 작성되어 있으면 1 없으면 0
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -28,6 +32,40 @@ public class ReviewService {
 			}
 		}
 		System.out.println("리뷰 작성 여부 row --> " + row);
+		return row;
+	}
+
+	// 리뷰 작성
+	public int addReview(Review review) {
+		// 리턴값
+		int row = 0;
+		Connection conn = null;
+		dbUtil = new DBUtil();
+		reviewDAO = new ReviewDAO();
+		try {
+			conn = dbUtil.getConnection();
+			System.out.println("addReview DB 연결 성공");
+			// DAO call
+			row = reviewDAO.insertReview(conn, review);
+			// 디버깅
+			if (row != 0) {
+				System.out.println("리뷰 작성 성공!");
+			} else {
+				System.out.println("리뷰 작성 실패");
+				throw new Exception();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// DB 자원 해제
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
 		return row;
 	}
 
@@ -50,6 +88,39 @@ public class ReviewService {
 			}
 		}
 		return list;
+	}
+
+	// 리뷰 수정
+	public int modifyReview(Review review) {
+		// 리턴값
+		int row = 0;
+		Connection conn = null;
+		try {
+			dbUtil = new DBUtil();
+			conn = dbUtil.getConnection();
+			System.out.println("modifyReview DB 연결 성공");
+			reviewDAO = new ReviewDAO();
+			row = reviewDAO.updateReview(conn, review);
+			// 디버깅
+			if (row != 0) {
+				System.out.println("리뷰 수정 성공!");
+			} else {
+				System.out.println("리뷰 수정 실패");
+				throw new Exception();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// DB 자원 해제
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return row;
 	}
 
 	// 리뷰 삭제 : D

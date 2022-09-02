@@ -8,9 +8,78 @@ import java.util.Map;
 
 import repository.DBUtil;
 import repository.OrdersDAO;
-import repository.ReviewDAO;
+import vo.Orders;
 
 public class OrdersService {
+	private DBUtil dbUtil;
+	private OrdersDAO ordersDAO;
+
+	// 주문하기
+	public int addOrder(Orders order) {
+		//리턴값
+		int row = 0;
+		Connection conn = null;
+		dbUtil = new DBUtil();
+		ordersDAO = new OrdersDAO();
+		try {
+			conn = dbUtil.getConnection();
+			System.out.println("addOrder DB연결 성공");
+			row = ordersDAO.insertOrder(conn, order);
+			//디버깅
+			if(row != 0) {
+				System.out.println("주문 생성 성공!");
+			} else {
+				System.out.println("주문 생성 실패");
+				throw new Exception();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(conn != null) {
+				try {
+					conn.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return row;
+	}
+
+	// 주문 취소(삭제)
+	public int removeOrder(int orderNo) {
+		// 리턴값
+		int row = 0;
+		Connection conn = null;
+		dbUtil = new DBUtil();
+		ordersDAO = new OrdersDAO();
+		try {
+			conn = dbUtil.getConnection();
+			System.out.println("removeOrder DB 연결 성공");
+			row = ordersDAO.deleteOrder(conn, orderNo);
+			// 디버깅
+			if (row != 0) {
+				System.out.println("주문 취소 성공!");
+			} else {
+				System.out.println("주문 취소 실패!");
+				throw new Exception();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// DB 자원해제
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return row;
+
+	}
+
 	// 고객1의 주문 내역
 	public List<Map<String, Object>> getCustomerOrdersList(String customerId) throws SQLException {
 		// 파라미터 디버깅
@@ -36,7 +105,41 @@ public class OrdersService {
 		return list;
 	}
 
-	// 주문 내역 수정하기
+	// 주문 수정 - 고객버전
+	public int modifyOrder(Orders order) {
+		// 리턴값
+		int row = 0;
+		Connection conn = null;
+		dbUtil = new DBUtil();
+		ordersDAO = new OrdersDAO();
+
+		try {
+			conn = dbUtil.getConnection();
+			System.out.println("modifyOrder DB연결 성공");
+			row = ordersDAO.updateOrderByCustomer(conn, order);
+			// 디버깅
+			if (row != 0) {
+				System.out.println("주문 수정 성공");
+			} else {
+				System.out.println("주문 수정 실패");
+				throw new Exception();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// DB자원 해제
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return row;
+	}
+
+	// 주문 내역 수정하기 - 직원버전
 	public int addOrdersOne(Map<String, Object> map) throws SQLException {
 		// 리턴할 변수 선언 및 초기화
 		int row = 0;
@@ -148,19 +251,4 @@ public class OrdersService {
 		return list;
 	}
 
-	// 특정 고객의 주문 목록 - 관리자페이지 & 고객페이지
-	public List<Map<String, Object>> getOrdersListByCustomer(Connection conn, String customerId, int rowPerPage,
-			int beginRow) {
-		// 파라미터 디버깅
-		System.out.println("selectOrdersListByCustomer 파라미터 디버깅 --> customerId : " + customerId + " rowPerPage : "
-				+ rowPerPage + "  beginRow : " + beginRow);
-		// 리턴하려는 변수 생성
-		List<Map<String, Object>> list = new ArrayList<>(); // 다형성
-		/*
-		 * SELECT o.*, g.* FROM order o INNER JOIN goods g USING (goods_no) WHERE
-		 * customer_id = ? ORDER BY create_date DESC LIMIT ?,?
-		 */
-
-		return list;
-	}
 }
