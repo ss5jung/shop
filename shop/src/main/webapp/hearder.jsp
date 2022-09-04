@@ -1,3 +1,4 @@
+<%@page import="service.CartService"%>
 <%@page import="service.CounterService"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
@@ -7,6 +8,8 @@ counterService.count();
 int todayCounter = counterService.getTodayCount();
 int totalCounter = counterService.getTotalCount();
 int currentCount = (Integer) (application.getAttribute("currentCounter"));
+//장바구니에 들어있는 상품의 수 불러오기
+int qty = new CartService().getCartGoodsCnt((String)session.getAttribute("id"));
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -43,7 +46,7 @@ int currentCount = (Integer) (application.getAttribute("currentCounter"));
 <body>
 	<!-- HEADER -->
 	<header>
-		<!-- TOP HEADER -->
+		<%-- <!-- TOP HEADER -->
 		<div id="top-header">
 			<div class="container">
 				<ul class="header-links pull-left">
@@ -52,11 +55,11 @@ int currentCount = (Integer) (application.getAttribute("currentCounter"));
 					<li><i class="fa fa-user-o"></i> 총 방문자 수 : <%=totalCounter%></li>
 				</ul>
 				<ul class="header-links pull-right">
-					<li><a href="<%=request.getContextPath()%>/index.jsp"><i class="fa fa-user-o"></i> My Account</a></li>
+					<li><a href="<%=request.getContextPath()%>/index.jsp"><i class="fa fa-user-o"></i>내 정보</a></li>
 				</ul>
 			</div>
 		</div>
-		<!-- /TOP HEADER -->
+		<!-- /TOP HEADER --> --%>
 		<!-- MAIN HEADER -->
 		<div id="header">
 			<!-- container -->
@@ -77,7 +80,7 @@ int currentCount = (Integer) (application.getAttribute("currentCounter"));
 					<div class="col-md-6">
 						<div class="header-search">
 							<form action="<%=request.getContextPath()%>/customer/researchGoods.jsp" method="get">
-								<input class="input-select" style="width: 75%" type="text" name="goodsName" placeholder="검색어를 입력해주세요" >
+								<input class="input-select" style="width: 75%" type="text" name="goodsName" placeholder="검색어를 입력해주세요">
 								<button class="search-btn">Search</button>
 							</form>
 						</div>
@@ -89,53 +92,9 @@ int currentCount = (Integer) (application.getAttribute("currentCounter"));
 						<div class="header-ctn">
 							<!-- Cart -->
 							<div class="dropdown">
-								<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"> <i class="fa fa-shopping-cart"></i> <span>Your Cart</span>
-									<div class="qty">3</div>
+								<a href="<%=request.getContextPath()%>/customer/customerCart.jsp"> <i class="fa fa-shopping-cart"></i> <span>Your Cart</span>
+									<div class="qty"><%=qty %></div>
 								</a>
-								<div class="cart-dropdown">
-									<div class="cart-list">
-										<div class="product-widget">
-											<div class="product-img">
-												<img src="./img/product01.png" alt="">
-											</div>
-											<div class="product-body">
-												<h3 class="product-name">
-													<a href="#">product name goes here</a>
-												</h3>
-												<h4 class="product-price">
-													<span class="qty">1x</span>$980.00
-												</h4>
-											</div>
-											<button class="delete">
-												<i class="fa fa-close"></i>
-											</button>
-										</div>
-
-										<div class="product-widget">
-											<div class="product-img">
-												<img src="./img/product02.png" alt="">
-											</div>
-											<div class="product-body">
-												<h3 class="product-name">
-													<a href="#">product name goes here</a>
-												</h3>
-												<h4 class="product-price">
-													<span class="qty">3x</span>$980.00
-												</h4>
-											</div>
-											<button class="delete">
-												<i class="fa fa-close"></i>
-											</button>
-										</div>
-									</div>
-									<div class="cart-summary">
-										<small>3 Item(s) selected</small>
-										<h5>SUBTOTAL: $2940.00</h5>
-									</div>
-									<div class="cart-btns">
-										<a href="<%=request.getContextPath()%>/customer/customerCart.jsp">View Cart</a> <a href="#">Checkout <i class="fa fa-arrow-circle-right"></i></a>
-									</div>
-								</div>
 							</div>
 							<!-- /Cart -->
 
@@ -156,3 +115,23 @@ int currentCount = (Integer) (application.getAttribute("currentCounter"));
 		<!-- /MAIN HEADER -->
 	</header>
 	<!-- /HEADER -->
+	<!-- NAVIGATION -->
+	<nav id="navigation">
+		<!-- container -->
+		<div class="container">
+			<!-- responsive-nav -->
+			<div id="responsive-nav">
+				<!-- NAV -->
+				<ul class="main-nav nav navbar-nav">
+					<li class="active"><a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp">Home</a></li>
+				</ul>
+				<ul class="main-nav nav navbar-nav" style="float: right;">
+					<li><a href="<%=request.getContextPath()%>/index.jsp"><i class="fa fa-user-o"></i><%=session.getAttribute("id") %>님</a></li>
+				</ul>
+				<!-- /NAV -->
+			</div>
+			<!-- /responsive-nav -->
+		</div>
+		<!-- /container -->
+	</nav>
+	<!-- /NAVIGATION -->

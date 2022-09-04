@@ -30,29 +30,7 @@ int lastPage = new GoodsService().getGoodsLastPage(rowPerPage);
 System.out.println(lastPage + "<-- lastPage customerGoodsList");
 %>
 <%@include file="/hearder.jsp"%>
-<!-- NAVIGATION -->
-<nav id="navigation">
-	<!-- container -->
-	<div class="container">
-		<!-- responsive-nav -->
-		<div id="responsive-nav">
-			<!-- NAV -->
-			<ul class="main-nav nav navbar-nav">
-				<li class="active"><a href="#">Home</a></li>
-				<li><a href="#">Hot Deals</a></li>
-				<li><a href="#">Categories</a></li>
-				<li><a href="#">Laptops</a></li>
-				<li><a href="#">Smartphones</a></li>
-				<li><a href="#">Cameras</a></li>
-				<li><a href="#">Accessories</a></li>
-			</ul>
-			<!-- /NAV -->
-		</div>
-		<!-- /responsive-nav -->
-	</div>
-	<!-- /container -->
-</nav>
-<!-- /NAVIGATION -->
+
 
 <!-- SECTION -->
 <div class="section">
@@ -80,7 +58,7 @@ System.out.println(lastPage + "<-- lastPage customerGoodsList");
 					<div class="col-lg-3">
 						<div class="product">
 							<div class="product-img">
-								<img src="<%=request.getContextPath()%>/upload/<%=m.get("filename")%>" alt="<%=m.get("goodsName")%>">
+								<img src="<%=request.getContextPath()%>/upload/<%=m.get("filename")%>" alt="<%=m.get("goodsName")%>" style="height: 260px">
 								<%
 								if ("Y".equals(m.get("soldOut"))) {
 								%>
@@ -92,7 +70,6 @@ System.out.println(lastPage + "<-- lastPage customerGoodsList");
 								%>
 							</div>
 							<div class="product-body">
-								<p class="product-category">Category</p>
 								<h3 class="product-name">
 									<a href="<%=request.getContextPath()%>/customer/goodsDetail.jsp?goodsNo=<%=m.get("goodsNo")%>"><%=m.get("goodsName")%></a>
 								</h3>
@@ -100,10 +77,10 @@ System.out.println(lastPage + "<-- lastPage customerGoodsList");
 								</h4>
 								<hr>
 								<div class="product-btns">
-									<button class="add-to-cart-btn">
+									<button class="add-to-cart-btn" id="add-to-cart-btn">
 										<i class="fa fa-shopping-cart"></i><span class="tooltipp">Add to Cart</span>
 									</button>
-									<button class="quick-view" id="detailViewBtn">
+									<button class="quick-view" id="detail-View-Btn">
 										<i class="fa fa-eye"></i><span class="tooltipp">Detail view</span>
 									</button>
 								</div>
@@ -163,4 +140,13 @@ System.out.println(lastPage + "<-- lastPage customerGoodsList");
 <!-- /SECTION -->
 <%@include file="/footer.jsp"%>
 </body>
+<script>
+	$('#add-to-cart-btn').click(function(){
+		alert('qjxmsfs');
+		location.href='<%=request.getContextPath()%>/customer/customerCart.jsp';
+	});
+	$('#detail-View-Btn').click(function(){
+		location.href='<%=request.getContextPath()%>/customer/goodsDetail';
+	});
+</script>
 </html>

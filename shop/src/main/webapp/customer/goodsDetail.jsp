@@ -1,3 +1,4 @@
+<%@page import="service.OrdersService"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="vo.Review"%>
 <%@page import="service.ReviewService"%>
@@ -30,31 +31,11 @@ if (goodsOne.isEmpty()) {
 }
 //리뷰 가져오기
 List<Map<String, Object>> list = new ReviewService().getReviewList(goodsNo);
+//리뷰를 작성한지 있는 확인
+String loginId = (String)session.getAttribute("id");
+int reviewCk = new ReviewService().getReviewCk(loginId, goodsNo);
 %>
 <%@include file="/hearder.jsp"%>
-<!-- NAVIGATION -->
-<nav id="navigation">
-	<!-- container -->
-	<div class="container">
-		<!-- responsive-nav -->
-		<div id="responsive-nav">
-			<!-- NAV -->
-			<ul class="main-nav nav navbar-nav">
-				<li class="active"><a href="#">Home</a></li>
-				<li><a href="#">Hot Deals</a></li>
-				<li><a href="#">Categories</a></li>
-				<li><a href="#">Laptops</a></li>
-				<li><a href="#">Smartphones</a></li>
-				<li><a href="#">Cameras</a></li>
-				<li><a href="#">Accessories</a></li>
-			</ul>
-			<!-- /NAV -->
-		</div>
-		<!-- /responsive-nav -->
-	</div>
-	<!-- /container -->
-</nav>
-<!-- /NAVIGATION -->
 <!-- SECTION -->
 <div class="section">
 	<!-- container -->
@@ -85,12 +66,7 @@ List<Map<String, Object>> list = new ReviewService().getReviewList(goodsNo);
 			<div class="col-md-6">
 				<div class="product-details">
 					<h2 class="product-name"><%=goodsOne.get("goodsName")%></h2>
-					<div>
-						<div class="product-rating">
-							<i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star-o"></i>
-						</div>
-						<a class="review-link" href="#">10 Review(s) | Add your review</a>
-					</div>
+					<hr>
 					<div>
 						<h3 class="product-price">
 							<%=goodsOne.get("goodsPrice")%>
@@ -107,9 +83,7 @@ List<Map<String, Object>> list = new ReviewService().getReviewList(goodsNo);
 						<%
 						}
 						%>
-
 					</div>
-					<p>상품 설명</p>
 					<!-- 장바구니/바로구매 -->
 					<form name="qtyForm" id="qtyForm" method="post">
 						<fieldset>
@@ -118,19 +92,30 @@ List<Map<String, Object>> list = new ReviewService().getReviewList(goodsNo);
 									Qty
 									<div class="input-number">
 										<input type="hidden" value="<%=goodsOne.get("goodsNo")%>" name="goodsNo">
-										<input type="hidden" value="<%=goodsOne.get("goodsName")%>" name="goodsName">
 										<input type="number" min="1" value="1" name="qty">
 										<span class="qty-up">+</span> <span class="qty-down">-</span>
 									</div>
 								</div>
 							</div>
 							<div class="add-to-cart">
-								<button class="add-to-cart-btn" id="add-to-cart-btn">
+								<%
+								if (goodsOne.get("soldOut").equals("Y")) {
+								%>
+								<button class="add-to-cart-btn">
+									<i class="fa fa-shopping-cart"></i> 구매불가
+								</button>
+								<%
+								} else {
+								%>
+								<button class="add-to-cart-btn" id="add-to-cart-btn" type="button">
 									<i class="fa fa-shopping-cart"></i> Add to Cart
 								</button>
-								<button class="buy-now-btn" id="buy-now-btn">
+								<button class="buy-now-btn" id="buy-now-btn" type="button">
 									<i class="fa fa-shopping-cart"></i> Buy Now
 								</button>
+								<%
+								}
+								%>
 							</div>
 						</fieldset>
 					</form>
@@ -138,7 +123,6 @@ List<Map<String, Object>> list = new ReviewService().getReviewList(goodsNo);
 				</div>
 			</div>
 			<!-- /Product details -->
-
 			<!-- Product tab -->
 			<div class="col-md-12">
 				<div id="product-tab">
@@ -150,126 +134,56 @@ List<Map<String, Object>> list = new ReviewService().getReviewList(goodsNo);
 
 					<!-- product tab content -->
 					<div class="tab-content">
-						<!-- tab1  -->
-						<div id="tab1" class="tab-pane fade in active">
-							<div class="row">
-								<!-- Rating -->
-								<div class="col-md-3">
-									<div id="rating">
-										<div class="rating-avg">
-											<span>4.5</span>
-											<div class="rating-stars">
-												<i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star-o"></i>
-											</div>
-										</div>
-										<ul class="rating">
-											<li>
-												<div class="rating-stars">
-													<i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i>
-												</div>
-												<div class="rating-progress">
-													<div style="width: 80%;"></div>
-												</div> <span class="sum">3</span>
-											</li>
-											<li>
-												<div class="rating-stars">
-													<i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star-o"></i>
-												</div>
-												<div class="rating-progress">
-													<div style="width: 60%;"></div>
-												</div> <span class="sum">2</span>
-											</li>
-											<li>
-												<div class="rating-stars">
-													<i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i>
-												</div>
-												<div class="rating-progress">
-													<div></div>
-												</div> <span class="sum">0</span>
-											</li>
-											<li>
-												<div class="rating-stars">
-													<i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i>
-												</div>
-												<div class="rating-progress">
-													<div></div>
-												</div> <span class="sum">0</span>
-											</li>
-											<li>
-												<div class="rating-stars">
-													<i class="fa fa-star"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i>
-												</div>
-												<div class="rating-progress">
-													<div></div>
-												</div> <span class="sum">0</span>
-											</li>
-										</ul>
-									</div>
+						<div class="row">
+							<!-- Review Form -->
+							<div class="col-md-4">
+								<div id="review-form">
+									<form class="review-form">
+										<input class="input" type="text" value="<%=session.getAttribute("id")%>" readonly="readonly">
+										<textarea class="input" placeholder="상품 후기를 작성해주세요"></textarea>
+										<button class="primary-btn">Submit</button>
+									</form>
 								</div>
-								<!-- /Rating -->
-
-								<!-- Reviews -->
-								<div class="col-md-6">
-									<div id="reviews">
-										<ul class="reviews">
-											<%
-											if (list.isEmpty()) {
-											%>
-											<li>No Review</li>
-											<%
-											} else {
-											for (Map<String, Object> m : list) {
-											%>
-											<li>
-												<div class="review-heading">
-													<h5 class="customerId"><%=m.get("customerId")%></h5>
-													<p class="updateDate"><%=m.get("updateDate")%></p>
-													<div class="review-rating">
-														<i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star-o empty"></i>
-													</div>
-												</div>
-												<div class="review-body">
-													<p><%=m.get("reviewContent")%></p>
-												</div>
-											</li>
-											<%
-											}
-											}
-											%>
-										</ul>
-									</div>
-								</div>
-								<!-- /Reviews -->
-
-								<!-- Review Form -->
-								<div class="col-md-3">
-									<div id="review-form">
-										<form class="review-form">
-											<input class="input" type="text" value="<%=session.getAttribute("id")%>" readonly="readonly">
-											<textarea class="input" placeholder="Your Reviewㄴㄹㅇㄹㄴㅇㄹ"></textarea>
-											<div class="input-rating">
-												<span>Your Rating: </span>
-												<div class="stars">
-													<input id="star5" name="rating" value="5" type="radio">
-													<label for="star5"></label>
-													<input id="star4" name="rating" value="4" type="radio">
-													<label for="star4"></label>
-													<input id="star3" name="rating" value="3" type="radio">
-													<label for="star3"></label>
-													<input id="star2" name="rating" value="2" type="radio">
-													<label for="star2"></label>
-													<input id="star1" name="rating" value="1" type="radio">
-													<label for="star1"></label>
-												</div>
-											</div>
-											<button class="primary-btn">Submit</button>
-										</form>
-									</div>
-								</div>
-								<!-- /Review Form -->
 							</div>
+							<!-- /Review Form -->
+							<!-- Reviews -->
+							<div class="col-md-8">
+								<div id="reviews">
+									<ul class="reviews">
+										<%
+										if (list.isEmpty()) {
+										%>
+										<li style="text-align: center;">작성된 리뷰가 없습니다</li>
+										<%
+										} else {
+										for (Map<String, Object> m : list) {
+										%>
+										<li>
+											<div class="review-heading">
+												<h5 class="customerId"><%=m.get("customerId")%></h5>
+												<p class="updateDate"><%=m.get("updateDate")%></p>
+											</div>
+											<div class="review-body">
+												<p><%=m.get("reviewContent")%></p>
+												<a href="<%=request.getContextPath()%>/customer/deleteReviewAction.jsp?orderNo=<%=m.get("orderNo")%>&goodsNo=<%=goodsNo%>">
+													<button class="btn btn-danger btn-sm" style="float: right; margin-left: 5px">삭제</button>
+												</a>
+												<a href="<%=request.getContextPath()%>/customer/updateReviewForm.jsp?orderNo=<%=m.get("orderNo")%>&goodsNo=<%=goodsNo%>">
+													<button class="btn btn-primary btn-sm" style="float: right;">수정</button>
+												</a>
+											</div>
+										</li>
+										<%
+										}
+										}
+										%>
+									</ul>
+								</div>
+							</div>
+							<!-- /Reviews -->
+
+
 						</div>
-						<!-- /tab1  -->
 					</div>
 					<!-- /product tab content  -->
 				</div>
@@ -281,15 +195,12 @@ List<Map<String, Object>> list = new ReviewService().getReviewList(goodsNo);
 	<!-- /container -->
 </div>
 <!-- /SECTION -->
-
 <%@include file="/footer.jsp"%>
 <script>
 $('#add-to-cart-btn').click(function() {
-	$("#qtyForm").attr("action", "<%=request.getContextPath()%>/customer/customerCart.jsp");
-})
-$('#buy-now-btn').click(function() {
-	$("#qtyForm").attr("action", "<%=request.getContextPath()%>/customer/checkout.jsp");
-})
+	alert('장바구니에 추가하였습니다.');
+	$("#qtyForm").attr("action", "<%=request.getContextPath()%>/customer/addCartAction.jsp").submit();
+});
 </script>
 </body>
 </html>

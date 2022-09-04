@@ -8,12 +8,13 @@ import java.util.Map;
 
 import repository.DBUtil;
 import repository.OrdersDAO;
+import repository.ReviewDAO;
 import vo.Orders;
 
 public class OrdersService {
 	private DBUtil dbUtil;
 	private OrdersDAO ordersDAO;
-
+	
 	// 주문하기
 	public int addOrder(Orders order) {
 		//리턴값

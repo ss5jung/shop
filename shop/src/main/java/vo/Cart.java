@@ -1,61 +1,50 @@
 package vo;
 
 public class Cart {
-	private int goods_no;
-	private String customer_id;
-	private int cart_quantity;
+	private int goodsNo;
+	private String customerId;
+	private int cartQuantity;
 	private String updateDate;
 	private String createDate;
-
 	public Cart() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-
-	public int getGoods_no() {
-		return goods_no;
+	@Override
+	public String toString() {
+		return "Cart [goodsNo=" + goodsNo + ", customerId=" + customerId + ", cartQuantity=" + cartQuantity
+				+ ", updateDate=" + updateDate + ", createDate=" + createDate + "]";
 	}
-
-	public void setGoods_no(int goods_no) {
-		this.goods_no = goods_no;
+	public int getGoodsNo() {
+		return goodsNo;
 	}
-
-	public String getCustomer_id() {
-		return customer_id;
+	public void setGoodsNo(int goodsNo) {
+		this.goodsNo = goodsNo;
 	}
-
-	public void setCustomer_id(String customer_id) {
-		this.customer_id = customer_id;
+	public String getCustomerId() {
+		return customerId;
 	}
-
-	public int getCart_quantity() {
-		return cart_quantity;
+	public void setCustomerId(String customerId) {
+		this.customerId = customerId;
 	}
-
-	public void setCart_quantity(int cart_quantity) {
-		this.cart_quantity = cart_quantity;
+	public int getCartQuantity() {
+		return cartQuantity;
 	}
-
+	public void setCartQuantity(int cartQuantity) {
+		this.cartQuantity = cartQuantity;
+	}
 	public String getUpdateDate() {
 		return updateDate;
 	}
-
 	public void setUpdateDate(String updateDate) {
 		this.updateDate = updateDate;
 	}
-
 	public String getCreateDate() {
 		return createDate;
 	}
-
 	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
 	}
 
-	@Override
-	public String toString() {
-		return "Cart [goods_no=" + goods_no + ", customer_id=" + customer_id + ", cart_quantity=" + cart_quantity
-				+ ", updateDate=" + updateDate + ", createDate=" + createDate + "]";
-	}
-
+	
 }

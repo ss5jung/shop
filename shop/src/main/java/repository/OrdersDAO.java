@@ -12,6 +12,7 @@ import java.util.Map;
 import vo.Orders;
 
 public class OrdersDAO {
+
 	// 주문 취소(삭제)
 	public int deleteOrder(Connection conn, int orderNo) throws Exception {
 		// 리턴값
