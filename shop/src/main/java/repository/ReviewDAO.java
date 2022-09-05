@@ -12,18 +12,47 @@ import java.util.Map;
 import vo.Review;
 
 public class ReviewDAO {
+	// 리뷰 하나
+	public Review selectReviewOne(Connection conn, int orderNo) throws SQLException {
+		// 리턴할 객체 생성
+		Review review = new Review();
+		// DB
+		String sql = "SELECT order_no orderNo, review_content reviewContent,update_date updateDate,create_date createDate FROM review WHERE order_no = ?";
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, orderNo);
+			rs = stmt.executeQuery();
+			while (rs.next()) {
+				review.setOrderNo(rs.getInt("orderNo"));
+				review.setReviewContent(rs.getString("reviewContent"));
+				review.setUpdateDate(rs.getString("updateDate"));
+				review.setCreateDate(rs.getString("createDate"));
+			}
+		} finally {
+			// DB 자원 해제
+			if (rs != null) {
+				rs.close();
+			}
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return review;
+	}
+
 	// 리뷰 작성한 적 있는지 확인
-	public int selectReviewCk(Connection conn, String loginId, int goodsNo) throws Exception {
+	public int selectReviewCk(Connection conn, int orderNo) throws Exception {
 		// 리턴값
 		int row = 0;
 		// DB자원
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		String sql = "SELECT COUNT(*) cnt FROM (SELECT * FROM orders WHERE customer_id =? AND goods_no = ?) d inner JOIN review r ON r.order_no = d.order_no";
+		String sql = "SELECT COUNT(*) cnt FROM review WHERE order_no = ?";
 		try {
 			stmt = conn.prepareStatement(sql);
-			stmt.setString(1, loginId);
-			stmt.setInt(2, goodsNo);
+			stmt.setInt(1, orderNo);
 			System.out.println(stmt + "<-- stmt");
 			rs = stmt.executeQuery();
 			if (rs.next()) {
@@ -102,7 +131,7 @@ public class ReviewDAO {
 		// 리턴값
 		int row = 0;
 		PreparedStatement stmt = null;
-		String sql = "UPDATE review SET review_content=? WHERE order_no=?";
+		String sql = "UPDATE review SET review_content=? , update_date = NOW() WHERE order_no=?";
 		try {
 			stmt = conn.prepareStatement(sql);
 			stmt.setString(1, review.getReviewContent());

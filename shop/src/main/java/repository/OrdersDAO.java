@@ -108,7 +108,7 @@ public class OrdersDAO {
 		// DB자원
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		String sql = "SELECT  c.customer_id cutomerId, o.order_no orderNo, g.goods_name goodsName, o.order_quantity orderQuantity, o.order_price orderPrice, o.order_addr orderAddr, o.order_state orderState, c.customer_name customerName, c.customer_telephone customerTelephone, o.create_date createDate FROM orders o INNER JOIN goods g USING (goods_no) INNER JOIN customer c USING (customer_id) WHERE o.customer_id = ?";
+		String sql = "SELECT  c.customer_id cutomerId, o.order_no orderNo, g.goods_name goodsName, o.order_quantity orderQuantity, o.order_price orderPrice, o.order_addr orderAddr, o.order_state orderState, c.customer_name customerName, c.customer_telephone customerTelephone, o.create_date createDate FROM orders o INNER JOIN goods g USING (goods_no) INNER JOIN customer c USING (customer_id) WHERE o.customer_id = ? ORDER BY o.create_date DESC";
 		try {
 			stmt = conn.prepareStatement(sql);
 			stmt.setString(1, customerId);

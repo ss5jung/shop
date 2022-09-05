@@ -163,15 +163,6 @@ int reviewCk = new ReviewService().getReviewCk(loginId, goodsNo);
 												<h5 class="customerId"><%=m.get("customerId")%></h5>
 												<p class="updateDate"><%=m.get("updateDate")%></p>
 											</div>
-											<div class="review-body">
-												<p><%=m.get("reviewContent")%></p>
-												<a href="<%=request.getContextPath()%>/customer/deleteReviewAction.jsp?orderNo=<%=m.get("orderNo")%>&goodsNo=<%=goodsNo%>">
-													<button class="btn btn-danger btn-sm" style="float: right; margin-left: 5px">삭제</button>
-												</a>
-												<a href="<%=request.getContextPath()%>/customer/updateReviewForm.jsp?orderNo=<%=m.get("orderNo")%>&goodsNo=<%=goodsNo%>">
-													<button class="btn btn-primary btn-sm" style="float: right;">수정</button>
-												</a>
-											</div>
 										</li>
 										<%
 										}
@@ -181,8 +172,6 @@ int reviewCk = new ReviewService().getReviewCk(loginId, goodsNo);
 								</div>
 							</div>
 							<!-- /Reviews -->
-
-
 						</div>
 					</div>
 					<!-- /product tab content  -->

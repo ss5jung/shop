@@ -14,15 +14,36 @@ public class ReviewService {
 	private DBUtil dbUtil;
 	private ReviewDAO reviewDAO;
 
+	// 리뷰 하나
+	public Review getReviewOne(int orderNo) throws SQLException {
+		// 리턴할 객체 생성
+		Review review = new Review();
+		// DB
+		Connection conn = null;
+		try {
+			conn = new DBUtil().getConnection();
+			System.out.println("getReviewList DB 연결");
+			review = new ReviewDAO().selectReviewOne(conn, orderNo);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// DB 자원해제
+			if (conn != null) {
+				conn.close();
+			}
+		}
+		return review;
+	}
+
 	// 리뷰 작성여부
-	public int getReviewCk(String loginId, int goodsNo) throws Exception {
+	public int getReviewCk(int orderNo) throws Exception {
 		// 리턴값
 		int row = 0;
 		Connection conn = null;
 		try {
 			conn = new DBUtil().getConnection();
 			System.out.println("getReviewCk DB 연결");
-			row = new ReviewDAO().selectReviewCk(conn, loginId, goodsNo); // 리뷰가 작성되어 있으면 1 없으면 0
+			row = new ReviewDAO().selectReviewCk(conn, orderNo); // 리뷰가 작성되어 있으면 1 없으면 0
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

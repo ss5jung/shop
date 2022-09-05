@@ -189,7 +189,6 @@ if(list.isEmpty()){
 										}
 									}
 									%>
-
 								</tbody>
 							</table>
 						</div>
