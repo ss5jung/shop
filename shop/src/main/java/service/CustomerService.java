@@ -12,6 +12,32 @@ import vo.Customer;
 
 public class CustomerService {
 	private CustomerDAO customerDAO;
+	//고객 정보 수정
+	public int modifyCustomerOne(Customer customer) throws Exception {
+		//리턴 값
+		int row = 0;
+		//DB
+		Connection conn = null;
+		try {
+			conn = new DBUtil().getConnection();
+			System.out.println("DB 연결 - modifyCustomerOne");
+			row = new CustomerDAO().updateCustomerOne(conn, customer);
+			if(row != 0) {
+				System.out.println("회원정보가 수정되었습니다.");
+			} else {
+				System.out.println("회원정보 수정에 실패하였습니다.");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			//DB자원 해제
+			if(conn != null) {
+				conn.close();
+			}
+		}
+		return row;
+	}
+	
 	//임시 비밀번호로 수정하기
 	public int modifyCustomerPass(Customer customer) throws SQLException {
 		//리턴 값

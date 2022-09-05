@@ -10,6 +10,32 @@ import java.util.List;
 import vo.Customer;
 
 public class CustomerDAO {
+	// 고객 정보 수정
+	public int updateCustomerOne(Connection conn, Customer customer) throws Exception {
+		//파라미터
+		System.out.println(customer + "<-- customer - updateCustomerOne");
+		int row = 0;
+		PreparedStatement stmt = null;
+		String sql = "UPDATE customer SET customer_address= ?, customer_telephone=?, update_date=NOW() WHERE customer_id=?";
+		try {
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, customer.getCustomerAddress());
+			stmt.setString(2, customer.getCustomerTelephone());
+			stmt.setString(3, customer.getCustomerId());
+			System.out.println(stmt + "<-- stmt");
+			row = stmt.executeUpdate();
+			if (row == 0) {
+				throw new Exception();
+			}
+		} finally {
+			// DB자원해제
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return row;
+	}
+
 	// 임시 비밀번호 정보 수정
 	public int updateCustomerPass(Connection conn, Customer customer) throws Exception {
 		int row = 0;
