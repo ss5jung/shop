@@ -33,7 +33,6 @@ if (goodsOne.isEmpty()) {
 List<Map<String, Object>> list = new ReviewService().getReviewList(goodsNo);
 //리뷰를 작성한지 있는 확인
 String loginId = (String)session.getAttribute("id");
-int reviewCk = new ReviewService().getReviewCk(loginId, goodsNo);
 %>
 <%@include file="/hearder.jsp"%>
 <!-- SECTION -->

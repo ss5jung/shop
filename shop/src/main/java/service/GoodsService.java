@@ -18,6 +18,39 @@ public class GoodsService {
 	private GoodsDAO goodsDAO;
 	private GoodsImgDAO goodsImgDAO;
 
+	// 특정 검색어가 포함된 상품 리스트 가져오기
+	public List<Map<String, Object>> getResearchGoodsList(int rowPerPage, int currentPage, String orderSql,
+			String researchGoodsName) throws SQLException {
+		// 파라미터 디버깅
+		System.out.println("getResearchGoodsList 파라미터 디버깅 : " + "rowPerPage > " + rowPerPage + ",currentPage >"
+				+ currentPage + " ,orderSql >" + orderSql + ", researchGoodsName>" + researchGoodsName);
+		// beginRow
+		int beginRow = (currentPage - 1) * rowPerPage;
+		// DB자원 만들기
+		Connection conn = null;
+		// List객체 생성 - 상품리스트 받아오기
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		try {
+			// DB driver 연결
+			conn = new DBUtil().getConnection();
+			System.out.println("getResearchGoodsList - Driver 연동 성공");
+			// 상품 리스트 받아오기
+			list = new GoodsDAO().selectResearchGoodsList(conn, rowPerPage, beginRow, orderSql, researchGoodsName);
+			if (list == null) {
+				System.out.println("getCustomerGoodsListByPage list가 null값");
+				throw new Exception();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// DB자원 해제
+			if (conn != null) {
+				conn.close();
+			}
+		}
+		return list;
+	}
+
 	// 상품 추가 C
 	public int addGoods(Goods goods, GoodsImg goodsImg) throws SQLException {
 		// 파라미터 디버깅
@@ -130,7 +163,7 @@ public class GoodsService {
 			// 정보 수정에 성공하면 img도 수정
 			if (row != 0) {
 				int imgRow = goodsImgDAO.updateGoodsImg(conn, goodsImg);
-				if(imgRow == 0) {
+				if (imgRow == 0) {
 					throw new Exception();
 				}
 			}

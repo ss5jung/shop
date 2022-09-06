@@ -9,22 +9,25 @@
 			<div class="row">
 				<div class="col-md-3 col-xs-6">
 					<div class="footer">
-						<h3 class="footer-title">About Us</h3>
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.</p>
+						<h3 class="footer-title">About Me</h3>
+						<p>
+							신입 백엔드 개발자 <b>박소정</b>입니다.
+						</p>
 						<ul class="footer-links">
-							<li><a href="#"><i class="fa fa-map-marker"></i>서울 금천구 가산디지털2로 115</a></li>
-							<li><a href="#"><i class="fa fa-phone"></i>+82-02-2108-5900</a></li>
+							<li><a href="#"><i class="fa fa-map-marker"></i>경기도 광명시</a></li>
+							<li><a href="#"><i class="fa fa-phone"></i>+82-010-6736-****</a></li>
 							<li><a href="#"><i class="fa fa-envelope-o"></i>fnsk0423@gmail.com</a></li>
 						</ul>
+						<hr><a href="https://ss5jung.github.io/"><h3 class="footer-title">포트폴리오</h3></a>
 					</div>
 				</div>
 
 				<div class="col-md-3 col-xs-6">
 					<div class="footer">
-						<h3 class="footer-title">Categories</h3>
+						<h3 class="footer-title">학습 관리 시스템(LMS)</h3>
 						<ul class="footer-links">
-							<li><a href="#">Hot deals</a></li>
-							<li><a href="#">Laptops</a></li>
+							<li><a href="#">팀 프로젝트</a></li>
+							<li><a href="#">Spring</a></li>
 							<li><a href="#">Smartphones</a></li>
 							<li><a href="#">Cameras</a></li>
 							<li><a href="#">Accessories</a></li>
@@ -36,9 +39,9 @@
 
 				<div class="col-md-3 col-xs-6">
 					<div class="footer">
-						<h3 class="footer-title">Information</h3>
+						<h3 class="footer-title">Blog</h3>
 						<ul class="footer-links">
-							<li><a href="#">About Us</a></li>
+							<li><a href="#">개인 프로젝트</a></li>
 							<li><a href="#">Contact Us</a></li>
 							<li><a href="#">Privacy Policy</a></li>
 							<li><a href="#">Orders and Returns</a></li>
@@ -49,9 +52,9 @@
 
 				<div class="col-md-3 col-xs-6">
 					<div class="footer">
-						<h3 class="footer-title">Service</h3>
+						<h3 class="footer-title">shop</h3>
 						<ul class="footer-links">
-							<li><a href="#">My Account</a></li>
+							<li><a href="#">개인 프로젝트</a></li>
 							<li><a href="#">View Cart</a></li>
 							<li><a href="#">Wishlist</a></li>
 							<li><a href="#">Track My Order</a></li>
@@ -97,10 +100,10 @@
 <!-- /FOOTER -->
 
 <!-- jQuery Plugins -->
-<script src="<%=request.getContextPath() %>/js/jquery.min.js"></script>
-<script src="<%=request.getContextPath() %>/js/bootstrap.min.js"></script>
-<script src="<%=request.getContextPath() %>/js/slick.min.js"></script>
-<script src="<%=request.getContextPath() %>/js/nouislider.min.js"></script>
-<script src="<%=request.getContextPath() %>/js/jquery.zoom.min.js"></script>
-<script src="<%=request.getContextPath() %>/js/main.js"></script>
+<script src="<%=request.getContextPath()%>/js/jquery.min.js"></script>
+<script src="<%=request.getContextPath()%>/js/bootstrap.min.js"></script>
+<script src="<%=request.getContextPath()%>/js/slick.min.js"></script>
+<script src="<%=request.getContextPath()%>/js/nouislider.min.js"></script>
+<script src="<%=request.getContextPath()%>/js/jquery.zoom.min.js"></script>
+<script src="<%=request.getContextPath()%>/js/main.js"></script>
 <!-- /jQuery Plugins -->

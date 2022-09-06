@@ -40,24 +40,20 @@ notice = new NoticeService().getNoticeOne(noticeNo);
 <body class="sb-nav-fixed">
 	<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
 		<!-- Navbar Brand-->
-		<a class="navbar-brand ps-3" href="<%=request.getContextPath()%>/admin/adminIndex.jsp"> 
-			<img alt="mamazon" src="<%=request.getContextPath()%>/img/mamazon.png" style="margin-top: 15px">
+		<a class="navbar-brand ps-3" href="<%=request.getContextPath()%>/admin/adminIndex.jsp"> <img alt="mamazon" src="<%=request.getContextPath()%>/img/mamazon.png" style="margin-top: 15px">
 		</a>
 		<!-- Sidebar Toggle-->
 		<button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!">
 			<i class="fas fa-bars"></i>
 		</button>
-		
+
 		<!-- Navbar-->
 		<ul class="d-none d-md-inline-block navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
-			<li class="nav-item dropdown">
-				<a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> 
-					<i class="fas fa-user fa-fw"></i><span style="color: white;"><%=session.getAttribute("name")%>님</span>
-				</a>
+			<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> <i class="fas fa-user fa-fw"></i><span style="color: white;"><%=session.getAttribute("name")%>님</span>
+			</a>
 				<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
 					<li><a class="dropdown-item" href="<%=request.getContextPath()%>/logout.jsp">Logout</a></li>
-				</ul>	
-			</li>
+				</ul></li>
 		</ul>
 		<!-- /Navbar-->
 	</nav>
@@ -138,8 +134,7 @@ notice = new NoticeService().getNoticeOne(noticeNo);
 							</table>
 							<!-- 버튼 -->
 							<div style="float: right;">
-								<a href="<%=request.getContextPath()%>/admin/adminNoticeList.jsp"><button class="btn btn-secondary">목록</button></a> 
-								<a href="<%=request.getContextPath()%>/admin/adminUpdateNoticeOne.jsp?noticeNo=<%=notice.getNotice_no()%>"><button class="btn btn-primary">수정</button></a>
+								<a href="<%=request.getContextPath()%>/admin/adminNoticeList.jsp"><button class="btn btn-secondary">목록</button></a> <a href="<%=request.getContextPath()%>/admin/adminUpdateNoticeOne.jsp?noticeNo=<%=notice.getNotice_no()%>"><button class="btn btn-primary">수정</button></a>
 								<button class="btn btn-danger" onclick="deleteNoticeBtn()">삭제</button>
 							</div>
 						</div>
@@ -174,7 +169,8 @@ notice = new NoticeService().getNoticeOne(noticeNo);
 function deleteNoticeBtn() {
  var result = confirm("공지사항을 삭제하시겠습니까?");
   if (result == true) {
-	  location.href="<%=request.getContextPath()%>/admin/deleteNoticeOneAction.jsp?noticeNo=<%=notice.getNotice_no()%>";
+	  location.href="<%=request.getContextPath()%>/admin/deleteNoticeOneAction.jsp?noticeNo=<%=notice.getNotice_no()%>
+	";
 		}
 	}
 </script>

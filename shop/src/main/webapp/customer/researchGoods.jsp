@@ -25,22 +25,13 @@ int currentPage = 1;
 if (request.getParameter("currentPage") != null) {
 	currentPage = Integer.parseInt(request.getParameter("currentPage"));
 }
-//상품 리스트
-List<Map<String, Object>> list = null;
-//요청받은 검색어의 값
+//요청받은 값
 String researchGoodsName = request.getParameter("researchGoodsName");
-System.out.println(researchGoodsName+"<--researchGoodsName 검색어");
-if (researchGoodsName == null || researchGoodsName.equals("")) {	//검색어가 없을 경우
-	//상품리스트 Service에서 받아오기
-	list = new GoodsService().getCustomerGoodsListByPage(rowPerPage, currentPage, orderSql);
-} else {	//검색어가 있을 경우
-	//특정 검색어가 포함된 상품리스트 Service에서 받아오기
-	list = new GoodsService().getResearchGoodsList(rowPerPage, currentPage, orderSql, researchGoodsName);
-}
-
+//특정 검색어가 포함된 상품리스트 Service에서 받아오기
+List<Map<String, Object>> list = new GoodsService().getResearchGoodsList(rowPerPage, currentPage, orderSql, researchGoodsName);
 //라스트페이지
 int lastPage = new GoodsService().getGoodsLastPage(rowPerPage);
-System.out.println(lastPage + "<-- lastPage customerGoodsList");
+System.out.println(lastPage + "<-- lastPage researchGoods");
 //돈 단위 표시
 DecimalFormat df = new DecimalFormat("###,###");
 %>
@@ -55,14 +46,20 @@ DecimalFormat df = new DecimalFormat("###,###");
 			<div id="store" class="col-lg-12">
 				<!-- store top filter -->
 				<div class="row">
+					<div>검색어 : <%=researchGoodsName%> 에 대한 상품리스트입니다</div>
 					<div class="store-filter clearfix" style="float: right;">
 						<div class="store-sort">
-							<a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?orderSql=popular&researchGoodsName=<%=researchGoodsName%>">누적판매순</a> &nbsp;|&nbsp; 
-							<a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?orderSql=lastest&researchGoodsName=<%=researchGoodsName%>">최신순</a> &nbsp;|&nbsp; 
-							<a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?orderSql=lowPrice&researchGoodsName=<%=researchGoodsName%>">낮은가격순</a> &nbsp;|&nbsp; 
-							<a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?orderSql=highPrice&researchGoodsName=<%=researchGoodsName%>">높은가격순</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-							<a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?rowPerPage=20">20개씩</a> &nbsp;|&nbsp; 
-							<a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp?rowPerPage=40">40개씩</a>
+							<a href="<%=request.getContextPath()%>/customer/researchGoods.jsp?orderSql=popular">누적판매순</a> 
+							&nbsp;|&nbsp; 
+							<a href="<%=request.getContextPath()%>/customer/researchGoods.jsp?orderSql=lastest">최신순</a> 
+							&nbsp;|&nbsp; 
+							<a href="<%=request.getContextPath()%>/customer/researchGoods.jsp?orderSql=lowPrice">낮은가격순</a> 
+							&nbsp;|&nbsp; 
+							<a href="<%=request.getContextPath()%>/customer/researchGoods.jsp?orderSql=highPrice">높은가격순</a> 
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+							<a href="<%=request.getContextPath()%>/customer/researchGoods.jsp?rowPerPage=20">20개씩</a> 
+							&nbsp;|&nbsp; 
+							<a href="<%=request.getContextPath()%>/customer/researchGoods.jsp?rowPerPage=40">40개씩</a>
 						</div>
 					</div>
 				</div>
@@ -97,7 +94,7 @@ DecimalFormat df = new DecimalFormat("###,###");
 								<div class="product-btns">
 									<button class="add-to-cart-btn" id="add-to-cart-btn">
 										<%
-										if ("Y".equals(m.get("soldOut"))) { //품절이면 상품을 담을 수 없음
+										if ("Y".equals(m.get("soldOut"))) {	//품절이면 상품을 담을 수 없음
 										%>
 										<i class="fa fa-shopping-cart"></i><span class="tooltipp">품절 - 구매불가</span>
 										<%

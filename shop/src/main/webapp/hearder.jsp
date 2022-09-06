@@ -79,8 +79,8 @@ int qty = new CartService().getCartGoodsCnt((String)session.getAttribute("id"));
 					<!-- 검색창 -->
 					<div class="col-md-6">
 						<div class="header-search">
-							<form action="<%=request.getContextPath()%>/customer/researchGoods.jsp" method="get">
-								<input class="input-select" style="width: 75%" type="text" name="goodsName" placeholder="검색어를 입력해주세요">
+							<form action="<%=request.getContextPath()%>/customer/customerGoodsList.jsp" method="get">
+								<input class="input-select" style="width: 75%" type="text" name="researchGoodsName" placeholder="검색어를 입력해주세요">
 								<button class="search-btn">Search</button>
 							</form>
 						</div>
@@ -123,7 +123,8 @@ int qty = new CartService().getCartGoodsCnt((String)session.getAttribute("id"));
 			<div id="responsive-nav">
 				<!-- NAV -->
 				<ul class="main-nav nav navbar-nav">
-					<li class="active"><a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp">Home</a></li>
+					<li><a href="<%=request.getContextPath()%>/customer/customerGoodsList.jsp">Home</a></li>
+					<li><a href="<%=request.getContextPath()%>/customer/customerNoticeList.jsp">Notice</a></li>
 				</ul>
 				<ul class="main-nav nav navbar-nav" style="float: right;">
 					<li><a href="<%=request.getContextPath()%>/index.jsp"><i class="fa fa-user-o"></i><%=session.getAttribute("id") %>님</a></li>

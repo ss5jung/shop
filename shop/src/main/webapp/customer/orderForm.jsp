@@ -1,7 +1,9 @@
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="java.util.Map"%>
 <%@page import="vo.Cart"%>
 <%@page import="java.util.List"%>
 <%@page import="service.CartService"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
 //인코딩
@@ -10,6 +12,8 @@ request.setCharacterEncoding("utf-8");
 String customerId = (String) session.getAttribute("id");
 List<Map<String, Object>> list = new CartService().getCartList(customerId);
 int total = 0;
+//돈 단위 표시
+DecimalFormat df = new DecimalFormat("###,###");
 %>
 <%@include file="/hearder.jsp"%>
 
@@ -40,7 +44,17 @@ int total = 0;
 	<div class="container">
 		<!-- row -->
 		<div class="row">
-
+			<%
+			if (session.getAttribute("id") == null) {
+			%>
+			<div style="text-align: center; margin: 10% 0 10% 0">
+				<h3>로그인이 필요한 서비스입니다</h3>
+				<a href="<%=request.getContextPath()%>/loginForm.jsp"><button type="button" class="btn">로그인하기</button></a>
+			
+			</div>
+			<%
+			} else {
+			%>
 			<div class="col-md-4">
 				<!-- Billing Details -->
 				<div class="billing-details">
@@ -48,26 +62,26 @@ int total = 0;
 						<h3 class="title">Shiping address</h3>
 					</div>
 					<form action="<%=request.getContextPath()%>/customer/orderAction.jsp" method="post" id="orderForm">
-					<div class="form-group">
-						<input class="input" type="text" value="<%=customerId%>" readonly="readonly">
-					</div>
-					<div class="form-group">
-						<b>배송지 :</b> 
-						<button type="button" class="btn btn-sm btn-primary" id="addrBtn2" style="margin-bottom: 5px">
-							<b>주소검색</b>
-						</button>
-						<input style="margin-bottom: 5px" class="input" id="customerAddress" name="customerAddress" type="text" readonly="readonly" placeholder="주소" />
-						<input class="input" id="customerDetailAddr" name="customerDetailAddr" type="text" placeholder="상세주소" />
-					</div>
-					<div class="form-group">
-						<b>은행명 :</b> <select id="bank" name="bank" class="input">
-							<option value="default">---은행선택---</option>
-							<option value="국민은행 269851-09-1988754">국민은행 269851-09-1988754</option>
-							<option value="신한은행 5480-085-147-8945">신한은행 5480-085-147-8945</option>
-							<option value="우리은행 987-5574-4488">우리은행 987-5574-4488</option>
-							<option value="농협은행 1569-874-1574">농협은행 1569-874-1574</option>
-						</select>
-					</div>
+						<div class="form-group">
+							<input class="input" type="text" value="<%=customerId%>" readonly="readonly">
+						</div>
+						<div class="form-group">
+							<b>배송지 :</b>
+							<button type="button" class="btn btn-sm btn-primary" id="addrBtn2" style="margin-bottom: 5px">
+								<b>주소검색</b>
+							</button>
+							<input style="margin-bottom: 5px" class="input" id="customerAddress" name="customerAddress" type="text" readonly="readonly" placeholder="주소" />
+							<input class="input" id="customerDetailAddr" name="customerDetailAddr" type="text" placeholder="상세주소" />
+						</div>
+						<div class="form-group">
+							<b>은행명 :</b> <select id="bank" name="bank" class="input">
+								<option value="default">---은행선택---</option>
+								<option value="국민은행 269851-09-1988754">국민은행 269851-09-1988754</option>
+								<option value="신한은행 5480-085-147-8945">신한은행 5480-085-147-8945</option>
+								<option value="우리은행 987-5574-4488">우리은행 987-5574-4488</option>
+								<option value="농협은행 1569-874-1574">농협은행 1569-874-1574</option>
+							</select>
+						</div>
 					</form>
 					<!-- /////////////////////////////////////// -->
 					<!-- iOS에서는 position:fixed 버그가 있음, 적용하는 사이트에 맞게 position:absolute 등을 이용하여 top,left값 조정 필요 -->
@@ -98,10 +112,12 @@ int total = 0;
 							%>
 							<tr>
 								<td><%=map.get("goodsName")%></td>
-								<td><%=map.get("goodsPrice")%>원</td>
+								<td><%=df.format(map.get("goodsPrice"))%>원</td>
 								<td><%=map.get("cartQuantity")%>개</td>
-								 <%total+= (int) map.get("goodsPrice") * (int) map.get("cartQuantity");%>
-								<td><%=(int) map.get("goodsPrice") * (int) map.get("cartQuantity")%>원</td>
+								<%
+								total += (int) map.get("goodsPrice") * (int) map.get("cartQuantity");
+								%>
+								<td><%=df.format((int) map.get("goodsPrice") * (int) map.get("cartQuantity"))%>원</td>
 							</tr>
 							<%
 							}
@@ -119,13 +135,17 @@ int total = 0;
 							<strong>TOTAL</strong>
 						</div>
 						<div>
-							<strong class="order-total"><%=total %>원</strong>
+							<strong class="order-total"><%=df.format(total)%>원</strong>
 						</div>
 					</div>
 				</div>
 				<a href="#" class="primary-btn order-submit" id="orderBtn">Place order</a>
 			</div>
 			<!-- /Order Details -->
+			<%
+			}
+			%>
+
 		</div>
 		<!-- /row -->
 	</div>
@@ -136,9 +156,9 @@ int total = 0;
 <%@include file="/footer.jsp"%>
 </body>
 <script>
-$('#orderBtn').click(function(){
-	$('#orderForm').submit();
-});
+	$('#orderBtn').click(function() {
+		$('#orderForm').submit();
+	});
 </script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>

@@ -1,7 +1,9 @@
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="java.util.Map"%>
 <%@page import="vo.Cart"%>
 <%@page import="java.util.List"%>
 <%@page import="service.CartService"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
 //인코딩
@@ -9,6 +11,8 @@ request.setCharacterEncoding("utf-8");
 //장바구니 리스트 가져오기
 String customerId = (String) session.getAttribute("id");
 List<Map<String, Object>> list = new CartService().getCartList(customerId);
+//돈 단위 표시
+DecimalFormat df = new DecimalFormat("###,###");
 %>
 <%@include file="/hearder.jsp"%>
 
@@ -68,11 +72,11 @@ List<Map<String, Object>> list = new CartService().getCartList(customerId);
 						<tr>
 							<td><img src="<%=request.getContextPath() %>/upload/<%=map.get("filename") %>" alt="상품이미지"></td>
 							<td><%=map.get("goodsName") %></td>
-							<td><%=map.get("goodsPrice") %></td>
+							<td><%=df.format(map.get("goodsPrice"))%>원</td>
 							<td>
 								<form method="post" action="<%=request.getContextPath()%>/customer/updateQtyInCartAction.jsp">
 									<input type="hidden" value=<%=map.get("goodsNo")%> id="goodsNo" name="goodsNo"> 
-									<input type="number" value=<%=map.get("cartQuantity")%> min="1" style="width: 40px" id="cartQuantity" name="cartQuantity">
+									<input type="number" value=<%=map.get("cartQuantity")%> min="1" style="width: 45px" id="cartQuantity" name="cartQuantity">
 									<button class="btn btn-primary btn-sm" type="submit">수량변경</button>
 								</form>
 							</td>

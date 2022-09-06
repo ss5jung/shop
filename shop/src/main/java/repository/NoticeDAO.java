@@ -108,7 +108,11 @@ public class NoticeDAO {
 			}
 		}
 		// lastPage 연산 - 올림해서 lastPage구하기
-		lastPage = (int) Math.ceil((double) totalCount / rowPerPage);
+		if(totalCount%rowPerPage == 0) {
+			lastPage = totalCount / rowPerPage;
+		} else {
+			lastPage = (int) Math.ceil((double) totalCount / rowPerPage);
+		}
 		return lastPage;
 	}
 
