@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 import repository.DBUtil;
 import repository.EmployeeDAO;
-import repository.GoodsDAO;
 import repository.OutIdDAO;
 import vo.Employee;
 

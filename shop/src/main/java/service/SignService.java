@@ -3,7 +3,6 @@ package service;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import repository.CustomerDAO;
 import repository.DBUtil;
 import repository.SignDAO;
 

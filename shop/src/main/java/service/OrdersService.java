@@ -8,7 +8,6 @@ import java.util.Map;
 
 import repository.DBUtil;
 import repository.OrdersDAO;
-import repository.ReviewDAO;
 import vo.Orders;
 
 public class OrdersService {

@@ -149,7 +149,7 @@ public class OrdersDAO {
 		int row = 0;
 		// DB 자원 생성
 		PreparedStatement stmt = null;
-		String sql = "UPDATE orders SET order_quantity = ? WHERE  order_no = ? AND (order_state='결제대기' OR order_state='주문완료')";
+		String sql = "UPDATE orders SET order_quantity = ? WHERE  order_no = ? AND order_state='주문완료' ";
 		try {
 			stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, (int) order.getOrderQuantity());

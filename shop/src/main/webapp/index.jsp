@@ -135,9 +135,9 @@ if (list.isEmpty()) {
 							 <a href="<%=request.getContextPath()%>/customer/updateOrder.jsp?orderNo=<%=m.get("orderNo")%>"><button class="btn btn-xs btn-warning" id="updateOrderBtn">주문수정</button></a>
 							<%
 							 }
-							 if (m.get("orderState").equals("결제대기") || m.get("orderState").equals("주문완료")) {
+							 if (m.get("orderState").equals("결제대기")) {
 							 %>
-							 <a href="<%=request.getContextPath()%>/customer/deleteOrder.jsp?orderNo=<%=m.get("orderNo")%>"><button class="btn btn-xs btn-danger" id="deleteOrderBtn">주문취소</button></a>
+							 <a href="<%=request.getContextPath()%>/customer/deleteOrderAction.jsp?orderNo=<%=m.get("orderNo")%>"><button class="btn btn-xs btn-danger" id="deleteOrderBtn">주문취소</button></a>
 							<%
 							 }
 							 %>

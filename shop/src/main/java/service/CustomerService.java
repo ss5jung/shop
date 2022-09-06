@@ -11,7 +11,6 @@ import repository.OutIdDAO;
 import vo.Customer;
 
 public class CustomerService {
-	private CustomerDAO customerDAO;
 	//고객 정보 수정
 	public int modifyCustomerOne(Customer customer) throws Exception {
 		//리턴 값

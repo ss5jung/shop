@@ -95,7 +95,7 @@ System.out.println(lastPage + "<-- lastPage - adminNoticeList");
 					<%
 					} else {
 					%>
-					<li class="page-item disabled"><a class="page-link" href="<%=request.getContextPath()%>/customer/customerNoticeList.jsp?currentPage=<%=currentPage - 1%>">이전</a></li>
+					<li class="page-item disabled"><a class="page-link" href="#">이전</a></li>
 					<%
 					}
 					%>
@@ -106,7 +106,7 @@ System.out.println(lastPage + "<-- lastPage - adminNoticeList");
 					<%
 					} else {
 					%>
-					<li class="page-item disabled"><a class="page-link" href="<%=request.getContextPath()%>/customer/customerNoticeList.jsp?currentPage=<%=currentPage + 1%>">다음</a></li>
+					<li class="page-item disabled"><a class="page-link" href="#">다음</a></li>
 					<%
 					}
 					%>

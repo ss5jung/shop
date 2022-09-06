@@ -9,7 +9,7 @@ int todayCounter = counterService.getTodayCount();
 int totalCounter = counterService.getTotalCount();
 int currentCount = (Integer) (application.getAttribute("currentCounter"));
 //장바구니에 들어있는 상품의 수 불러오기
-int qty = new CartService().getCartGoodsCnt((String)session.getAttribute("id"));
+int qty = new CartService().getCartGoodsCnt((String) session.getAttribute("id"));
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -80,7 +80,17 @@ int qty = new CartService().getCartGoodsCnt((String)session.getAttribute("id"));
 					<div class="col-md-6">
 						<div class="header-search">
 							<form action="<%=request.getContextPath()%>/customer/customerGoodsList.jsp" method="get">
+								<%
+								if (request.getParameter("researchGoodsName") == null || request.getParameter("researchGoodsName").equals("") || request.getParameter("researchGoodsName").equals("null")) {
+								%>
 								<input class="input-select" style="width: 75%" type="text" name="researchGoodsName" placeholder="검색어를 입력해주세요">
+								<%
+								} else {
+								%>
+								<input class="input-select" style="width: 75%" type="text" name="researchGoodsName" value="<%=request.getParameter("researchGoodsName")%>">
+								<%
+								}
+								%>
 								<button class="search-btn">Search</button>
 							</form>
 						</div>
@@ -93,7 +103,7 @@ int qty = new CartService().getCartGoodsCnt((String)session.getAttribute("id"));
 							<!-- Cart -->
 							<div class="dropdown">
 								<a href="<%=request.getContextPath()%>/customer/customerCart.jsp"> <i class="fa fa-shopping-cart"></i> <span>Your Cart</span>
-									<div class="qty"><%=qty %></div>
+									<div class="qty"><%=qty%></div>
 								</a>
 							</div>
 							<!-- /Cart -->
@@ -127,7 +137,7 @@ int qty = new CartService().getCartGoodsCnt((String)session.getAttribute("id"));
 					<li><a href="<%=request.getContextPath()%>/customer/customerNoticeList.jsp">Notice</a></li>
 				</ul>
 				<ul class="main-nav nav navbar-nav" style="float: right;">
-					<li><a href="<%=request.getContextPath()%>/index.jsp"><i class="fa fa-user-o"></i><%=session.getAttribute("id") %>님</a></li>
+					<li><a href="<%=request.getContextPath()%>/index.jsp"><i class="fa fa-user-o"></i><%=session.getAttribute("id")%>님</a></li>
 				</ul>
 				<!-- /NAV -->
 			</div>

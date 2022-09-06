@@ -10,6 +10,7 @@
 request.setCharacterEncoding("utf-8");
 //페이지 확인
 System.out.println("--------------------------/customer/goodsDetail.jsp");
+System.out.println(session.getAttribute("id")+"<--로그인 아이디");
 //링크를 통한 접근 제한 
 if (request.getParameter("goodsNo") == null) { //전송받은 goodsNo값이 null일 때
 	//디버깅
@@ -109,9 +110,6 @@ String loginId = (String)session.getAttribute("id");
 								<button class="add-to-cart-btn" id="add-to-cart-btn" type="button">
 									<i class="fa fa-shopping-cart"></i> Add to Cart
 								</button>
-								<button class="buy-now-btn" id="buy-now-btn" type="button">
-									<i class="fa fa-shopping-cart"></i> Buy Now
-								</button>
 								<%
 								}
 								%>
@@ -134,41 +132,28 @@ String loginId = (String)session.getAttribute("id");
 					<!-- product tab content -->
 					<div class="tab-content">
 						<div class="row">
-							<!-- Review Form -->
-							<div class="col-md-4">
-								<div id="review-form">
-									<form class="review-form">
-										<input class="input" type="text" value="<%=session.getAttribute("id")%>" readonly="readonly">
-										<textarea class="input" placeholder="상품 후기를 작성해주세요"></textarea>
-										<button class="primary-btn">Submit</button>
-									</form>
-								</div>
-							</div>
-							<!-- /Review Form -->
 							<!-- Reviews -->
-							<div class="col-md-8">
-								<div id="reviews">
-									<ul class="reviews">
-										<%
-										if (list.isEmpty()) {
-										%>
-										<li style="text-align: center;">작성된 리뷰가 없습니다</li>
-										<%
-										} else {
-										for (Map<String, Object> m : list) {
-										%>
-										<li>
-											<div class="review-heading">
-												<h5 class="customerId"><%=m.get("customerId")%></h5>
-												<p class="updateDate"><%=m.get("updateDate")%></p>
-											</div>
-										</li>
-										<%
-										}
-										}
-										%>
-									</ul>
-								</div>
+							<div id="reviews">
+								<ul class="reviews">
+									<%
+									if (list.isEmpty()) {
+									%>
+									<li style="text-align: center;">작성된 리뷰가 없습니다</li>
+									<%
+									} else {
+									for (Map<String, Object> m : list) {
+									%>
+									<li>
+										<div class="review-heading">
+											<h5 class="customerId"><%=m.get("customerId")%></h5>
+											<p class="updateDate"><%=m.get("updateDate")%></p>
+										</div>
+									</li>
+									<%
+									}
+									}
+									%>
+								</ul>
 							</div>
 							<!-- /Reviews -->
 						</div>
@@ -185,9 +170,13 @@ String loginId = (String)session.getAttribute("id");
 <!-- /SECTION -->
 <%@include file="/footer.jsp"%>
 <script>
-$('#add-to-cart-btn').click(function() {
+$('#add-to-cart-btn').click(function(){
+	<%-- if ( <%=session.getAttribute("id")%> == null || <%=session.getAttribute("id")%>.equals("null") ) {
+		alert('로그인이 필요한 서비스입니다');
+		return;
+	} --%>
 	alert('장바구니에 추가하였습니다.');
-	$("#qtyForm").attr("action", "<%=request.getContextPath()%>/customer/addCartAction.jsp").submit();
+	$('#qtyForm').attr('action', '<%=request.getContextPath()%>/customer/addCartAction.jsp').submit();
 });
 </script>
 </body>

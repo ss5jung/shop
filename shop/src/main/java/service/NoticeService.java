@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import repository.DBUtil;
-import repository.GoodsDAO;
 import repository.NoticeDAO;
 import vo.Notice;
 
